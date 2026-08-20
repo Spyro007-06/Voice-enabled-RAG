@@ -1,0 +1,11 @@
+Category,Name,Recall@1,Recall@5,Recall@10,MRR@10,Avg Latency (ms)
+Strategy,fixed,0.2549,0.7843,0.9216,0.4573,320.76
+Strategy,sentence,0.2745,0.7059,0.902,0.4589,152.71
+Strategy,sliding_window,0.3137,0.7059,0.902,0.4667,152.76
+Strategy,semantic,0.2157,0.4902,0.7843,0.3693,159.2
+Strategy,hierarchical,0.2745,0.7059,0.902,0.4589,152.79
+Strategy,all,0.3333,0.5098,0.6471,0.4014,62.66
+Fusion/Retriever,dense_only,0.4118,0.5098,0.6275,0.4586,30.33
+Fusion/Retriever,bm25_only,0.1961,0.2353,0.4118,0.2345,26.03
+Fusion/Retriever,weighted_hybrid,0.3333,0.5098,0.6078,0.3983,63.07
+Fusion/Retriever,rrf_hybrid,0.3333,0.5098,0.6471,0.4014,70.21

@@ -1,0 +1,87 @@
+{
+  "metadata": {
+    "dataset_name": "ai4bharat/MSMARCO-XI",
+    "split": "validation",
+    "language": "hi",
+    "raw_records_processed": 100,
+    "documents_processed": 997,
+    "timestamp": "2026-08-15T15:55:06Z"
+  },
+  "strategies": {
+    "fixed": {
+      "strategy": "fixed",
+      "documents_processed": 997,
+      "chunks_generated": 1864,
+      "chunks_per_document": 1.87,
+      "avg_chunk_char_length": 190.83,
+      "min_chunk_char_length": 51,
+      "max_chunk_char_length": 250,
+      "avg_chunk_tokens": 130.51,
+      "min_chunk_tokens": 30,
+      "max_chunk_tokens": 191,
+      "processing_time_ms": 50.99,
+      "output_file": "data/processed\\chunks_fixed.jsonl",
+      "validation_passed": true
+    },
+    "sentence": {
+      "strategy": "sentence",
+      "documents_processed": 997,
+      "chunks_generated": 1485,
+      "chunks_per_document": 1.49,
+      "avg_chunk_char_length": 212.13,
+      "min_chunk_char_length": 8,
+      "max_chunk_char_length": 7515,
+      "avg_chunk_tokens": 145.13,
+      "min_chunk_tokens": 2,
+      "max_chunk_tokens": 5515,
+      "processing_time_ms": 41.74,
+      "output_file": "data/processed\\chunks_sentence.jsonl",
+      "validation_passed": true
+    },
+    "sliding_window": {
+      "strategy": "sliding_window",
+      "documents_processed": 997,
+      "chunks_generated": 1633,
+      "chunks_per_document": 1.64,
+      "avg_chunk_char_length": 217.65,
+      "min_chunk_char_length": 15,
+      "max_chunk_char_length": 7515,
+      "avg_chunk_tokens": 148.65,
+      "min_chunk_tokens": 9,
+      "max_chunk_tokens": 5515,
+      "processing_time_ms": 46.6,
+      "output_file": "data/processed\\chunks_sliding_window.jsonl",
+      "validation_passed": true
+    },
+    "semantic": {
+      "strategy": "semantic",
+      "documents_processed": 997,
+      "chunks_generated": 2888,
+      "chunks_per_document": 2.9,
+      "avg_chunk_char_length": 108.59,
+      "min_chunk_char_length": 2,
+      "max_chunk_char_length": 7515,
+      "avg_chunk_tokens": 74.62,
+      "min_chunk_tokens": 2,
+      "max_chunk_tokens": 5515,
+      "processing_time_ms": 138.39,
+      "output_file": "data/processed\\chunks_semantic.jsonl",
+      "validation_passed": true
+    },
+    "hierarchical": {
+      "strategy": "hierarchical",
+      "documents_processed": 997,
+      "chunks_generated": 1485,
+      "chunks_per_document": 1.49,
+      "avg_chunk_char_length": 212.13,
+      "min_chunk_char_length": 8,
+      "max_chunk_char_length": 7515,
+      "avg_chunk_tokens": 145.13,
+      "min_chunk_tokens": 2,
+      "max_chunk_tokens": 5515,
+      "processing_time_ms": 42.25,
+      "output_file": "data/processed\\chunks_hierarchical.jsonl",
+      "validation_passed": true
+    }
+  }
+}

@@ -1,0 +1,107 @@
+version: "3.8"
+
+# =============================================================================
+# Phase 6.11 — Production-Grade Docker Compose for HH Goa 2026 Voice RAG
+# =============================================================================
+
+services:
+  # ---------------------------------------------------------------------------
+  # 1. Voice RAG Backend API Service
+  # ---------------------------------------------------------------------------
+  voice-rag-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: hhgoa-voice-rag-api
+    restart: unless-stopped
+    ports:
+      - "${APP_PORT:-8000}:8000"
+    environment:
+      - ENVIRONMENT=${ENVIRONMENT:-production}
+      - DEBUG=${DEBUG:-false}
+      - APP_HOST=0.0.0.0
+      - APP_PORT=8000
+      - STT_PROVIDER=${STT_PROVIDER:-mock}
+      - TTS_PROVIDER=${TTS_PROVIDER:-mock}
+      - LLM_PROVIDER=${LLM_PROVIDER:-mock}
+      - VECTOR_PROVIDER=${VECTOR_PROVIDER:-qdrant_local}
+      - SARVAM_API_KEY=${SARVAM_API_KEY:-}
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-}
+      - VECTOR_DB_URL=${VECTOR_DB_URL:-http://qdrant:6333}
+      - VECTOR_DB_API_KEY=${VECTOR_DB_API_KEY:-}
+      - RATE_LIMIT_ENABLED=${RATE_LIMIT_ENABLED:-true}
+      - RATE_LIMIT_REQUESTS_PER_MINUTE=${RATE_LIMIT_REQUESTS_PER_MINUTE:-120}
+      - SECURITY_HEADERS_ENABLED=${SECURITY_HEADERS_ENABLED:-true}
+      - TOTAL_RETRIEVAL_DEADLINE_MS=${TOTAL_RETRIEVAL_DEADLINE_MS:-200.0}
+      - RAG_CACHE_ENABLED=${RAG_CACHE_ENABLED:-true}
+      - RAG_CACHE_MAX_SIZE=${RAG_CACHE_MAX_SIZE:-256}
+      - RAG_CACHE_TTL_SECONDS=${RAG_CACHE_TTL_SECONDS:-300}
+      - HF_HOME=/app/data/cache/huggingface
+      - TRANSFORMERS_CACHE=/app/data/cache/huggingface
+    volumes:
+      # Persistent HuggingFace model cache (avoids redownloading on restart)
+      - model_cache:/app/data/cache/huggingface
+      # Application persistent state & local indices
+      - app_data:/app/data
+    depends_on:
+      qdrant:
+        condition: service_healthy
+    networks:
+      - voice-rag-net
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8000/health || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
+    deploy:
+      resources:
+        limits:
+          cpus: "4.0"
+          memory: 4096M
+        reservations:
+          cpus: "1.0"
+          memory: 1024M
+
+  # ---------------------------------------------------------------------------
+  # 2. Qdrant Vector Search Engine
+  # ---------------------------------------------------------------------------
+  qdrant:
+    image: qdrant/qdrant:v1.9.0
+    container_name: hhgoa-qdrant
+    restart: unless-stopped
+    volumes:
+      # Persistent storage volume for collections and vector snapshots
+      - qdrant_storage:/qdrant/storage
+    networks:
+      - voice-rag-net
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:6333/readyz || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    deploy:
+      resources:
+        limits:
+          cpus: "2.0"
+          memory: 2048M
+        reservations:
+          cpus: "0.5"
+          memory: 512M
+
+# -----------------------------------------------------------------------------
+# Storage Volumes & Isolated Internal Network
+# -----------------------------------------------------------------------------
+volumes:
+  model_cache:
+    name: hhgoa_model_cache
+  app_data:
+    name: hhgoa_app_data
+  qdrant_storage:
+    name: hhgoa_qdrant_storage
+
+networks:
+  voice-rag-net:
+    name: hhgoa_voice_rag_net
+    driver: bridge

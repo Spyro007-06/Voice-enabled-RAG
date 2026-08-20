@@ -1,0 +1,23 @@
+{
+  "embedding_model": "intfloat/multilingual-e5-small",
+  "vector_dimension": 384,
+  "device": "cpu",
+  "batch_size": 32,
+  "num_texts_per_pass": 256,
+  "num_runs": 5,
+  "model_loading_time_sec": 14.3296,
+  "document_embedding_benchmarks": {
+    "throughput_texts_per_sec": 232.25,
+    "avg_batch_latency_ms": 137.78,
+    "p50_batch_latency_ms": 134.36,
+    "p70_batch_latency_ms": 136.26,
+    "p100_batch_latency_ms": 164.15
+  },
+  "query_embedding_benchmarks": {
+    "avg_query_latency_ms": 11.48,
+    "p50_query_latency_ms": 11.12,
+    "p95_query_latency_ms": 13.63,
+    "p100_query_latency_ms": 16.35
+  },
+  "timestamp": "2026-08-15T16:05:24Z"
+}

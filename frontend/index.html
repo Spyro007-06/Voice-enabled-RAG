@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HH Goa 2026 — Multilingual Passage Intelligence & Voice RAG</title>
+  <meta name="description" content="Multilingual Passage Intelligence & Retrieval System on MSMARCO-XI. Grounded answers in English, Hindi, Tamil, Telugu, and Malayalam." />
+  <link rel="icon" type="image/svg+xml" href="assets/logo.svg" />
+
+  <!-- Google Fonts: Inter + Multilingual Indic Scripts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Devanagari:wght@400;600&family=Noto+Sans+Malayalam:wght@400;600&family=Noto+Sans+Tamil:wght@400;600&family=Noto+Sans+Telugu:wght@400;600&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="css/main.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <link rel="stylesheet" href="css/animations.css" />
+  <link rel="stylesheet" href="css/responsive.css" />
+</head>
+<body>
+
+  <!-- ================================================================
+       APP SHELL
+       ================================================================ -->
+  <div class="app-shell" id="appShell">
+
+    <!-- ── HEADER ────────────────────────────────────────────────── -->
+    <header class="app-header" role="banner">
+      <div class="header-inner">
+
+        <!-- Left: Menu toggle + Brand -->
+        <div class="header-left">
+          <button id="menuBtn" class="icon-btn menu-toggle-btn" aria-label="Open navigation menu" aria-expanded="false" aria-controls="menuDrawer" title="Open menu">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+              <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
+            </svg>
+          </button>
+          <a class="brand" href="/app/" aria-label="HH Goa 2026 Home">
+            <img src="assets/logo.svg" alt="" class="brand-logo" width="28" height="28" aria-hidden="true" />
+            <div class="brand-text">
+              <span class="brand-name">HH Goa 2026</span>
+              <span class="brand-sub">Multilingual Voice RAG</span>
+            </div>
+          </a>
+        </div>
+
+        <!-- Center: System Badge (Desktop) -->
+        <div class="header-center" aria-hidden="true">
+          <span class="header-tagline">MSMARCO-XI Passage Intelligence</span>
+        </div>
+
+        <!-- Right: Language Selector + Quick Actions + Status Pill -->
+        <div class="header-right">
+          <!-- Language Selector -->
+          <div class="lang-wrapper">
+            <label for="langSelect" class="sr-only">Select language</label>
+            <select id="langSelect" class="lang-select" aria-label="Select language">
+              <option value="en" selected>English</option>
+              <option value="hi">हिन्दी — Hindi</option>
+              <option value="ta">தமிழ் — Tamil</option>
+              <option value="te">తెలుగు — Telugu</option>
+              <option value="ml">മലയാളം — Malayalam</option>
+            </select>
+            <svg class="lang-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+              <polyline points="6 9 12 15 18 9"/>
+            </svg>
+          </div>
+
+          <!-- Dataset Info Button -->
+          <button id="headerDatasetBtn" class="icon-text-btn" aria-label="Open Dataset Overview" title="MSMARCO-XI Dataset Overview">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <ellipse cx="12" cy="5" rx="9" ry="3"/>
+              <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/>
+              <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/>
+            </svg>
+            <span class="btn-text-desktop">Dataset</span>
+          </button>
+
+          <!-- Pipeline Button -->
+          <button id="headerPipelineBtn" class="icon-text-btn" aria-label="Open Pipeline Architecture" title="Retrieval Pipeline Architecture">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+            </svg>
+            <span class="btn-text-desktop">Pipeline</span>
+          </button>
+
+          <!-- System Status Pill -->
+          <button id="statusBtn" class="status-pill" aria-label="System status — click for details" aria-expanded="false" aria-controls="statusDrawer" title="System status">
+            <span id="statusDot" class="status-dot"></span>
+            <span id="statusText" class="status-label">Operational</span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- ── MAIN CONVERSATION AREA ────────────────────────────────── -->
+    <main class="app-main" role="main">
+
+      <!-- Conversation feed -->
+      <div id="chatMessages" class="chat-feed" role="log" aria-label="Conversation" aria-live="polite">
+
+        <!-- Welcome / Empty State (Dataset-Centric Hero) -->
+        <section id="welcomeState" class="welcome-state animate-fade-in" aria-label="Dataset Overview & Suggested Questions">
+          <div class="welcome-inner">
+            <div class="hero-badge">
+              <span class="badge-dot"></span>
+              <span>MSMARCO-XI Corpus · 48,206 Chunks · 5 Languages</span>
+            </div>
+
+            <h1 class="welcome-title">Multilingual Passage Intelligence</h1>
+            <p class="welcome-sub">Ask a question and retrieve grounded answers from the indexed multilingual knowledge corpus.</p>
+            <p class="welcome-notice">Answers are synthesized strictly from retrieved passages. Unanswerable queries will be safely refused.</p>
+
+            <!-- Voice Quick Trigger -->
+            <button id="welcomeMicBtn" class="welcome-mic-btn" aria-label="Start speaking" title="Start voice recording">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+                <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+                <line x1="12" y1="19" x2="12" y2="23"/>
+                <line x1="8" y1="23" x2="16" y2="23"/>
+              </svg>
+              <span>Start speaking</span>
+            </button>
+
+            <!-- Suggested Deterministic Example Questions -->
+            <div class="suggestions-container">
+              <div class="suggestions-header">
+                <span class="suggestions-label">Suggested questions known to be in corpus</span>
+                <div class="suggestions-lang-tabs" role="tablist" aria-label="Suggestion Languages">
+                  <button class="lang-tab active" data-lang="en" role="tab" aria-selected="true">English</button>
+                  <button class="lang-tab" data-lang="hi" role="tab" aria-selected="false">हिन्दी</button>
+                  <button class="lang-tab" data-lang="ta" role="tab" aria-selected="false">தமிழ்</button>
+                  <button class="lang-tab" data-lang="te" role="tab" aria-selected="false">తెలుగు</button>
+                  <button class="lang-tab" data-lang="ml" role="tab" aria-selected="false">മലയാളം</button>
+                </div>
+              </div>
+
+              <!-- English Suggestions -->
+              <div class="suggestion-grid active" data-lang-group="en" role="list">
+                <button class="suggestion-chip" role="listitem" data-query="What is a computer?">What is a computer?</button>
+                <button class="suggestion-chip" role="listitem" data-query="What is machine learning?">What is machine learning?</button>
+                <button class="suggestion-chip" role="listitem" data-query="What is artificial intelligence?">What is artificial intelligence?</button>
+                <button class="suggestion-chip" role="listitem" data-query="What is the internet?">What is the internet?</button>
+                <button class="suggestion-chip" role="listitem" data-query="What is a programming language?">What is a programming language?</button>
+              </div>
+
+              <!-- Hindi Suggestions -->
+              <div class="suggestion-grid" data-lang-group="hi" role="list" hidden>
+                <button class="suggestion-chip" role="listitem" data-query="कंप्यूटर क्या है?">कंप्यूटर क्या है?</button>
+                <button class="suggestion-chip" role="listitem" data-query="मशीन लर्निंग क्या है?">मशीन लर्निंग क्या है?</button>
+                <button class="suggestion-chip" role="listitem" data-query="कृत्रिम बुद्धिमत्ता क्या है?">कृत्रिम बुद्धिमत्ता क्या है?</button>
+                <button class="suggestion-chip" role="listitem" data-query="इंटरनेट क्या है?">इंटरनेट क्या है?</button>
+                <button class="suggestion-chip" role="listitem" data-query="प्रोग्रामिंग भाषा क्या है?">प्रोग्रामिंग भाषा क्या है?</button>
+              </div>
+
+              <!-- Tamil Suggestions -->
+              <div class="suggestion-grid" data-lang-group="ta" role="list" hidden>
+                <button class="suggestion-chip" role="listitem" data-query="கணினி என்றால் என்ன?">கணினி என்றால் என்ன?</button>
+                <button class="suggestion-chip" role="listitem" data-query="இயந்திர கற்றல் என்றால் என்ன?">இயந்திர கற்றல் என்றால் என்ன?</button>
+                <button class="suggestion-chip" role="listitem" data-query="செயற்கை நுண்ணறிவு என்றால் என்ன?">செயற்கை நுண்ணறிவு என்றால் என்ன?</button>
+                <button class="suggestion-chip" role="listitem" data-query="இணையம் என்றால் என்ன?">இணையம் என்றால் என்ன?</button>
+                <button class="suggestion-chip" role="listitem" data-query="நிரலாக்க மொழி என்றால் என்ன?">நிரலாக்க மொழி என்றால் என்ன?</button>
+              </div>
+
+              <!-- Telugu Suggestions -->
+              <div class="suggestion-grid" data-lang-group="te" role="list" hidden>
+                <button class="suggestion-chip" role="listitem" data-query="కంప్యూటర్ అంటే ఏమిటి?">కంప్యూటర్ అంటే ఏమిటి?</button>
+                <button class="suggestion-chip" role="listitem" data-query="మెషిన్ లెర్నింగ్ అంటే ఏమిటి?">మెషిన్ లెర్నింగ్ అంటే ఏమిటి?</button>
+                <button class="suggestion-chip" role="listitem" data-query="కృత్రిమ మేధస్సు అంటే ఏమిటి?">కృత్రిమ మేధస్సు అంటే ఏమిటి?</button>
+                <button class="suggestion-chip" role="listitem" data-query="ఇంటర్నెట్ అంటే ఏమిటి?">ఇంటర్నెట్ అంటే ఏమిటి?</button>
+                <button class="suggestion-chip" role="listitem" data-query="ప్రోగ్రామింగ్ భాష అంటే ఏమిటి?">ప్రోగ్రామింగ్ భాష అంటే ఏమిటి?</button>
+              </div>
+
+              <!-- Malayalam Suggestions -->
+              <div class="suggestion-grid" data-lang-group="ml" role="list" hidden>
+                <button class="suggestion-chip" role="listitem" data-query="കമ്പ്യൂട്ടർ എന്താണ്?">കമ്പ്യൂട്ടർ എന്താണ്?</button>
+                <button class="suggestion-chip" role="listitem" data-query="മെഷീൻ ലേണിംഗ് എന്താണ്?">മെഷീൻ ലേണിംഗ് എന്താണ്?</button>
+                <button class="suggestion-chip" role="listitem" data-query="കൃത്രിമ ബുദ്ധി എന്താണ്?">കൃത്രിമ ബുദ്ധി എന്താണ്?</button>
+                <button class="suggestion-chip" role="listitem" data-query="ഇന്റർനെറ്റ് എന്താണ്?">ഇന്റർനെറ്റ് എന്താണ്?</button>
+                <button class="suggestion-chip" role="listitem" data-query="പ്രോഗ്രാമിംഗ് ഭാഷ എന്താണ്?">പ്രോഗ്രാമിംഗ് ഭാഷ എന്താണ്?</button>
+              </div>
+            </div>
+
+            <!-- Dataset Specs Grid Summary -->
+            <div class="specs-pill-row">
+              <div class="spec-pill"><span>Dataset</span> <b>MSMARCO-XI</b></div>
+              <div class="spec-pill"><span>Chunks</span> <b>48,206</b></div>
+              <div class="spec-pill"><span>Qdrant Vectors</span> <b>28,541</b></div>
+              <div class="spec-pill"><span>Retrieval</span> <b>Dense + BM25 + RRF</b></div>
+              <div class="spec-pill"><span>LLM</span> <b>Sarvam 105B</b></div>
+              <div class="spec-pill"><span>Voice</span> <b>Saarika v2.5 / Bulbul v2</b></div>
+            </div>
+          </div>
+        </section>
+
+      </div><!-- /chatMessages -->
+
+      <!-- Inline Voice Recording Bar -->
+      <div id="recordingBar" class="recording-bar" hidden aria-live="assertive">
+        <div class="recording-bar-inner">
+          <span class="recording-dot" aria-hidden="true"></span>
+          <span id="recordingStatusLabel" class="recording-label">Listening...</span>
+          <span id="recordingTimer" class="recording-timer" aria-label="Recording duration">00:00</span>
+          <span id="recordingRemaining" class="recording-remaining" aria-live="polite" hidden></span>
+          <div class="waveform" aria-hidden="true">
+            <span class="waveform-bar"></span><span class="waveform-bar"></span>
+            <span class="waveform-bar"></span><span class="waveform-bar"></span>
+            <span class="waveform-bar"></span><span class="waveform-bar"></span>
+            <span class="waveform-bar"></span>
+          </div>
+          <div class="recording-actions">
+            <button id="cancelRecordingBtn" class="rec-action-btn cancel" aria-label="Cancel voice recording">Cancel</button>
+            <button id="stopRecordingBtn" class="rec-action-btn stop" aria-label="Stop recording and submit">Stop</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── BOTTOM QUERY COMPOSER ──────────────────────────────── -->
+      <div class="composer-wrap">
+        <div class="composer" role="form" aria-label="Message composer">
+          <textarea
+            id="queryInput"
+            class="composer-input"
+            rows="1"
+            maxlength="2000"
+            placeholder="Ask a question about the indexed knowledge base..."
+            aria-label="Ask a question about the indexed knowledge base"
+            aria-multiline="true"
+          ></textarea>
+          <div class="composer-actions">
+            <!-- Voice Button -->
+            <button id="micBtn" class="composer-btn mic-btn" aria-label="Start voice recording" title="Record voice question">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+                <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+                <line x1="12" y1="19" x2="12" y2="23"/>
+                <line x1="8" y1="23" x2="16" y2="23"/>
+              </svg>
+            </button>
+            <!-- Send Button -->
+            <button id="sendBtn" class="composer-btn send-btn" disabled aria-label="Send message" title="Send question (Enter)">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="22" y1="2" x2="11" y2="13"/>
+                <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+        <div class="composer-footer">
+          <span class="composer-hint">Enter to send&nbsp;&nbsp;·&nbsp;&nbsp;Shift+Enter for newline&nbsp;&nbsp;·&nbsp;&nbsp;Esc to close</span>
+          <span id="charCounter" class="char-counter" aria-live="polite">0 / 2000</span>
+        </div>
+      </div>
+
+      <!-- ── COMPACT DATASET FOOTER ──────────────────────────────── -->
+      <footer class="dataset-footer" role="contentinfo">
+        <div class="footer-inner">
+          <div class="footer-stats">
+            <span><b>MSMARCO-XI</b> (48,206 chunks)</span>
+            <span class="footer-sep">·</span>
+            <span>5 Languages</span>
+            <span class="footer-sep">·</span>
+            <span>Qdrant (28,541 vectors)</span>
+            <span class="footer-sep">·</span>
+            <span>Sarvam 105B</span>
+          </div>
+          <div class="footer-links">
+            <button id="footerDatasetBtn" class="footer-link">Dataset Specs</button>
+            <button id="footerPipelineBtn" class="footer-link">Pipeline View</button>
+            <button id="footerStatusBtn" class="footer-link">System Health</button>
+          </div>
+        </div>
+      </footer>
+
+    </main><!-- /app-main -->
+
+    <!-- ── DRAWER BACKDROP ───────────────────────────────────────── -->
+    <div id="drawerBackdrop" class="drawer-backdrop" hidden aria-hidden="true"></div>
+
+    <!-- ── LEFT MENU DRAWER ──────────────────────────────────────── -->
+    <nav id="menuDrawer" class="drawer drawer-left" role="dialog" aria-modal="true" aria-label="Application navigation menu" hidden>
+      <div class="drawer-header">
+        <span class="drawer-title">Navigation</span>
+        <button id="closeMenuBtn" class="icon-btn" aria-label="Close navigation menu">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <ul class="drawer-menu" role="list">
+        <li>
+          <button id="newChatBtn" class="drawer-item" role="listitem">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+            New Query Session
+          </button>
+        </li>
+        <li>
+          <button id="openDatasetFromMenu" class="drawer-item" role="listitem">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
+            Dataset Overview (MSMARCO-XI)
+          </button>
+        </li>
+        <li>
+          <button id="openPipelineFromMenu" class="drawer-item" role="listitem">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+            Pipeline Architecture
+          </button>
+        </li>
+        <li>
+          <button id="openStatusFromMenu" class="drawer-item" role="listitem">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+            System Health & Providers
+          </button>
+        </li>
+        <li>
+          <button id="openAboutBtn" class="drawer-item" role="listitem">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            About System
+          </button>
+        </li>
+        <li class="drawer-sep" role="separator"></li>
+        <li>
+          <button id="clearChatBtn" class="drawer-item danger" role="listitem">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/></svg>
+            Clear Conversation
+          </button>
+        </li>
+      </ul>
+    </nav>
+
+    <!-- ── DATASET OVERVIEW DRAWER (Right) ───────────────────────── -->
+    <aside id="datasetDrawer" class="drawer drawer-right drawer-wide" role="dialog" aria-modal="true" aria-label="MSMARCO-XI Dataset Overview" hidden>
+      <div class="drawer-header">
+        <span class="drawer-title">MSMARCO-XI Knowledge Base</span>
+        <button id="closeDatasetBtn" class="icon-btn" aria-label="Close dataset overview">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div class="drawer-body">
+        <div class="dataset-notice-box">
+          <p><b>Passage Retrieval System:</b> This application synthesizes answers strictly from the indexed MSMARCO-XI multilingual passage corpus. It is not an ungrounded general-purpose assistant.</p>
+        </div>
+
+        <div class="drawer-section">
+          <p class="drawer-section-title">Corpus Key Metrics</p>
+          <div class="stats-card-grid">
+            <div class="stat-card">
+              <span class="stat-num">48,206</span>
+              <span class="stat-name">Total Indexed Chunks</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-num">28,541</span>
+              <span class="stat-name">Qdrant Production Vectors</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-num">5</span>
+              <span class="stat-name">Supported Languages</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-num">384</span>
+              <span class="stat-name">Embedding Dimension</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="drawer-section">
+          <p class="drawer-section-title">Language Distribution</p>
+          <div class="lang-dist-list">
+            <div class="lang-dist-row">
+              <div class="lang-dist-info">
+                <span class="lang-dist-name">English (en / eng_Latn)</span>
+                <span class="lang-dist-count">9,858 chunks</span>
+              </div>
+              <div class="dist-bar"><div class="dist-fill" style="width: 20.45%;"></div></div>
+            </div>
+            <div class="lang-dist-row">
+              <div class="lang-dist-info">
+                <span class="lang-dist-name">Malayalam (ml / mal_Mlym)</span>
+                <span class="lang-dist-count">9,915 chunks</span>
+              </div>
+              <div class="dist-bar"><div class="dist-fill" style="width: 20.57%;"></div></div>
+            </div>
+            <div class="lang-dist-row">
+              <div class="lang-dist-info">
+                <span class="lang-dist-name">Tamil (ta / tam_Taml)</span>
+                <span class="lang-dist-count">9,910 chunks</span>
+              </div>
+              <div class="dist-bar"><div class="dist-fill" style="width: 20.56%;"></div></div>
+            </div>
+            <div class="lang-dist-row">
+              <div class="lang-dist-info">
+                <span class="lang-dist-name">Hindi (hi / hin_Deva)</span>
+                <span class="lang-dist-count">9,355 chunks</span>
+              </div>
+              <div class="dist-bar"><div class="dist-fill" style="width: 19.41%;"></div></div>
+            </div>
+            <div class="lang-dist-row">
+              <div class="lang-dist-info">
+                <span class="lang-dist-name">Telugu (te / tel_Telu)</span>
+                <span class="lang-dist-count">9,168 chunks</span>
+              </div>
+              <div class="dist-bar"><div class="dist-fill" style="width: 19.02%;"></div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="drawer-section">
+          <p class="drawer-section-title">Retrieval & Model Infrastructure</p>
+          <ul class="about-list">
+            <li><b>Dense Vector Store:</b> Qdrant HNSW ANN with 28,541 vectors</li>
+            <li><b>Lexical Search:</b> Inverted BM25 index with 48,206 documents</li>
+            <li><b>Embedding Model:</b> <code>intfloat/multilingual-e5-small</code> (384-dim)</li>
+            <li><b>Fusion Strategy:</b> Reciprocal Rank Fusion (RRF k=60)</li>
+            <li><b>Reranker:</b> <code>cross-encoder/mmarco-mMiniLMv2-L12-H384-v1</code></li>
+            <li><b>Generator:</b> Sarvam AI 105B LLM (<code>sarvam-105b</code>)</li>
+            <li><b>STT & TTS:</b> Saarika v2.5 (<code>saarika:v2.5</code>) & Bulbul v2 (<code>bulbul:v2</code>)</li>
+          </ul>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ── PIPELINE ARCHITECTURE DRAWER (Right) ──────────────────── -->
+    <aside id="pipelineDrawer" class="drawer drawer-right drawer-wide" role="dialog" aria-modal="true" aria-label="Pipeline Architecture" hidden>
+      <div class="drawer-header">
+        <span class="drawer-title">12-Stage Multilingual Pipeline</span>
+        <button id="closePipelineBtn" class="icon-btn" aria-label="Close pipeline overview">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div class="drawer-body">
+        <div class="pipeline-flow">
+          <div class="pipeline-step">
+            <div class="step-badge">1</div>
+            <div class="step-content">
+              <b>Voice / Text Input</b>
+              <span>Microphone audio (WebM/WAV) or UTF-8 text query</span>
+            </div>
+          </div>
+          <div class="pipeline-connector">↓</div>
+          <div class="pipeline-step">
+            <div class="step-badge">2</div>
+            <div class="step-content">
+              <b>Language Resolution</b>
+              <span>Centralized resolver maps ISO to Flores-200 (en, hi, ta, te, ml)</span>
+            </div>
+          </div>
+          <div class="pipeline-connector">↓</div>
+          <div class="pipeline-step">
+            <div class="step-badge">3</div>
+            <div class="step-content">
+              <b>Speech-to-Text (STT)</b>
+              <span>Sarvam Saarika v2.5 with language-targeted acoustic decoding</span>
+            </div>
+          </div>
+          <div class="pipeline-connector">↓</div>
+          <div class="pipeline-step">
+            <div class="step-badge">4</div>
+            <div class="step-content">
+              <b>Query Normalization</b>
+              <span>Unicode NFC normalization and script sanity checks</span>
+            </div>
+          </div>
+          <div class="pipeline-connector">↓</div>
+          <div class="pipeline-step">
+            <div class="step-badge">5</div>
+            <div class="step-content">
+              <b>Multilingual Embedding</b>
+              <span>intfloat/multilingual-e5-small (384-dimensional dense vectors)</span>
+            </div>
+          </div>
+          <div class="pipeline-connector">↓</div>
+          <div class="pipeline-step">
+            <div class="step-badge">6</div>
+            <div class="step-content">
+              <b>Hybrid Retrieval</b>
+              <span>Parallel Qdrant HNSW ANN + Inverted BM25 candidate lookup</span>
+            </div>
+          </div>
+          <div class="pipeline-connector">↓</div>
+          <div class="pipeline-step">
+            <div class="step-badge">7</div>
+            <div class="step-content">
+              <b>Reciprocal Rank Fusion</b>
+              <span>Score-agnostic RRF (k=60) merges dense and lexical candidates</span>
+            </div>
+          </div>
+          <div class="pipeline-connector">↓</div>
+          <div class="pipeline-step">
+            <div class="step-badge">8</div>
+            <div class="step-content">
+              <b>Cross-Encoder Reranking</b>
+              <span>mmarco-mMiniLMv2-L12-H384-v1 evaluates query-passage cross-attention</span>
+            </div>
+          </div>
+          <div class="pipeline-connector">↓</div>
+          <div class="pipeline-step">
+            <div class="step-badge">9</div>
+            <div class="step-content">
+              <b>Grounding & Relevance Guardrails</b>
+              <span>Pre-generation threshold checks and unanswerable query filtering</span>
+            </div>
+          </div>
+          <div class="pipeline-connector">↓</div>
+          <div class="pipeline-step">
+            <div class="step-badge">10</div>
+            <div class="step-content">
+              <b>Sarvam-105B LLM</b>
+              <span>Prompt construction with strictly grounded provenance citations</span>
+            </div>
+          </div>
+          <div class="pipeline-connector">↓</div>
+          <div class="pipeline-step">
+            <div class="step-badge">11</div>
+            <div class="step-content">
+              <b>Grounded Answer & Citations</b>
+              <span>Final answer formatting with verifiable passage provenance</span>
+            </div>
+          </div>
+          <div class="pipeline-connector">↓</div>
+          <div class="pipeline-step">
+            <div class="step-badge">12</div>
+            <div class="step-content">
+              <b>Text-to-Speech (TTS)</b>
+              <span>Sarvam Bulbul v2 synthesis (anushka voice) to streaming audio</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ── RIGHT SYSTEM STATUS DRAWER ────────────────────────────── -->
+    <aside id="statusDrawer" class="drawer drawer-right" role="dialog" aria-modal="true" aria-label="System status telemetry" hidden>
+      <div class="drawer-header">
+        <span class="drawer-title">System Status</span>
+        <button id="closeStatusBtn" class="icon-btn" aria-label="Close system status">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div class="drawer-body">
+        <div class="status-grid">
+          <div class="status-row">
+            <span class="status-label-text">API Gateway</span>
+            <span id="statApiGateway" class="status-val ok">● Operational</span>
+          </div>
+          <div class="status-row">
+            <span class="status-label-text">Qdrant Vector DB</span>
+            <span id="statVectorDb" class="status-val ok">● Operational</span>
+          </div>
+          <div class="status-row">
+            <span class="status-label-text">BM25 Lexical Index</span>
+            <span id="statBm25" class="status-val ok">● Operational</span>
+          </div>
+          <div class="status-row">
+            <span class="status-label-text">Embedding Engine</span>
+            <span id="statEmbedding" class="status-val ok">● Operational</span>
+          </div>
+          <div class="status-row">
+            <span class="status-label-text">Cross-Encoder Reranker</span>
+            <span id="statReranker" class="status-val ok">● Operational</span>
+          </div>
+          <div class="status-row">
+            <span class="status-label-text">Sarvam-105B LLM</span>
+            <span id="statLlm" class="status-val ok">● Operational</span>
+          </div>
+          <div class="status-row">
+            <span class="status-label-text">Saarika v2.5 STT</span>
+            <span id="statStt" class="status-val ok">● Operational</span>
+          </div>
+          <div class="status-row">
+            <span class="status-label-text">Bulbul v2 TTS</span>
+            <span id="statTts" class="status-val ok">● Operational</span>
+          </div>
+        </div>
+        <p class="status-last-checked">Last checked: <span id="lastCheckedTime">—</span></p>
+        <button id="refreshHealthBtn" class="drawer-action-btn" aria-label="Refresh telemetry">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+          Refresh Telemetry
+        </button>
+      </div>
+    </aside>
+
+    <!-- ── ABOUT DRAWER (Right) ──────────────────────────────────── -->
+    <aside id="aboutDrawer" class="drawer drawer-right" role="dialog" aria-modal="true" aria-label="About HH Goa 2026" hidden>
+      <div class="drawer-header">
+        <span class="drawer-title">About</span>
+        <button id="closeAboutBtn" class="icon-btn" aria-label="Close about panel">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div class="drawer-body">
+        <div class="about-logo-row">
+          <img src="assets/logo.svg" alt="" width="36" height="36" aria-hidden="true" />
+          <div>
+            <p class="about-name">HH Goa 2026</p>
+            <p class="about-version">Multilingual Voice RAG (v1.0.0)</p>
+          </div>
+        </div>
+        <div class="about-section">
+          <p class="about-section-title">System Mission</p>
+          <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.5;">
+            A high-performance Multilingual Passage Intelligence & Retrieval System evaluated across 5 Indic languages on the MSMARCO-XI passage dataset.
+          </p>
+        </div>
+        <div class="about-section">
+          <p class="about-section-title">Core Technology Stack</p>
+          <ul class="about-list">
+            <li>FastAPI + Uvicorn Async Backend</li>
+            <li>Qdrant Vector Store (384-dim E5 Embeddings)</li>
+            <li>Multilingual BM25 Lexical Index (48,206 Chunks)</li>
+            <li>Cross-Encoder MiniLM Reranker</li>
+            <li>Sarvam AI (Saarika STT, 105B LLM, Bulbul TTS)</li>
+          </ul>
+        </div>
+        <div class="about-section">
+          <p class="about-section-title">Supported Languages</p>
+          <ul class="about-list">
+            <li>English (eng_Latn)</li>
+            <li>हिन्दी — Hindi (hin_Deva)</li>
+            <li>தமிழ் — Tamil (tam_Taml)</li>
+            <li>తెలుగు — Telugu (tel_Telu)</li>
+            <li>മലയാളം — Malayalam (mal_Mlym)</li>
+          </ul>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ── TOAST NOTIFICATIONS ───────────────────────────────────── -->
+    <div id="toastContainer" class="toast-container" role="status" aria-live="polite" aria-atomic="true"></div>
+
+  </div><!-- /app-shell -->
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>

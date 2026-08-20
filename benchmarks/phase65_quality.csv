@@ -1,0 +1,7 @@
+Configuration,MRR@10,Recall@1,Recall@5,Recall@10
+A. RRF Only,0.4088,0.3529,0.5294,0.5294
+B. MiniLM K=3,0.415,0.3922,0.451,0.451
+C. MiniLM K=5,0.431,0.3922,0.5294,0.5294
+D. Adaptive,0.415,0.3922,0.451,0.451
+G. Adaptive + Time Budget,0.415,0.3922,0.451,0.451
+H. Adaptive + Parallel Retrieval,0.415,0.3922,0.451,0.451

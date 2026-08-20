@@ -1,0 +1,123 @@
+{
+  "model_name": "BAAI/bge-reranker-v2-m3",
+  "device": "cpu",
+  "model_initialization_ms": 6699.84,
+  "num_queries_evaluated": 50,
+  "evaluations": {
+    "candidate_k_10": {
+      "candidate_k": 10,
+      "final_k": 5,
+      "retrieval_latency": {
+        "mean_ms": 74.39,
+        "p50_ms": 71.59,
+        "p70_ms": 78.28,
+        "p95_ms": 97.65,
+        "p100_ms": 108.38
+      },
+      "reranking_latency": {
+        "mean_ms": 1230.75,
+        "p50_ms": 1296.86,
+        "p70_ms": 1377.13,
+        "p95_ms": 1474.14,
+        "p100_ms": 1560.02
+      },
+      "context_selection_latency": {
+        "mean_ms": 0.01,
+        "p50_ms": 0.01,
+        "p70_ms": 0.01,
+        "p95_ms": 0.02,
+        "p100_ms": 0.02
+      },
+      "total_latency": {
+        "mean_ms": 1305.15,
+        "p50_ms": 1363.29,
+        "p70_ms": 1449.81,
+        "p95_ms": 1558.95,
+        "p100_ms": 1640.3
+      },
+      "context_stats": {
+        "avg_characters": 805.5,
+        "p95_characters": 1316.0,
+        "max_characters": 1316,
+        "avg_chunks_selected": 5.0
+      }
+    },
+    "candidate_k_20": {
+      "candidate_k": 20,
+      "final_k": 5,
+      "retrieval_latency": {
+        "mean_ms": 87.07,
+        "p50_ms": 85.5,
+        "p70_ms": 92.57,
+        "p95_ms": 107.26,
+        "p100_ms": 160.77
+      },
+      "reranking_latency": {
+        "mean_ms": 2733.56,
+        "p50_ms": 2707.25,
+        "p70_ms": 3008.81,
+        "p95_ms": 3884.34,
+        "p100_ms": 4514.36
+      },
+      "context_selection_latency": {
+        "mean_ms": 0.02,
+        "p50_ms": 0.02,
+        "p70_ms": 0.02,
+        "p95_ms": 0.02,
+        "p100_ms": 0.03
+      },
+      "total_latency": {
+        "mean_ms": 2820.64,
+        "p50_ms": 2780.56,
+        "p70_ms": 3073.19,
+        "p95_ms": 3980.79,
+        "p100_ms": 4599.74
+      },
+      "context_stats": {
+        "avg_characters": 859.3,
+        "p95_characters": 1468.0,
+        "max_characters": 1468,
+        "avg_chunks_selected": 5.0
+      }
+    },
+    "candidate_k_30": {
+      "candidate_k": 30,
+      "final_k": 5,
+      "retrieval_latency": {
+        "mean_ms": 95.64,
+        "p50_ms": 96.03,
+        "p70_ms": 104.35,
+        "p95_ms": 127.78,
+        "p100_ms": 137.7
+      },
+      "reranking_latency": {
+        "mean_ms": 4397.94,
+        "p50_ms": 4272.67,
+        "p70_ms": 4815.48,
+        "p95_ms": 6087.24,
+        "p100_ms": 6816.21
+      },
+      "context_selection_latency": {
+        "mean_ms": 0.02,
+        "p50_ms": 0.02,
+        "p70_ms": 0.02,
+        "p95_ms": 0.03,
+        "p100_ms": 0.03
+      },
+      "total_latency": {
+        "mean_ms": 4493.6,
+        "p50_ms": 4379.01,
+        "p70_ms": 4914.76,
+        "p95_ms": 6205.91,
+        "p100_ms": 6916.98
+      },
+      "context_stats": {
+        "avg_characters": 929.5,
+        "p95_characters": 1468.0,
+        "max_characters": 1468,
+        "avg_chunks_selected": 5.0
+      }
+    }
+  },
+  "timestamp": "2026-08-15T16:44:28Z"
+}

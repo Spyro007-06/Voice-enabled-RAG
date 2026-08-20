@@ -1,0 +1,25 @@
+{
+  "collection_name": "msmarco_xi",
+  "embedding_model": "intfloat/multilingual-e5-small",
+  "embedding_dimension": 384,
+  "device": "cpu",
+  "strategies_indexed": [
+    "fixed",
+    "sentence",
+    "sliding_window",
+    "semantic",
+    "hierarchical"
+  ],
+  "total_chunks_processed": 8467,
+  "total_vectors_indexed": 8467,
+  "collection_points_count": 8467,
+  "timing": {
+    "jsonl_loading_sec": 0.133,
+    "model_init_sec": 10.849,
+    "total_embedding_sec": 91.1751,
+    "total_upsert_sec": 46.2015,
+    "total_pipeline_sec": 137.3831,
+    "indexing_throughput_vectors_per_sec": 61.63
+  },
+  "timestamp": "2026-08-15T16:17:03Z"
+}

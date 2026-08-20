@@ -1,0 +1,8 @@
+metric,baseline_phase651,phase67_measured,delta,status
+Recall@1,0.4333,0.4333,0.0,PASS
+Recall@5,0.5333,0.5333,0.0,PASS
+Recall@10,0.6667,0.6667,0.0,PASS
+MRR@10,0.4776,0.4776,0.0,PASS
+Citation_Validity_Pct,100.0,100.0,0.0,PASS
+Refusal_Correctness_Pct,100.0,100.0,0.0,PASS
+Unsupported_Claim_Rate_Pct,0.0,0.0,0.0,PASS

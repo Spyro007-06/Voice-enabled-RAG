@@ -1,0 +1,478 @@
+{
+  "api_test": {
+    "status_code": 200,
+    "response": {
+      "query": "What is natural language processing?",
+      "answer": "I don't have enough information in the retrieved context to answer that.",
+      "grounded": false,
+      "confidence": 0.0,
+      "citations": [],
+      "citation_provenance": [],
+      "retrieval": {
+        "confidence": 0.0,
+        "reranking_used": false,
+        "chunks_count": 0,
+        "total_characters": 0,
+        "languages": []
+      },
+      "guardrail_decision": {
+        "allowed": false,
+        "reason": "empty_retrieval_context",
+        "grounded": false,
+        "confidence": 0.0,
+        "action": "refuse_generation",
+        "issues": [
+          "No usable context retrieved for query."
+        ],
+        "latency_ms": 0.831,
+        "safe_fallback_text": "I don't have enough information in the retrieved context to answer that."
+      },
+      "retrieval_confidence": 0.0,
+      "reranking_used": false,
+      "model": "mock-model",
+      "latency_ms": {
+        "embedding": 0.0,
+        "retrieval": 73.54,
+        "reranking": 0.0,
+        "context_selection": 0.0,
+        "guardrails": 0.83,
+        "prompt_construction": 0.0,
+        "generation": 0.0,
+        "total": 903.54
+      },
+      "retrieved_context_summary": {
+        "chunks_count": 0,
+        "total_characters": 0,
+        "languages": [],
+        "chunk_ids": []
+      },
+      "error": null
+    }
+  },
+  "pipeline_trace": {
+    "query": "What is natural language processing?",
+    "language": "en",
+    "dense_candidates_count": 0,
+    "bm25_candidates_count": 0,
+    "fused_candidates_count": 0,
+    "adaptive_selected_count": 0,
+    "adaptive_decision": {
+      "confidence_score": 0.0,
+      "should_rerank": false,
+      "reranker_tier": "high",
+      "reranker": "none"
+    },
+    "pre_guardrail": {
+      "allowed": false,
+      "reason": "empty_retrieval_context",
+      "confidence": 0.0,
+      "safe_fallback": "I don't have enough information in the retrieved context to answer that."
+    }
+  },
+  "dense_top10": [
+    {
+      "chunk_id": "msmarco_1060348_3_sentence_0001_b130de99",
+      "document_id": "msmarco_1060348_3",
+      "score": 0.8005,
+      "rank": 1,
+      "strategy": "sentence",
+      "snippet": "http://learn/genetics.utah.edu/\u0964"
+    },
+    {
+      "chunk_id": "msmarco_1060348_3_hierarchical_0001_b9de9883",
+      "document_id": "msmarco_1060348_3",
+      "score": 0.8005,
+      "rank": 2,
+      "strategy": "hierarchical",
+      "snippet": "http://learn/genetics.utah.edu/\u0964"
+    },
+    {
+      "chunk_id": "msmarco_1060348_3_semantic_0003_5ce275bc",
+      "document_id": "msmarco_1060348_3",
+      "score": 0.8005,
+      "rank": 3,
+      "strategy": "semantic",
+      "snippet": "http://learn/genetics.utah.edu/\u0964"
+    },
+    {
+      "chunk_id": "msmarco_1060341_1_fixed_0001_81729441",
+      "document_id": "msmarco_1060341_1",
+      "score": 0.7874,
+      "rank": 4,
+      "strategy": "fixed",
+      "snippet": "\u093f \u092a\u094d\u0930\u093e\u092a\u094d\u0924 \u0915\u0940 \u0914\u0930 \u0915\u093e\u0928, \u0928\u093e\u0915 \u0914\u0930 \u0917\u0932\u0947 \u092e\u0947\u0902 \u0935\u093f\u0936\u0947\u0937\u091c\u094d\u091e\u0924\u093e \u0930\u0916\u0924\u0947 \u0939\u0948\u0902\u0964"
+    },
+    {
+      "chunk_id": "msmarco_191749_1_fixed_0001_33e3a0f7",
+      "document_id": "msmarco_191749_1",
+      "score": 0.7844,
+      "rank": 5,
+      "strategy": "fixed",
+      "snippet": "\u0936\u092c\u094d\u0926\u094b\u0902 \u0914\u0930 \u0935\u093e\u0915\u094d\u092f\u093e\u0902\u0936\u094b\u0902 \u0915\u0947 \u0924\u094d\u0935\u0930\u093f\u0924 \u092b\u094d\u0930\u0947\u0902\u091a \u0905\u0928\u0941\u0935\u093e\u0926 \u0915\u0947 \u0932\u093f\u090f \u090f\u0915 \u0938\u094d\u0935\u091a\u093e\u0932\u093f\u0924 \u0905\u0928\u0941\u0935\u093e\u0926\u0915 \u092a\u094d\u0930\u0926\u093e\u0928 \u0915\u0930\u0924\u093e \u0939\u0948\u0964"
+    },
+    {
+      "chunk_id": "msmarco_1102431_8_fixed_0001_a209d6da",
+      "document_id": "msmarco_1102431_8",
+      "score": 0.7839,
+      "rank": 6,
+      "strategy": "fixed",
+      "snippet": "\u0942\u0932 \u092d\u0930\u0940 \u091c\u0917\u0939 \u092a\u0930 \u092f\u093e\u0924\u094d\u0930\u093e \u0915\u0930\u0924\u093e \u0939\u0948... \u092a\u093e\u0920\u0915 \u0915\u094b \u0915\u0947\u0935\u0932 \u0915\u092d\u0940-\u0915\u092d\u0940 \u0906\u0926\u092e\u0940 \u0915\u0947 \u092e\u0928 \u0915\u0947 \u0906\u0902\u0924\u0930\u093f\u0915 \u0915\u093e\u0930\u094d\u092f\u094b\u0902 \u092e\u0947\u0902 \u0905\u0902\u0924\u0930\u094d\u0926\u0943\u0937\u094d\u091f\u093f \u092e\u093f\u0932\u0924\u0940 \u0939\u0948\u0964"
+    },
+    {
+      "chunk_id": "msmarco_1090356_9_sliding_window_0001_9e9683a7",
+      "document_id": "msmarco_1090356_9",
+      "score": 0.7823,
+      "rank": 7,
+      "strategy": "sliding_window",
+      "snippet": "\u0932\u0917\u092d\u0917 \u0916\u094b\u091c \u092a\u0930\u093f\u0923\u093e\u092e. \u0935\u093e\u0908.\u092a\u0940. - \u0926 \u0930\u093f\u092f\u0932 \u092f\u0947\u0932\u094b \u092a\u0947\u091c\u0947\u0938\u090f\u0938.\u090f\u092e."
+    },
+    {
+      "chunk_id": "msmarco_1060348_9_semantic_0002_21d35230",
+      "document_id": "msmarco_1060348_9",
+      "score": 0.7815,
+      "rank": 8,
+      "strategy": "semantic",
+      "snippet": "2 \u092f\u0942\u090f\u0938\u0906\u0930 - \u092a\u094d\u0930\u094b\u0917\u094d\u0930\u093e\u092e \u0928\u093f\u092f\u0902\u0924\u094d\u0930\u0923 \u0915\u094b \u090f\u0915 \u092e\u0936\u0940\u0928 \u092d\u093e\u0937\u093e \u0909\u092a-\u092a\u094d\u0930\u094b\u0917\u094d\u0930\u093e\u092e \u092e\u0947\u0902 \u0938\u094d\u0925\u093e\u0928\u093e\u0902\u0924\u0930\u093f\u0924 \u0915\u0930\u0924\u093e \u0939\u0948, \u0906\u092e\u0924\u094c\u0930 \u092a\u0930 \u090f\u0915 \u0905\u0932\u094d\u092b\u093c\u093e\u0928\u094d\u092f\u0942\u092e\u0947\u0930\u093f\u0915 \u0938\u094d\u091f\u094d\u0930\u093f\u0902\u0917..."
+    },
+    {
+      "chunk_id": "msmarco_1060348_9_fixed_0001_21b210be",
+      "document_id": "msmarco_1060348_9",
+      "score": 0.7815,
+      "rank": 9,
+      "strategy": "fixed",
+      "snippet": "2 \u092f\u0942\u090f\u0938\u0906\u0930 - \u092a\u094d\u0930\u094b\u0917\u094d\u0930\u093e\u092e \u0928\u093f\u092f\u0902\u0924\u094d\u0930\u0923 \u0915\u094b \u090f\u0915 \u092e\u0936\u0940\u0928 \u092d\u093e\u0937\u093e \u0909\u092a-\u092a\u094d\u0930\u094b\u0917\u094d\u0930\u093e\u092e \u092e\u0947\u0902 \u0938\u094d\u0925\u093e\u0928\u093e\u0902\u0924\u0930\u093f\u0924 \u0915\u0930\u0924\u093e \u0939\u0948, \u0906\u092e\u0924\u094c\u0930 \u092a\u0930 \u090f\u0915 \u0905\u0932\u094d\u092b\u093c\u093e\u0928\u094d\u092f\u0942\u092e\u0947\u0930\u093f\u0915 \u0938\u094d\u091f\u094d\u0930\u093f\u0902\u0917..."
+    },
+    {
+      "chunk_id": "msmarco_1060348_9_hierarchical_0001_fb02cc47",
+      "document_id": "msmarco_1060348_9",
+      "score": 0.7815,
+      "rank": 10,
+      "strategy": "hierarchical",
+      "snippet": "2 \u092f\u0942\u090f\u0938\u0906\u0930 - \u092a\u094d\u0930\u094b\u0917\u094d\u0930\u093e\u092e \u0928\u093f\u092f\u0902\u0924\u094d\u0930\u0923 \u0915\u094b \u090f\u0915 \u092e\u0936\u0940\u0928 \u092d\u093e\u0937\u093e \u0909\u092a-\u092a\u094d\u0930\u094b\u0917\u094d\u0930\u093e\u092e \u092e\u0947\u0902 \u0938\u094d\u0925\u093e\u0928\u093e\u0902\u0924\u0930\u093f\u0924 \u0915\u0930\u0924\u093e \u0939\u0948, \u0906\u092e\u0924\u094c\u0930 \u092a\u0930 \u090f\u0915 \u0905\u0932\u094d\u092b\u093c\u093e\u0928\u094d\u092f\u0942\u092e\u0947\u0930\u093f\u0915 \u0938\u094d\u091f\u094d\u0930\u093f\u0902\u0917..."
+    }
+  ],
+  "bm25_top10": [
+    {
+      "chunk_id": "msmarco_1100338_5_hierarchical_0000_8aa14176",
+      "document_id": "msmarco_1100338_5",
+      "score": 15.9587,
+      "rank": 1,
+      "strategy": "hierarchical",
+      "snippet": "https://en.wikipedia.org/w/index.php?title=galantine&oldid=44996355 \u0938\u0947 \u092a\u0941\u0928\u0903 \u092a\u094d\u0930\u093e\u092a\u094d\u0924 \u0915\u093f\u092f\u093e \u0917\u092f\u093e"
+    },
+    {
+      "chunk_id": "msmarco_1100338_5_semantic_0000_c33dde19",
+      "document_id": "msmarco_1100338_5",
+      "score": 15.9587,
+      "rank": 2,
+      "strategy": "semantic",
+      "snippet": "https://en.wikipedia.org/w/index.php?title=galantine&oldid=44996355 \u0938\u0947 \u092a\u0941\u0928\u0903 \u092a\u094d\u0930\u093e\u092a\u094d\u0924 \u0915\u093f\u092f\u093e \u0917\u092f\u093e"
+    },
+    {
+      "chunk_id": "msmarco_1100338_5_sliding_window_0000_22abe295",
+      "document_id": "msmarco_1100338_5",
+      "score": 15.9587,
+      "rank": 3,
+      "strategy": "sliding_window",
+      "snippet": "https://en.wikipedia.org/w/index.php?title=galantine&oldid=44996355 \u0938\u0947 \u092a\u0941\u0928\u0903 \u092a\u094d\u0930\u093e\u092a\u094d\u0924 \u0915\u093f\u092f\u093e \u0917\u092f\u093e"
+    },
+    {
+      "chunk_id": "msmarco_1100338_5_sentence_0000_f9be1d9f",
+      "document_id": "msmarco_1100338_5",
+      "score": 15.9587,
+      "rank": 4,
+      "strategy": "sentence",
+      "snippet": "https://en.wikipedia.org/w/index.php?title=galantine&oldid=44996355 \u0938\u0947 \u092a\u0941\u0928\u0903 \u092a\u094d\u0930\u093e\u092a\u094d\u0924 \u0915\u093f\u092f\u093e \u0917\u092f\u093e"
+    },
+    {
+      "chunk_id": "msmarco_1100338_5_fixed_0000_a376e85a",
+      "document_id": "msmarco_1100338_5",
+      "score": 15.9587,
+      "rank": 5,
+      "strategy": "fixed",
+      "snippet": "https://en.wikipedia.org/w/index.php?title=galantine&oldid=44996355 \u0938\u0947 \u092a\u0941\u0928\u0903 \u092a\u094d\u0930\u093e\u092a\u094d\u0924 \u0915\u093f\u092f\u093e \u0917\u092f\u093e"
+    },
+    {
+      "chunk_id": "msmarco_191749_2_hierarchical_0001_38360da9",
+      "document_id": "msmarco_191749_2",
+      "score": 7.5343,
+      "rank": 6,
+      "strategy": "hierarchical",
+      "snippet": "\u0915\u093f\u0938\u0940 \u0905\u0928\u094d\u092f \u092d\u093e\u0937\u093e \u0915\u094b \u0938\u0940\u0916\u0928\u0947 \u0938\u0947 \u0932\u094b\u0917\u094b\u0902 \u0915\u094b \u0909\u0938 \u0926\u0942\u0938\u0930\u0940 \u0938\u0902\u0938\u094d\u0915\u0943\u0924\u093f \u0915\u0947 \u0926\u093f\u092e\u093e\u0917 \u0914\u0930 \u0938\u0902\u0926\u0930\u094d\u092d \u092e\u0947\u0902 \u0915\u0926\u092e \u0930\u0916\u0928\u0947 \u0915\u0940 \u0915\u094d\u0937\u092e\u0924\u093e \u092e\u093f\u0932\u0924\u0940 \u0939\u0948\u0964"
+    },
+    {
+      "chunk_id": "msmarco_191749_2_hierarchical_0000_becacedc",
+      "document_id": "msmarco_191749_2",
+      "score": 7.5343,
+      "rank": 7,
+      "strategy": "hierarchical",
+      "snippet": "\u092b\u094d\u0930\u0947\u0902\u091a \u092d\u093e\u0937\u093e\u0964 \u0939\u092e\u093e\u0930\u0940 \u092e\u0941\u092b\u094d\u0924 \u092b\u094d\u0930\u0947\u0902\u091a \u0938\u0947 \u0905\u0902\u0917\u094d\u0930\u0947\u091c\u0940 \u0905\u0928\u0941\u0935\u093e\u0926 \u0938\u0947\u0935\u093e \u0915\u093e \u0909\u092a\u092f\u094b\u0917 \u0915\u0930\u0915\u0947 \u092b\u094d\u0930\u0947\u0902\u091a \u092d\u093e\u0937\u093e \u0938\u0940\u0916\u0947\u0902\u0964 \u092b\u094d\u0930\u0947\u0902\u091a \u092d\u093e\u0937\u093e \u091c\u093e\u0928\u0928\u0947 \u0938\u0947 \u0906\u092a\u0915\u094b \u092b\u094d\u0930\u093e\u0902..."
+    },
+    {
+      "chunk_id": "msmarco_191749_1_hierarchical_0000_46e6e8ee",
+      "document_id": "msmarco_191749_1",
+      "score": 7.5343,
+      "rank": 8,
+      "strategy": "hierarchical",
+      "snippet": "\u091f\u093e\u0930\u0917\u0947\u091f \u0932\u0948\u0902\u0917\u094d\u0935\u0947\u091c\u0964 \u092f\u0926\u093f \u0906\u092a\u0915\u094b \u090f\u0915 \u0911\u0928\u0932\u093e\u0907\u0928 \u092b\u094d\u0930\u0947\u0902\u091a \u0905\u0928\u0941\u0935\u093e\u0926\u0915 \u0915\u0940 \u0906\u0935\u0936\u094d\u092f\u0915\u0924\u093e \u0939\u0948, \u0924\u094b \u0906\u092a\u0928\u0947 \u0905\u092d\u0940-\u0905\u092d\u0940 \u0938\u092c\u0938\u0947 \u0905\u091a\u094d\u091b\u0947 \u092b\u094d\u0930\u0947\u0902\u091a \u0905\u0928\u0941\u0935\u093e\u0926\u0915 \u0915\u094b \u092a\u093e\u092f\u093e \u0939\u0948 ..."
+    },
+    {
+      "chunk_id": "msmarco_191749_0_hierarchical_0000_f3692bb5",
+      "document_id": "msmarco_191749_0",
+      "score": 7.5343,
+      "rank": 9,
+      "strategy": "hierarchical",
+      "snippet": "\u090f\u0938.\u0935\u093e\u0908.\u090f\u0938.\u091f\u0940.\u0906\u0930.\u090f.\u090f\u0928. \u0906\u092a\u0915\u0940 \u0906\u0935\u0936\u094d\u092f\u0915\u0924\u093e\u0913\u0902 \u0915\u0947 \u0905\u0928\u0941\u0938\u093e\u0930 \u0924\u0941\u0930\u0902\u0924 \u092b\u094d\u0930\u0947\u0902\u091a \u0905\u0928\u0941\u0935\u093e\u0926 \u092a\u094d\u0930\u0926\u093e\u0928 \u0915\u0930\u0924\u093e \u0939\u0948\u0964 \u092b\u094d\u0930\u0947\u0902\u091a \u092e\u0947\u0902 \u0915\u093f\u0938\u0940 \u0926\u0938\u094d\u0924\u093e\u0935\u0947\u091c\u093c \u0915\u093e \u0905\u0928\u0941\u0935\u093e\u0926 ..."
+    },
+    {
+      "chunk_id": "msmarco_160108_9_hierarchical_0000_4ab1f490",
+      "document_id": "msmarco_160108_9",
+      "score": 7.5343,
+      "rank": 10,
+      "strategy": "hierarchical",
+      "snippet": "\u0906\u092a\u0915\u0947 \u0926\u094d\u0935\u093e\u0930\u093e \u0916\u0941\u0932\u0940 \u0935\u093e\u0907\u0928 \u0930\u0916\u0928\u0947 \u0915\u0940 \u0905\u0935\u0927\u093f \u0938\u0940\u092e\u093f\u0924 \u0939\u094b\u0928\u0947 \u0915\u093e \u0915\u093e\u0930\u0923 \u0911\u0915\u094d\u0938\u0940\u091c\u0928 \u0938\u0947 \u0938\u0902\u092c\u0902\u0927\u093f\u0924 \u0939\u0948\u0964 \u0916\u0941\u0932\u0940 \u0935\u093e\u0907\u0928 \u0915\u0947 \u0938\u093e\u0925 \u0911\u0915\u094d\u0938\u0940\u091c\u0928 \u092e\u093f\u0924\u094d\u0930 \u0914\u0930 \u0936\u0924\u094d\u0930\u0941 \u0926\u094b\u0928..."
+    }
+  ],
+  "rrf_top10": [
+    {
+      "chunk_id": "msmarco_1060348_3_sentence_0001_b130de99",
+      "document_id": "msmarco_1060348_3",
+      "score": 0.0164,
+      "rank": 1,
+      "snippet": "http://learn/genetics.utah.edu/\u0964"
+    },
+    {
+      "chunk_id": "msmarco_1100338_5_hierarchical_0000_8aa14176",
+      "document_id": "msmarco_1100338_5",
+      "score": 0.0164,
+      "rank": 2,
+      "snippet": "https://en.wikipedia.org/w/index.php?title=galantine&oldid=44996355 \u0938\u0947 \u092a\u0941\u0928\u0903 \u092a\u094d\u0930\u093e\u092a\u094d\u0924 \u0915\u093f\u092f\u093e \u0917\u092f\u093e"
+    },
+    {
+      "chunk_id": "msmarco_1060348_3_hierarchical_0001_b9de9883",
+      "document_id": "msmarco_1060348_3",
+      "score": 0.0161,
+      "rank": 3,
+      "snippet": "http://learn/genetics.utah.edu/\u0964"
+    },
+    {
+      "chunk_id": "msmarco_1100338_5_semantic_0000_c33dde19",
+      "document_id": "msmarco_1100338_5",
+      "score": 0.0161,
+      "rank": 4,
+      "snippet": "https://en.wikipedia.org/w/index.php?title=galantine&oldid=44996355 \u0938\u0947 \u092a\u0941\u0928\u0903 \u092a\u094d\u0930\u093e\u092a\u094d\u0924 \u0915\u093f\u092f\u093e \u0917\u092f\u093e"
+    },
+    {
+      "chunk_id": "msmarco_1060348_3_semantic_0003_5ce275bc",
+      "document_id": "msmarco_1060348_3",
+      "score": 0.0159,
+      "rank": 5,
+      "snippet": "http://learn/genetics.utah.edu/\u0964"
+    },
+    {
+      "chunk_id": "msmarco_1100338_5_sliding_window_0000_22abe295",
+      "document_id": "msmarco_1100338_5",
+      "score": 0.0159,
+      "rank": 6,
+      "snippet": "https://en.wikipedia.org/w/index.php?title=galantine&oldid=44996355 \u0938\u0947 \u092a\u0941\u0928\u0903 \u092a\u094d\u0930\u093e\u092a\u094d\u0924 \u0915\u093f\u092f\u093e \u0917\u092f\u093e"
+    },
+    {
+      "chunk_id": "msmarco_1060341_1_fixed_0001_81729441",
+      "document_id": "msmarco_1060341_1",
+      "score": 0.0156,
+      "rank": 7,
+      "snippet": "\u093f \u092a\u094d\u0930\u093e\u092a\u094d\u0924 \u0915\u0940 \u0914\u0930 \u0915\u093e\u0928, \u0928\u093e\u0915 \u0914\u0930 \u0917\u0932\u0947 \u092e\u0947\u0902 \u0935\u093f\u0936\u0947\u0937\u091c\u094d\u091e\u0924\u093e \u0930\u0916\u0924\u0947 \u0939\u0948\u0902\u0964"
+    },
+    {
+      "chunk_id": "msmarco_1100338_5_sentence_0000_f9be1d9f",
+      "document_id": "msmarco_1100338_5",
+      "score": 0.0156,
+      "rank": 8,
+      "snippet": "https://en.wikipedia.org/w/index.php?title=galantine&oldid=44996355 \u0938\u0947 \u092a\u0941\u0928\u0903 \u092a\u094d\u0930\u093e\u092a\u094d\u0924 \u0915\u093f\u092f\u093e \u0917\u092f\u093e"
+    },
+    {
+      "chunk_id": "msmarco_191749_1_fixed_0001_33e3a0f7",
+      "document_id": "msmarco_191749_1",
+      "score": 0.0154,
+      "rank": 9,
+      "snippet": "\u0936\u092c\u094d\u0926\u094b\u0902 \u0914\u0930 \u0935\u093e\u0915\u094d\u092f\u093e\u0902\u0936\u094b\u0902 \u0915\u0947 \u0924\u094d\u0935\u0930\u093f\u0924 \u092b\u094d\u0930\u0947\u0902\u091a \u0905\u0928\u0941\u0935\u093e\u0926 \u0915\u0947 \u0932\u093f\u090f \u090f\u0915 \u0938\u094d\u0935\u091a\u093e\u0932\u093f\u0924 \u0905\u0928\u0941\u0935\u093e\u0926\u0915 \u092a\u094d\u0930\u0926\u093e\u0928 \u0915\u0930\u0924\u093e \u0939\u0948\u0964"
+    },
+    {
+      "chunk_id": "msmarco_1100338_5_fixed_0000_a376e85a",
+      "document_id": "msmarco_1100338_5",
+      "score": 0.0154,
+      "rank": 10,
+      "snippet": "https://en.wikipedia.org/w/index.php?title=galantine&oldid=44996355 \u0938\u0947 \u092a\u0941\u0928\u0903 \u092a\u094d\u0930\u093e\u092a\u094d\u0924 \u0915\u093f\u092f\u093e \u0917\u092f\u093e"
+    }
+  ],
+  "reranked_top5": [
+    {
+      "chunk_id": "msmarco_1060341_1_fixed_0001_81729441",
+      "document_id": "msmarco_1060341_1",
+      "rerank_score": -3.2675,
+      "rank": 1,
+      "snippet": "\u093f \u092a\u094d\u0930\u093e\u092a\u094d\u0924 \u0915\u0940 \u0914\u0930 \u0915\u093e\u0928, \u0928\u093e\u0915 \u0914\u0930 \u0917\u0932\u0947 \u092e\u0947\u0902 \u0935\u093f\u0936\u0947\u0937\u091c\u094d\u091e\u0924\u093e \u0930\u0916\u0924\u0947 \u0939\u0948\u0902\u0964"
+    },
+    {
+      "chunk_id": "msmarco_1060348_9_semantic_0002_21d35230",
+      "document_id": "msmarco_1060348_9",
+      "rerank_score": -3.4465,
+      "rank": 2,
+      "snippet": "2 \u092f\u0942\u090f\u0938\u0906\u0930 - \u092a\u094d\u0930\u094b\u0917\u094d\u0930\u093e\u092e \u0928\u093f\u092f\u0902\u0924\u094d\u0930\u0923 \u0915\u094b \u090f\u0915 \u092e\u0936\u0940\u0928 \u092d\u093e\u0937\u093e \u0909\u092a-\u092a\u094d\u0930\u094b\u0917\u094d\u0930\u093e\u092e \u092e\u0947\u0902 \u0938\u094d\u0925\u093e\u0928\u093e\u0902\u0924\u0930\u093f\u0924 \u0915\u0930\u0924\u093e \u0939\u0948, \u0906\u092e\u0924\u094c\u0930 \u092a\u0930 \u090f\u0915 \u0905\u0932\u094d\u092b\u093c\u093e\u0928\u094d\u092f\u0942\u092e\u0947\u0930\u093f\u0915 \u0938\u094d\u091f\u094d\u0930\u093f\u0902\u0917..."
+    },
+    {
+      "chunk_id": "msmarco_191749_2_hierarchical_0001_38360da9",
+      "document_id": "msmarco_191749_2",
+      "rerank_score": -3.7961,
+      "rank": 3,
+      "snippet": "\u0915\u093f\u0938\u0940 \u0905\u0928\u094d\u092f \u092d\u093e\u0937\u093e \u0915\u094b \u0938\u0940\u0916\u0928\u0947 \u0938\u0947 \u0932\u094b\u0917\u094b\u0902 \u0915\u094b \u0909\u0938 \u0926\u0942\u0938\u0930\u0940 \u0938\u0902\u0938\u094d\u0915\u0943\u0924\u093f \u0915\u0947 \u0926\u093f\u092e\u093e\u0917 \u0914\u0930 \u0938\u0902\u0926\u0930\u094d\u092d \u092e\u0947\u0902 \u0915\u0926\u092e \u0930\u0916\u0928\u0947 \u0915\u0940 \u0915\u094d\u0937\u092e\u0924\u093e \u092e\u093f\u0932\u0924\u0940 \u0939\u0948\u0964"
+    },
+    {
+      "chunk_id": "msmarco_1090356_9_sliding_window_0001_9e9683a7",
+      "document_id": "msmarco_1090356_9",
+      "rerank_score": -4.2168,
+      "rank": 4,
+      "snippet": "\u0932\u0917\u092d\u0917 \u0916\u094b\u091c \u092a\u0930\u093f\u0923\u093e\u092e. \u0935\u093e\u0908.\u092a\u0940. - \u0926 \u0930\u093f\u092f\u0932 \u092f\u0947\u0932\u094b \u092a\u0947\u091c\u0947\u0938\u090f\u0938.\u090f\u092e."
+    },
+    {
+      "chunk_id": "msmarco_1102431_8_fixed_0001_a209d6da",
+      "document_id": "msmarco_1102431_8",
+      "rerank_score": -4.2752,
+      "rank": 5,
+      "snippet": "\u0942\u0932 \u092d\u0930\u0940 \u091c\u0917\u0939 \u092a\u0930 \u092f\u093e\u0924\u094d\u0930\u093e \u0915\u0930\u0924\u093e \u0939\u0948... \u092a\u093e\u0920\u0915 \u0915\u094b \u0915\u0947\u0935\u0932 \u0915\u092d\u0940-\u0915\u092d\u0940 \u0906\u0926\u092e\u0940 \u0915\u0947 \u092e\u0928 \u0915\u0947 \u0906\u0902\u0924\u0930\u093f\u0915 \u0915\u093e\u0930\u094d\u092f\u094b\u0902 \u092e\u0947\u0902 \u0905\u0902\u0924\u0930\u094d\u0926\u0943\u0937\u094d\u091f\u093f \u092e\u093f\u0932\u0924\u0940 \u0939\u0948\u0964"
+    }
+  ],
+  "nlp_query_variations": [
+    {
+      "query": "What is natural language processing?",
+      "status_code": 200,
+      "grounded": false,
+      "confidence": 0.0,
+      "retrieval_confidence": 0.0,
+      "citations_count": 0,
+      "answer_preview": "I don't have enough information in the retrieved context to answer that."
+    },
+    {
+      "query": "What is NLP?",
+      "status_code": 200,
+      "grounded": false,
+      "confidence": 0.0,
+      "retrieval_confidence": 0.0,
+      "citations_count": 0,
+      "answer_preview": "I don't have enough information in the retrieved context to answer that."
+    },
+    {
+      "query": "Explain natural language processing.",
+      "status_code": 200,
+      "grounded": false,
+      "confidence": 0.0,
+      "retrieval_confidence": 0.0,
+      "citations_count": 0,
+      "answer_preview": "I don't have enough information in the retrieved context to answer that."
+    },
+    {
+      "query": "What does natural language processing mean?",
+      "status_code": 200,
+      "grounded": false,
+      "confidence": 0.0,
+      "retrieval_confidence": 0.0,
+      "citations_count": 0,
+      "answer_preview": "I don't have enough information in the retrieved context to answer that."
+    },
+    {
+      "query": "How do computers process human language?",
+      "status_code": 200,
+      "grounded": false,
+      "confidence": 0.0,
+      "retrieval_confidence": 0.0,
+      "citations_count": 0,
+      "answer_preview": "I don't have enough information in the retrieved context to answer that."
+    },
+    {
+      "query": "What is computational linguistics?",
+      "status_code": 200,
+      "grounded": false,
+      "confidence": 0.0,
+      "retrieval_confidence": 0.0,
+      "citations_count": 0,
+      "answer_preview": "I don't have enough information in the retrieved context to answer that."
+    },
+    {
+      "query": "How can computers understand human language?",
+      "status_code": 200,
+      "grounded": false,
+      "confidence": 0.0,
+      "retrieval_confidence": 0.0,
+      "citations_count": 0,
+      "answer_preview": "I don't have enough information in the retrieved context to answer that."
+    },
+    {
+      "query": "Define natural language processing.",
+      "status_code": 200,
+      "grounded": false,
+      "confidence": 0.0,
+      "retrieval_confidence": 0.0,
+      "citations_count": 0,
+      "answer_preview": "I don't have enough information in the retrieved context to answer that."
+    }
+  ],
+  "known_good_queries": [
+    {
+      "query": "What is machine learning?",
+      "status_code": 200,
+      "grounded": false,
+      "confidence": 0.0,
+      "retrieval_confidence": 0.0,
+      "citations": [],
+      "answer_preview": "I don't have enough information in the retrieved context to answer that."
+    },
+    {
+      "query": "What is artificial intelligence?",
+      "status_code": 200,
+      "grounded": false,
+      "confidence": 0.0,
+      "retrieval_confidence": 0.0,
+      "citations": [],
+      "answer_preview": "I don't have enough information in the retrieved context to answer that."
+    },
+    {
+      "query": "What is deep learning?",
+      "status_code": 200,
+      "grounded": false,
+      "confidence": 0.0,
+      "retrieval_confidence": 0.0,
+      "citations": [],
+      "answer_preview": "I don't have enough information in the retrieved context to answer that."
+    }
+  ],
+  "dataset_scan": {
+    "total_chunks_scanned": 9355,
+    "nlp_matching_chunks_count": 0,
+    "nlp_matching_chunks": []
+  },
+  "index_stats": {
+    "collection_name": "msmarco_xi",
+    "exists": true,
+    "status": "GREEN",
+    "points_count": 8467,
+    "vectors_count": 8467,
+    "indexed_vectors_count": 0,
+    "config": {
+      "vector_size": 384,
+      "distance": "Cosine"
+    }
+  },
+  "embedding_verification": {
+    "provider": "MultilingualE5EmbeddingProvider",
+    "model_name": "intfloat/multilingual-e5-small",
+    "dimension": 384,
+    "query_prefix_applied": true
+  },
+  "cache_verification": {
+    "distinct_keys": true
+  },
+  "final_diagnosis": {
+    "code": "A",
+    "description": "Dataset does not contain relevant NLP content in the indexed corpus."
+  }
+}

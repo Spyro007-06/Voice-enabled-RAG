@@ -1,0 +1,126 @@
+{
+  "phase": "6.22",
+  "name": "Final Production QA Matrix",
+  "timestamp": "2026-08-19T14:55:00+05:30",
+  "system_info": {
+    "collection": "msmarco_xi",
+    "total_chunks": 48206,
+    "languages": ["en", "hi", "ta", "te", "ml"],
+    "embedding_model": "intfloat/multilingual-e5-small",
+    "vector_dimension": 384
+  },
+  "matrix": [
+    {
+      "feature": "Multilingual Text - English",
+      "test": "5 Canonical queries (AI, ML, Computer, Internet, NLP)",
+      "expected": "HTTP 200, answer exists, grounded=True, citations valid",
+      "actual": "HTTP 200, answer returned with grounded citations",
+      "status": "PASS",
+      "evidence": "tests/test_phase622_final_qa.py::test_multilingual_text_queries[en]"
+    },
+    {
+      "feature": "Multilingual Text - Hindi",
+      "test": "5 Native Devanagari queries (AI, ML, Computer, Internet, NLP)",
+      "expected": "HTTP 200, Hindi answer, grounded=True, citations valid",
+      "actual": "HTTP 200, fluent Hindi grounded response generated",
+      "status": "PASS",
+      "evidence": "tests/test_phase622_final_qa.py::test_multilingual_text_queries[hi]"
+    },
+    {
+      "feature": "Multilingual Text - Tamil",
+      "test": "5 Native Tamil script queries (AI, ML, Computer, Internet, NLP)",
+      "expected": "HTTP 200, Tamil answer, grounded=True, citations valid",
+      "actual": "HTTP 200, fluent Tamil grounded response generated",
+      "status": "PASS",
+      "evidence": "tests/test_phase622_final_qa.py::test_multilingual_text_queries[ta]"
+    },
+    {
+      "feature": "Multilingual Text - Telugu",
+      "test": "5 Native Telugu script queries (AI, ML, Computer, Internet, NLP)",
+      "expected": "HTTP 200, Telugu answer, grounded=True, citations valid",
+      "actual": "HTTP 200, fluent Telugu grounded response generated",
+      "status": "PASS",
+      "evidence": "tests/test_phase622_final_qa.py::test_multilingual_text_queries[te]"
+    },
+    {
+      "feature": "Multilingual Text - Malayalam",
+      "test": "5 Native Malayalam script queries (AI, ML, Computer, Internet, NLP)",
+      "expected": "HTTP 200, Malayalam answer, grounded=True, citations valid",
+      "actual": "HTTP 200, fluent Malayalam grounded response generated",
+      "status": "PASS",
+      "evidence": "tests/test_phase622_final_qa.py::test_multilingual_text_queries[ml]"
+    },
+    {
+      "feature": "Cross-Language Retrieval",
+      "test": "language=None query routing",
+      "expected": "Retrieval succeeds without altering user selected language state",
+      "actual": "Cross-lingual embeddings resolve matches; state preserved",
+      "status": "PASS",
+      "evidence": "tests/test_phase622_final_qa.py::test_cross_language_retrieval"
+    },
+    {
+      "feature": "Negative Refusal Invariant",
+      "test": "Out-of-domain unindexed queries (cake recipe, sports scores, stock prices)",
+      "expected": "grounded=False, no hallucinated citations, safe refusal text",
+      "actual": "System reliably refuses without hallucinating citations",
+      "status": "PASS",
+      "evidence": "tests/test_phase622_final_qa.py::test_negative_refusal_behavior"
+    },
+    {
+      "feature": "Prompt Injection Defense",
+      "test": "System prompt override, API key extraction, env var leak attempts",
+      "expected": "Safe refusal, 0 secrets leaked, no system prompt leakage",
+      "actual": "Pre-generation guardrails intercept and neutralize injection attacks",
+      "status": "PASS",
+      "evidence": "tests/test_phase622_final_qa.py::test_prompt_injection_defense"
+    },
+    {
+      "feature": "SSE Streaming Protocol",
+      "test": "GET /api/ask-stream event sequence (stage -> token -> done)",
+      "expected": "Ordered stage transitions, token stream, final done payload",
+      "actual": "Delivers SSE frames with incremental tokens and telemetry",
+      "status": "PASS",
+      "evidence": "tests/test_phase622_final_qa.py::test_sse_streaming_events"
+    },
+    {
+      "feature": "Voice Audio Container Support",
+      "test": "WAV, MP3, OGG, WebM, M4A, FLAC upload & validation",
+      "expected": "HTTP 200 on all valid audio containers",
+      "actual": "All 6 audio container formats accepted and parsed correctly",
+      "status": "PASS",
+      "evidence": "tests/test_phase622_final_qa.py::test_voice_ask_audio_formats"
+    },
+    {
+      "feature": "TTS Failure Graceful Degradation",
+      "test": "Simulated TTS provider error",
+      "expected": "status='partial_success', text answer preserved, audio=False",
+      "actual": "Returns partial success with answer readable by user",
+      "status": "PASS",
+      "evidence": "tests/test_phase622_final_qa.py::test_tts_failure_partial_success"
+    },
+    {
+      "feature": "STT Error Sanitization",
+      "test": "Simulated STT timeout/upstream error",
+      "expected": "HTTP 502, sanitized message, 0 raw stack traces/keys",
+      "actual": "HTTP 502 with clean user-facing error",
+      "status": "PASS",
+      "evidence": "tests/test_phase622_final_qa.py::test_stt_failure_returns_502"
+    },
+    {
+      "feature": "Microphone Lifecycle Guards",
+      "test": "60s max auto-stop, 500ms min guard, Page Visibility abort",
+      "expected": "No orphan streams, AudioContext closed on abort/stop",
+      "actual": "Hard duration constraints and visibility cleanup enforced",
+      "status": "PASS",
+      "evidence": "frontend/js/voice.js (Phase 6.21-6.22 lifecycle hardening)"
+    },
+    {
+      "feature": "Security & Credential Masking",
+      "test": "Response body and log auditing for raw secrets",
+      "expected": "Zero occurrences of API keys, bearer tokens, or internal paths",
+      "actual": "All responses verified sanitized with 0 credential exposure",
+      "status": "PASS",
+      "evidence": "Audit scan across logs and API outputs"
+    }
+  ]
+}

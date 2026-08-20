@@ -1,0 +1,6 @@
+Strategy,Documents,Chunks,Chunks/Doc,Avg Chars,Min Chars,Max Chars,Avg Tokens,Time (ms),Valid
+fixed,997,1864,1.87,190.8,51,250,130.5,51.0,True
+sentence,997,1485,1.49,212.1,8,7515,145.1,41.7,True
+sliding_window,997,1633,1.64,217.7,15,7515,148.6,46.6,True
+semantic,997,2888,2.9,108.6,2,7515,74.6,138.4,True
+hierarchical,997,1485,1.49,212.1,8,7515,145.1,42.3,True

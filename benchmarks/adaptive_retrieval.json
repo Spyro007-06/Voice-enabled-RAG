@@ -1,0 +1,110 @@
+{
+  "hardware": "Intel 20-Core (Intel64 Family 6 Model 186)",
+  "eval_queries_count": 15,
+  "configurations": {
+    "dense": {
+      "recall@1": 0.2,
+      "recall@5": 0.267,
+      "recall@10": 0.267,
+      "mrr@10": 0.222,
+      "latency": {
+        "mean_ms": 610.65,
+        "p50_ms": 27.97,
+        "p70_ms": 29.61,
+        "p95_ms": 2652.56,
+        "p100_ms": 8760.38
+      }
+    },
+    "rrf": {
+      "recall@1": 0.267,
+      "recall@5": 0.4,
+      "recall@10": 0.4,
+      "mrr@10": 0.302,
+      "latency": {
+        "mean_ms": 92.3,
+        "p50_ms": 76.72,
+        "p70_ms": 80.49,
+        "p95_ms": 171.32,
+        "p100_ms": 299.91
+      }
+    },
+    "bge_k3": {
+      "recall@1": 0.133,
+      "recall@5": 0.267,
+      "recall@10": 0.267,
+      "mrr@10": 0.189,
+      "latency": {
+        "mean_ms": 704.41,
+        "p50_ms": 584.09,
+        "p70_ms": 637.61,
+        "p95_ms": 1227.2,
+        "p100_ms": 2373.26
+      }
+    },
+    "bge_k5": {
+      "recall@1": 0.2,
+      "recall@5": 0.4,
+      "recall@10": 0.4,
+      "mrr@10": 0.278,
+      "latency": {
+        "mean_ms": 1053.96,
+        "p50_ms": 880.98,
+        "p70_ms": 919.94,
+        "p95_ms": 1948.9,
+        "p100_ms": 3958.73
+      }
+    },
+    "bge_k10": {
+      "recall@1": 0.267,
+      "recall@5": 0.467,
+      "recall@10": 0.467,
+      "mrr@10": 0.339,
+      "latency": {
+        "mean_ms": 1993.42,
+        "p50_ms": 1610.39,
+        "p70_ms": 1799.07,
+        "p95_ms": 3879.74,
+        "p100_ms": 7800.36
+      }
+    },
+    "lightweight_k3": {
+      "recall@1": 0.2,
+      "recall@5": 0.267,
+      "recall@10": 0.267,
+      "mrr@10": 0.222,
+      "latency": {
+        "mean_ms": 132.93,
+        "p50_ms": 126.24,
+        "p70_ms": 142.39,
+        "p95_ms": 174.46,
+        "p100_ms": 178.6
+      }
+    },
+    "lightweight_k5": {
+      "recall@1": 0.2,
+      "recall@5": 0.4,
+      "recall@10": 0.4,
+      "mrr@10": 0.261,
+      "latency": {
+        "mean_ms": 152.31,
+        "p50_ms": 150.11,
+        "p70_ms": 156.09,
+        "p95_ms": 197.12,
+        "p100_ms": 218.36
+      }
+    },
+    "adaptive": {
+      "recall@1": 0.267,
+      "recall@5": 0.333,
+      "recall@10": 0.333,
+      "mrr@10": 0.289,
+      "latency": {
+        "mean_ms": 536.82,
+        "p50_ms": 163.58,
+        "p70_ms": 209.99,
+        "p95_ms": 1842.04,
+        "p100_ms": 1889.71
+      }
+    }
+  }
+}

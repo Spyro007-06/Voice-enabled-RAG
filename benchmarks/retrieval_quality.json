@@ -1,0 +1,89 @@
+{
+  "evaluation_dataset": "ai4bharat/MSMARCO-XI",
+  "queries_evaluated": 51,
+  "chunking_strategy_comparison": {
+    "fixed": {
+      "queries_evaluated": 51,
+      "recall@1": 0.2549,
+      "recall@5": 0.7843,
+      "recall@10": 0.9216,
+      "mrr@10": 0.4573,
+      "avg_latency_ms": 320.76
+    },
+    "sentence": {
+      "queries_evaluated": 51,
+      "recall@1": 0.2745,
+      "recall@5": 0.7059,
+      "recall@10": 0.902,
+      "mrr@10": 0.4589,
+      "avg_latency_ms": 152.71
+    },
+    "sliding_window": {
+      "queries_evaluated": 51,
+      "recall@1": 0.3137,
+      "recall@5": 0.7059,
+      "recall@10": 0.902,
+      "mrr@10": 0.4667,
+      "avg_latency_ms": 152.76
+    },
+    "semantic": {
+      "queries_evaluated": 51,
+      "recall@1": 0.2157,
+      "recall@5": 0.4902,
+      "recall@10": 0.7843,
+      "mrr@10": 0.3693,
+      "avg_latency_ms": 159.2
+    },
+    "hierarchical": {
+      "queries_evaluated": 51,
+      "recall@1": 0.2745,
+      "recall@5": 0.7059,
+      "recall@10": 0.902,
+      "mrr@10": 0.4589,
+      "avg_latency_ms": 152.79
+    },
+    "all": {
+      "queries_evaluated": 51,
+      "recall@1": 0.3333,
+      "recall@5": 0.5098,
+      "recall@10": 0.6471,
+      "mrr@10": 0.4014,
+      "avg_latency_ms": 62.66
+    }
+  },
+  "fusion_method_comparison": {
+    "dense_only": {
+      "queries_evaluated": 51,
+      "recall@1": 0.4118,
+      "recall@5": 0.5098,
+      "recall@10": 0.6275,
+      "mrr@10": 0.4586,
+      "avg_latency_ms": 30.33
+    },
+    "bm25_only": {
+      "queries_evaluated": 51,
+      "recall@1": 0.1961,
+      "recall@5": 0.2353,
+      "recall@10": 0.4118,
+      "mrr@10": 0.2345,
+      "avg_latency_ms": 26.03
+    },
+    "weighted_hybrid": {
+      "queries_evaluated": 51,
+      "recall@1": 0.3333,
+      "recall@5": 0.5098,
+      "recall@10": 0.6078,
+      "mrr@10": 0.3983,
+      "avg_latency_ms": 63.07
+    },
+    "rrf_hybrid": {
+      "queries_evaluated": 51,
+      "recall@1": 0.3333,
+      "recall@5": 0.5098,
+      "recall@10": 0.6471,
+      "mrr@10": 0.4014,
+      "avg_latency_ms": 70.21
+    }
+  },
+  "timestamp": "2026-08-15T16:18:55Z"
+}

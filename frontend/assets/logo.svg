@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48" fill="none">
+  <defs>
+    <linearGradient id="logoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ff9933" />
+      <stop offset="50%" stop-color="#6366f1" />
+      <stop offset="100%" stop-color="#00d2c4" />
+    </linearGradient>
+    <radialGradient id="glowGrad" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#6366f1" stop-opacity="0.6" />
+      <stop offset="100%" stop-color="#6366f1" stop-opacity="0" />
+    </radialGradient>
+  </defs>
+  <circle cx="24" cy="24" r="22" fill="url(#glowGrad)" />
+  <circle cx="24" cy="24" r="20" stroke="url(#logoGrad)" stroke-width="2" fill="#111622" />
+  <!-- Wave / Sound Icon -->
+  <path d="M12 24C12 20 16 16 20 16M24 10C24 10 28 14 28 24C28 34 24 38 24 38M32 18C34 20 36 22 36 24C36 26 34 28 32 30" stroke="url(#logoGrad)" stroke-width="2.5" stroke-linecap="round" />
+  <circle cx="24" cy="24" r="4" fill="#ff9933" />
+</svg>

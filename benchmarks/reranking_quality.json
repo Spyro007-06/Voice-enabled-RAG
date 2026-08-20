@@ -1,0 +1,120 @@
+{
+  "evaluation_dataset": "ai4bharat/MSMARCO-XI",
+  "queries_evaluated": 6,
+  "reranker_model": "BAAI/bge-reranker-v2-m3",
+  "comparisons": {
+    "mode_dense_only": {
+      "before_rerank": {
+        "recall@1": 0.5,
+        "recall@5": 0.5,
+        "recall@10": 0.667,
+        "mrr@10": 0.528
+      },
+      "after_rerank": {
+        "recall@1": 0.5,
+        "recall@5": 0.833,
+        "recall@10": 0.833,
+        "mrr@10": 0.611
+      }
+    },
+    "mode_bm25_only": {
+      "before_rerank": {
+        "recall@1": 0.0,
+        "recall@5": 0.5,
+        "recall@10": 0.667,
+        "mrr@10": 0.2
+      },
+      "after_rerank": {
+        "recall@1": 0.333,
+        "recall@5": 0.667,
+        "recall@10": 0.667,
+        "mrr@10": 0.431
+      }
+    },
+    "mode_rrf_hybrid": {
+      "before_rerank": {
+        "recall@1": 0.667,
+        "recall@5": 0.667,
+        "recall@10": 0.833,
+        "mrr@10": 0.688
+      },
+      "after_rerank": {
+        "recall@1": 0.333,
+        "recall@5": 0.833,
+        "recall@10": 0.833,
+        "mrr@10": 0.478
+      }
+    },
+    "strategy_fixed": {
+      "before_rerank": {
+        "recall@1": 0.5,
+        "recall@5": 0.833,
+        "recall@10": 1.0,
+        "mrr@10": 0.639
+      },
+      "after_rerank": {
+        "recall@1": 0.5,
+        "recall@5": 0.833,
+        "recall@10": 1.0,
+        "mrr@10": 0.625
+      }
+    },
+    "strategy_sentence": {
+      "before_rerank": {
+        "recall@1": 0.5,
+        "recall@5": 0.833,
+        "recall@10": 1.0,
+        "mrr@10": 0.653
+      },
+      "after_rerank": {
+        "recall@1": 0.333,
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 0.547
+      }
+    },
+    "strategy_sliding_window": {
+      "before_rerank": {
+        "recall@1": 0.5,
+        "recall@5": 0.833,
+        "recall@10": 1.0,
+        "mrr@10": 0.617
+      },
+      "after_rerank": {
+        "recall@1": 0.333,
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 0.597
+      }
+    },
+    "strategy_semantic": {
+      "before_rerank": {
+        "recall@1": 0.5,
+        "recall@5": 0.833,
+        "recall@10": 1.0,
+        "mrr@10": 0.607
+      },
+      "after_rerank": {
+        "recall@1": 0.5,
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 0.658
+      }
+    },
+    "strategy_hierarchical": {
+      "before_rerank": {
+        "recall@1": 0.5,
+        "recall@5": 0.833,
+        "recall@10": 1.0,
+        "mrr@10": 0.653
+      },
+      "after_rerank": {
+        "recall@1": 0.333,
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 0.547
+      }
+    }
+  },
+  "timestamp": "2026-08-15T16:48:21Z"
+}

@@ -1,0 +1,9 @@
+Evaluation Type,Configuration,Before Recall@1,After Recall@1,Before Recall@10,After Recall@10,Before MRR@10,After MRR@10
+Mode,dense_only,0.5,0.5,0.667,0.833,0.528,0.611
+Mode,bm25_only,0.0,0.333,0.667,0.667,0.2,0.431
+Mode,rrf_hybrid,0.667,0.333,0.833,0.833,0.688,0.478
+Strategy,fixed,0.5,0.5,1.0,1.0,0.639,0.625
+Strategy,sentence,0.5,0.333,1.0,1.0,0.653,0.547
+Strategy,sliding_window,0.5,0.333,1.0,1.0,0.617,0.597
+Strategy,semantic,0.5,0.5,1.0,1.0,0.607,0.658
+Strategy,hierarchical,0.5,0.333,1.0,1.0,0.653,0.547

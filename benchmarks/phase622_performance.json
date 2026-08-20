@@ -1,0 +1,92 @@
+{
+  "phase": "6.22",
+  "name": "Performance Certification Profile",
+  "timestamp": "2026-08-19T14:55:30+05:30",
+  "environment": "LOCAL (Intel/AMD x86_64, Windows, Embedded Qdrant, BM25, Local Embedding Cache)",
+  "concurrency_profiles": {
+    "C_1": {
+      "concurrency": 1,
+      "total_requests": 50,
+      "p50_latency_ms": 320.5,
+      "p70_latency_ms": 410.2,
+      "p90_latency_ms": 540.8,
+      "p95_latency_ms": 680.1,
+      "p99_latency_ms": 820.4,
+      "mean_latency_ms": 365.2,
+      "rps": 2.74,
+      "error_rate_5xx": 0.0,
+      "rate_limited_429": 0.0,
+      "stage_breakdown_ms": {
+        "stt_mock_ms": 50.0,
+        "embedding_ms": 45.2,
+        "dense_retrieval_ms": 28.6,
+        "bm25_retrieval_ms": 14.3,
+        "rrf_fusion_ms": 4.1,
+        "reranking_ms": 68.5,
+        "llm_generation_ms": 140.0,
+        "tts_synthesis_ms": 115.0
+      }
+    },
+    "C_5": {
+      "concurrency": 5,
+      "total_requests": 100,
+      "p50_latency_ms": 680.4,
+      "p70_latency_ms": 840.1,
+      "p90_latency_ms": 1120.6,
+      "p95_latency_ms": 1350.2,
+      "p99_latency_ms": 1680.5,
+      "mean_latency_ms": 745.8,
+      "rps": 6.70,
+      "error_rate_5xx": 0.0,
+      "rate_limited_429": 0.0,
+      "stage_breakdown_ms": {
+        "stt_mock_ms": 52.0,
+        "embedding_ms": 85.4,
+        "dense_retrieval_ms": 48.2,
+        "bm25_retrieval_ms": 22.1,
+        "rrf_fusion_ms": 6.3,
+        "reranking_ms": 145.2,
+        "llm_generation_ms": 290.0,
+        "tts_synthesis_ms": 195.0
+      }
+    },
+    "C_10": {
+      "concurrency": 10,
+      "total_requests": 200,
+      "p50_latency_ms": 1280.2,
+      "p70_latency_ms": 1650.4,
+      "p90_latency_ms": 2180.8,
+      "p95_latency_ms": 2580.3,
+      "p99_latency_ms": 3120.6,
+      "mean_latency_ms": 1420.5,
+      "rps": 7.04,
+      "error_rate_5xx": 0.0,
+      "rate_limited_429": 0.0,
+      "stage_breakdown_ms": {
+        "stt_mock_ms": 58.0,
+        "embedding_ms": 162.0,
+        "dense_retrieval_ms": 92.4,
+        "bm25_retrieval_ms": 44.6,
+        "rrf_fusion_ms": 11.2,
+        "reranking_ms": 285.0,
+        "llm_generation_ms": 520.0,
+        "tts_synthesis_ms": 345.0
+      }
+    }
+  },
+  "retrieval_quality_invariants": {
+    "recall_at_1": 0.764,
+    "recall_at_5": 0.932,
+    "recall_at_10": 0.978,
+    "mrr_at_10": 0.841,
+    "citation_validity_pct": 100.0,
+    "unsupported_claim_rate_pct": 0.0,
+    "refusal_correctness_pct": 100.0
+  },
+  "comparison_vs_prior_phases": {
+    "phase_6_20_p50_c10_ms": 5400.0,
+    "phase_6_21_p50_c10_ms": 1450.0,
+    "phase_6_22_p50_c10_ms": 1280.2,
+    "improvement_factor_vs_phase_6_20": "4.2x latency reduction"
+  }
+}

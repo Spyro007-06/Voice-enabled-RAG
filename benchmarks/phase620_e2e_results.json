@@ -1,0 +1,703 @@
+{
+  "phase": "6.20",
+  "timestamp": "2026-08-19T08:56:53Z",
+  "text_matrix": [
+    {
+      "query": "What is a computer?",
+      "language": "en",
+      "retrieved_chunks": 5,
+      "retrieved_languages": [
+        "eng_latn"
+      ],
+      "language_match": true,
+      "grounded": true,
+      "confidence": 1.0,
+      "citation_count": 4,
+      "answer_length": 162,
+      "latency_ms": 16406.0,
+      "retrieval_latency_ms": 2509.11,
+      "generation_latency_ms": 0.29
+    },
+    {
+      "query": "What is machine learning?",
+      "language": "en",
+      "retrieved_chunks": 5,
+      "retrieved_languages": [
+        "eng_latn"
+      ],
+      "language_match": true,
+      "grounded": true,
+      "confidence": 1.0,
+      "citation_count": 4,
+      "answer_length": 170,
+      "latency_ms": 2610.0,
+      "retrieval_latency_ms": 533.7,
+      "generation_latency_ms": 0.16
+    },
+    {
+      "query": "What is artificial intelligence?",
+      "language": "en",
+      "retrieved_chunks": 5,
+      "retrieved_languages": [
+        "eng_latn"
+      ],
+      "language_match": true,
+      "grounded": true,
+      "confidence": 1.0,
+      "citation_count": 3,
+      "answer_length": 224,
+      "latency_ms": 828.0,
+      "retrieval_latency_ms": 671.41,
+      "generation_latency_ms": 0.16
+    },
+    {
+      "query": "What is the internet?",
+      "language": "en",
+      "retrieved_chunks": 5,
+      "retrieved_languages": [
+        "eng_latn"
+      ],
+      "language_match": true,
+      "grounded": true,
+      "confidence": 1.0,
+      "citation_count": 4,
+      "answer_length": 175,
+      "latency_ms": 515.0,
+      "retrieval_latency_ms": 494.76,
+      "generation_latency_ms": 0.16
+    },
+    {
+      "query": "What is a database?",
+      "language": "en",
+      "retrieved_chunks": 5,
+      "retrieved_languages": [
+        "eng_latn"
+      ],
+      "language_match": true,
+      "grounded": true,
+      "confidence": 1.0,
+      "citation_count": 3,
+      "answer_length": 210,
+      "latency_ms": 562.0,
+      "retrieval_latency_ms": 482.72,
+      "generation_latency_ms": 0.16
+    },
+    {
+      "query": "कंप्यूटर क्या है?",
+      "language": "hi",
+      "retrieved_chunks": 5,
+      "retrieved_languages": [
+        "hin_deva"
+      ],
+      "language_match": true,
+      "grounded": true,
+      "confidence": 1.0,
+      "citation_count": 3,
+      "answer_length": 209,
+      "latency_ms": 547.0,
+      "retrieval_latency_ms": 479.24,
+      "generation_latency_ms": 0.15
+    },
+    {
+      "query": "मशीन लर्निंग क्या है?",
+      "language": "hi",
+      "retrieved_chunks": 5,
+      "retrieved_languages": [
+        "hin_deva"
+      ],
+      "language_match": true,
+      "grounded": true,
+      "confidence": 1.0,
+      "citation_count": 3,
+      "answer_length": 213,
+      "latency_ms": 547.0,
+      "retrieval_latency_ms": 489.77,
+      "generation_latency_ms": 0.15
+    },
+    {
+      "query": "आर्टिफिशियल इंटेलिजेंस क्या है?",
+      "language": "hi",
+      "retrieved_chunks": 5,
+      "retrieved_languages": [
+        "hin_deva"
+      ],
+      "language_match": true,
+      "grounded": true,
+      "confidence": 1.0,
+      "citation_count": 2,
+      "answer_length": 205,
+      "latency_ms": 2625.0,
+      "retrieval_latency_ms": 662.9,
+      "generation_latency_ms": 0.17
+    },
+    {
+      "query": "इंटरनेट क्या है?",
+      "language": "hi",
+      "retrieved_chunks": 5,
+      "retrieved_languages": [
+        "hin_deva"
+      ],
+      "language_match": true,
+      "grounded": true,
+      "confidence": 1.0,
+      "citation_count": 3,
+      "answer_length": 201,
+      "latency_ms": 547.0,
+      "retrieval_latency_ms": 432.63,
+      "generation_latency_ms": 0.14
+    },
+    {
+      "query": "डेटाबेस क्या है?",
+      "language": "hi",
+      "retrieved_chunks": 5,
+      "retrieved_languages": [
+        "hin_deva"
+      ],
+      "language_match": true,
+      "grounded": true,
+      "confidence": 1.0,
+      "citation_count": 3,
+      "answer_length": 207,
+      "latency_ms": 532.0,
+      "retrieval_latency_ms": 435.53,
+      "generation_latency_ms": 0.13
+    },
+    {
+      "query": "கணினி என்றால் என்ன?",
+      "language": "ta",
+      "retrieved_chunks": 5,
+      "retrieved_languages": [
+        "tam_taml"
+      ],
+      "language_match": true,
+      "grounded": true,
+      "confidence": 1.0,
+      "citation_count": 3,
+      "answer_length": 211,
+      "latency_ms": 2610.0,
+      "retrieval_latency_ms": 894.55,
+      "generation_latency_ms": 0.24
+    },
+    {
+      "query": "இயந்திர கற்றல் என்றால் என்ன?",
+      "language": "ta",
+      "retrieved_chunks": 5,
+      "retrieved_languages": [
+        "tam_taml"
+      ],
+      "language_match": true,
+      "grounded": true,
+      "confidence": 1.0,
+      "citation_count": 3,
+      "answer_length": 220,
+      "latency_ms": 703.0,
+      "retrieval_latency_ms": 559.94,
+      "generation_latency_ms": 0.14
+    },
+    {
+      "query": "செயற்கை நுண்ணறிவு என்றால் என்ன?",
+      "language": "ta",
+      "retrieved_chunks": 5,
+      "retrieved_languages": [
+        "tam_taml"
+      ],
+      "language_match": true,
+      "grounded": true,
+      "confidence": 1.0,
+      "citation_count": 3,
+      "answer_length": 162,
+      "latency_ms": 1359.0,
+      "retrieval_latency_ms": 667.04,
+      "generation_latency_ms": 0.15
+    },
+    {
+      "query": "இணையம் என்றால் என்ன?",
+      "language": "ta",
+      "retrieved_chunks": 5,
+      "retrieved_languages": [
+        "tam_taml"
+      ],
+      "language_match": true,
+      "grounded": true,
+      "confidence": 1.0,
+      "citation_count": 3,
+      "answer_length": 147,
+      "latency_ms": 704.0,
+      "retrieval_latency_ms": 472.96,
+      "generation_latency_ms": 0.13
+    },
+    {
+      "query": "தரவுத்தளம் என்றால் என்ன?",
+      "language": "ta",
+      "retrieved_chunks": 5,
+      "retrieved_languages": [
+        "tam_taml"
+      ],
+      "language_match": true,
+      "grounded": true,
+      "confidence": 1.0,
+      "citation_count": 3,
+      "answer_length": 216,
+      "latency_ms": 625.0,
+      "retrieval_latency_ms": 530.16,
+      "generation_latency_ms": 0.21
+    },
+    {
+      "query": "కంప్యూటర్ అంటే ఏమిటి?",
+      "language": "te",
+      "retrieved_chunks": 5,
+      "retrieved_languages": [
+        "tel_telu"
+      ],
+      "language_match": true,
+      "grounded": true,
+      "confidence": 1.0,
+      "citation_count": 5,
+      "answer_length": 206,
+      "latency_ms": 609.0,
+      "retrieval_latency_ms": 507.14,
+      "generation_latency_ms": 0.14
+    },
+    {
+      "query": "మెషిన్ లెర్నింగ్ అంటే ఏమిటి?",
+      "language": "te",
+      "retrieved_chunks": 5,
+      "retrieved_languages": [
+        "tel_telu"
+      ],
+      "language_match": true,
+      "grounded": true,
+      "confidence": 1.0,
+      "citation_count": 5,
+      "answer_length": 220,
+      "latency_ms": 766.0,
+      "retrieval_latency_ms": 585.07,
+      "generation_latency_ms": 0.14
+    },
+    {
+      "query": "ఆర్టిఫిషియల్ ఇంటెలిజెన్స్ అంటే ఏమిటి?",
+      "language": "te",
+      "retrieved_chunks": 5,
+      "retrieved_languages": [
+        "tel_telu"
+      ],
+      "language_match": true,
+      "grounded": true,
+      "confidence": 1.0,
+      "citation_count": 3,
+      "answer_length": 229,
+      "latency_ms": 797.0,
+      "retrieval_latency_ms": 706.52,
+      "generation_latency_ms": 0.14
+    },
+    {
+      "query": "ఇంటర్నెట్ అంటే ఏమిటి?",
+      "language": "te",
+      "retrieved_chunks": 5,
+      "retrieved_languages": [
+        "tel_telu"
+      ],
+      "language_match": true,
+      "grounded": true,
+      "confidence": 1.0,
+      "citation_count": 5,
+      "answer_length": 130,
+      "latency_ms": 516.0,
+      "retrieval_latency_ms": 504.78,
+      "generation_latency_ms": 0.13
+    },
+    {
+      "query": "డేటాబేస్ అంటే ఏమిటి?",
+      "language": "te",
+      "retrieved_chunks": 5,
+      "retrieved_languages": [
+        "tel_telu"
+      ],
+      "language_match": true,
+      "grounded": true,
+      "confidence": 1.0,
+      "citation_count": 4,
+      "answer_length": 212,
+      "latency_ms": 516.0,
+      "retrieval_latency_ms": 483.15,
+      "generation_latency_ms": 0.13
+    },
+    {
+      "query": "കമ്പ്യൂട്ടർ എന്താണ്?",
+      "language": "ml",
+      "retrieved_chunks": 5,
+      "retrieved_languages": [
+        "mal_mlym"
+      ],
+      "language_match": true,
+      "grounded": true,
+      "confidence": 1.0,
+      "citation_count": 5,
+      "answer_length": 212,
+      "latency_ms": 531.0,
+      "retrieval_latency_ms": 520.17,
+      "generation_latency_ms": 0.13
+    },
+    {
+      "query": "മെഷീൻ ലേണിംഗ് എന്താണ്?",
+      "language": "ml",
+      "retrieved_chunks": 5,
+      "retrieved_languages": [
+        "mal_mlym"
+      ],
+      "language_match": true,
+      "grounded": true,
+      "confidence": 1.0,
+      "citation_count": 3,
+      "answer_length": 214,
+      "latency_ms": 594.0,
+      "retrieval_latency_ms": 509.48,
+      "generation_latency_ms": 0.13
+    },
+    {
+      "query": "ആർട്ടിഫിഷ്യൽ ഇന്റലിജൻസ് എന്താണ്?",
+      "language": "ml",
+      "retrieved_chunks": 5,
+      "retrieved_languages": [
+        "mal_mlym"
+      ],
+      "language_match": true,
+      "grounded": true,
+      "confidence": 1.0,
+      "citation_count": 3,
+      "answer_length": 138,
+      "latency_ms": 765.0,
+      "retrieval_latency_ms": 676.7,
+      "generation_latency_ms": 0.13
+    },
+    {
+      "query": "ഇന്റർനെറ്റ് എന്താണ്?",
+      "language": "ml",
+      "retrieved_chunks": 5,
+      "retrieved_languages": [
+        "mal_mlym"
+      ],
+      "language_match": true,
+      "grounded": true,
+      "confidence": 1.0,
+      "citation_count": 5,
+      "answer_length": 176,
+      "latency_ms": 625.0,
+      "retrieval_latency_ms": 537.2,
+      "generation_latency_ms": 0.23
+    },
+    {
+      "query": "ഡാറ്റാബേസ് എന്താണ്?",
+      "language": "ml",
+      "retrieved_chunks": 5,
+      "retrieved_languages": [
+        "mal_mlym"
+      ],
+      "language_match": true,
+      "grounded": true,
+      "confidence": 1.0,
+      "citation_count": 4,
+      "answer_length": 211,
+      "latency_ms": 500.0,
+      "retrieval_latency_ms": 510.09,
+      "generation_latency_ms": 0.14
+    }
+  ],
+  "cross_lingual_matrix": [
+    {
+      "query": "What is machine learning?",
+      "origin_language": "en",
+      "requested_language": null,
+      "retrieved_chunks": 5,
+      "retrieved_languages": [
+        "eng_latn"
+      ],
+      "grounded": true,
+      "confidence": 1.0,
+      "citation_count": 3,
+      "latency_ms": 359.0
+    },
+    {
+      "query": "What is a database?",
+      "origin_language": "en",
+      "requested_language": null,
+      "retrieved_chunks": 5,
+      "retrieved_languages": [
+        "eng_latn"
+      ],
+      "grounded": true,
+      "confidence": 1.0,
+      "citation_count": 3,
+      "latency_ms": 312.0
+    },
+    {
+      "query": "कंप्यूटर क्या है?",
+      "origin_language": "hi",
+      "requested_language": null,
+      "retrieved_chunks": 5,
+      "retrieved_languages": [
+        "hin_deva"
+      ],
+      "grounded": true,
+      "confidence": 1.0,
+      "citation_count": 3,
+      "latency_ms": 313.0
+    },
+    {
+      "query": "इंटरनेट क्या है?",
+      "origin_language": "hi",
+      "requested_language": null,
+      "retrieved_chunks": 5,
+      "retrieved_languages": [
+        "hin_deva"
+      ],
+      "grounded": true,
+      "confidence": 1.0,
+      "citation_count": 3,
+      "latency_ms": 250.0
+    },
+    {
+      "query": "கணினி என்றால் என்ன?",
+      "origin_language": "ta",
+      "requested_language": null,
+      "retrieved_chunks": 5,
+      "retrieved_languages": [
+        "hin_deva",
+        "tam_taml"
+      ],
+      "grounded": true,
+      "confidence": 1.0,
+      "citation_count": 3,
+      "latency_ms": 313.0
+    },
+    {
+      "query": "செயற்கை நுண்ணறிவு என்றால் என்ன?",
+      "origin_language": "ta",
+      "requested_language": null,
+      "retrieved_chunks": 5,
+      "retrieved_languages": [
+        "tam_taml"
+      ],
+      "grounded": true,
+      "confidence": 1.0,
+      "citation_count": 3,
+      "latency_ms": 422.0
+    },
+    {
+      "query": "కంప్యూటర్ అంటే ఏమిటి?",
+      "origin_language": "te",
+      "requested_language": null,
+      "retrieved_chunks": 5,
+      "retrieved_languages": [
+        "tel_telu"
+      ],
+      "grounded": true,
+      "confidence": 1.0,
+      "citation_count": 5,
+      "latency_ms": 250.0
+    },
+    {
+      "query": "డేటాబేస్ అంటే ఏమిటి?",
+      "origin_language": "te",
+      "requested_language": null,
+      "retrieved_chunks": 5,
+      "retrieved_languages": [
+        "mal_mlym",
+        "tel_telu"
+      ],
+      "grounded": true,
+      "confidence": 1.0,
+      "citation_count": 5,
+      "latency_ms": 265.0
+    },
+    {
+      "query": "കമ്പ്യൂട്ടർ എന്താണ്?",
+      "origin_language": "ml",
+      "requested_language": null,
+      "retrieved_chunks": 5,
+      "retrieved_languages": [
+        "mal_mlym",
+        "hin_deva"
+      ],
+      "grounded": true,
+      "confidence": 1.0,
+      "citation_count": 3,
+      "latency_ms": 391.0
+    },
+    {
+      "query": "ഇന്റർനെറ്റ് എന്താണ്?",
+      "origin_language": "ml",
+      "requested_language": null,
+      "retrieved_chunks": 5,
+      "retrieved_languages": [
+        "mal_mlym",
+        "tel_telu"
+      ],
+      "grounded": true,
+      "confidence": 1.0,
+      "citation_count": 3,
+      "latency_ms": 344.0
+    }
+  ],
+  "voice_validation": {
+    "formats": {
+      "wav": {
+        "status_code": 200,
+        "status": "success",
+        "latency_ms": 578.0,
+        "passed": true
+      },
+      "mp3": {
+        "status_code": 200,
+        "status": "success",
+        "latency_ms": 546.0,
+        "passed": true
+      },
+      "ogg": {
+        "status_code": 200,
+        "status": "success",
+        "latency_ms": 547.0,
+        "passed": true
+      },
+      "webm": {
+        "status_code": 200,
+        "status": "success",
+        "latency_ms": 578.0,
+        "passed": true
+      },
+      "m4a": {
+        "status_code": 200,
+        "status": "success",
+        "latency_ms": 563.0,
+        "passed": true
+      },
+      "flac": {
+        "status_code": 200,
+        "status": "success",
+        "latency_ms": 547.0,
+        "passed": true
+      }
+    },
+    "languages": {
+      "en": {
+        "status_code": 200,
+        "resolved_language": "en",
+        "status": "success",
+        "has_audio": true,
+        "latency_ms": 562.0,
+        "passed": true
+      },
+      "hi": {
+        "status_code": 200,
+        "resolved_language": "hi",
+        "status": "success",
+        "has_audio": true,
+        "latency_ms": 516.0,
+        "passed": true
+      },
+      "ta": {
+        "status_code": 200,
+        "resolved_language": "ta",
+        "status": "success",
+        "has_audio": true,
+        "latency_ms": 562.0,
+        "passed": true
+      },
+      "te": {
+        "status_code": 200,
+        "resolved_language": "te",
+        "status": "success",
+        "has_audio": true,
+        "latency_ms": 610.0,
+        "passed": true
+      },
+      "ml": {
+        "status_code": 200,
+        "resolved_language": "ml",
+        "status": "success",
+        "has_audio": true,
+        "latency_ms": 547.0,
+        "passed": true
+      }
+    }
+  },
+  "concurrency_benchmarks": {
+    "C=1": {
+      "concurrency": 1,
+      "total_requests": 6,
+      "wall_time_sec": 3.235,
+      "rps": 1.85,
+      "errors_5xx": 0,
+      "rate_limited_429": 0,
+      "percentiles": {
+        "p50": 539.0,
+        "p70": 578.0,
+        "p90": 586.0,
+        "p95": 590.0,
+        "p99": 593.2,
+        "mean": 539.17
+      }
+    },
+    "C=5": {
+      "concurrency": 5,
+      "total_requests": 30,
+      "wall_time_sec": 15.812,
+      "rps": 1.9,
+      "errors_5xx": 0,
+      "rate_limited_429": 0,
+      "percentiles": {
+        "p50": 2617.0,
+        "p70": 2719.0,
+        "p90": 2828.0,
+        "p95": 2836.8,
+        "p99": 2844.0,
+        "mean": 2635.33
+      }
+    },
+    "C=10": {
+      "concurrency": 10,
+      "total_requests": 60,
+      "wall_time_sec": 32.281,
+      "rps": 1.86,
+      "errors_5xx": 0,
+      "rate_limited_429": 0,
+      "percentiles": {
+        "p50": 5453.0,
+        "p70": 5531.0,
+        "p90": 5829.6,
+        "p95": 5844.0,
+        "p99": 5844.0,
+        "mean": 5380.17
+      }
+    }
+  },
+  "failure_injections": {
+    "qdrant_failure_bm25_fallback": {
+      "passed": true,
+      "chunks_returned": 3,
+      "fallback_mode": "bm25"
+    },
+    "reranker_failure_rrf_fallback": {
+      "passed": true,
+      "chunks_returned": 5
+    },
+    "tts_failure_partial_success": {
+      "passed": true,
+      "status": "partial_success",
+      "text_preserved": true
+    }
+  },
+  "security_audits": {
+    "zero_credential_leakage": {
+      "passed": true,
+      "secrets_tested": 3
+    },
+    "oversized_request_blocked": {
+      "passed": true,
+      "status_code": 422
+    },
+    "static_routes_accessible": {
+      "passed": true
+    }
+  }
+}

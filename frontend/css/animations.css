@@ -1,0 +1,128 @@
+/* ==========================================================================
+   HH Goa 2026 — Keyframe Animations & Transitions (Phase 6.21)
+   ========================================================================== */
+
+/* Fade in for messages and initial elements */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.25s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+/* Toast notification entrance */
+@keyframes toastIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Drawer transitions */
+@keyframes slideInLeft {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+/* Pulse animation for loading dots */
+@keyframes pulse-dot {
+  0%, 100% {
+    opacity: 0.3;
+    transform: scale(0.85);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.15);
+  }
+}
+
+/* Pulsing red mic during active voice capture */
+@keyframes pulse-mic {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 0 8px rgba(239, 68, 68, 0);
+  }
+}
+
+/* Blinking recording indicator */
+@keyframes blink-dot {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.3;
+  }
+}
+
+/* Typing cursor for SSE token streaming */
+@keyframes typing-cursor {
+  0%, 100% {
+    border-right-color: var(--accent-cyan, #22d3ee);
+  }
+  50% {
+    border-right-color: transparent;
+  }
+}
+
+/**
+ * Applied to the streaming content div while SSE tokens are arriving.
+ * Shows a blinking cursor at the end of streamed text.
+ */
+.stream-typing {
+  border-right: 2px solid var(--accent-cyan, #22d3ee);
+  animation: typing-cursor 0.8s step-end infinite;
+  padding-right: 2px;
+  min-height: 1.2em;
+}
+
+/* --------------------------------------------------------------------------
+   Reduced Motion Accessibility
+   -------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .animate-fade-in {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .stream-typing {
+    animation: none !important;
+    border-right: none !important;
+  }
+}

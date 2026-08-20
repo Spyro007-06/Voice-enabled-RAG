@@ -1,0 +1,57 @@
+{
+  "rrf_only": {
+    "name": "A. RRF Only",
+    "recall_1": 0.3667,
+    "recall_5": 0.5333,
+    "recall_10": 0.6667,
+    "mrr_10": 0.4343,
+    "skip_rate_pct": 0.0,
+    "p50_ms": 171.28,
+    "p95_ms": 221.2,
+    "p100_ms": 232.69
+  },
+  "rrf_bge_k10": {
+    "name": "B. RRF + BGE K=10",
+    "recall_1": 0.4667,
+    "recall_5": 0.5667,
+    "recall_10": 0.6667,
+    "mrr_10": 0.5064,
+    "skip_rate_pct": 0.0,
+    "p50_ms": 193.63,
+    "p95_ms": 342.47,
+    "p100_ms": 2115.98
+  },
+  "rrf_minilm_k3": {
+    "name": "C. RRF + MiniLM K=3",
+    "recall_1": 0.3333,
+    "recall_5": 0.4333,
+    "recall_10": 0.4333,
+    "mrr_10": 0.3778,
+    "skip_rate_pct": 0.0,
+    "p50_ms": 163.99,
+    "p95_ms": 218.52,
+    "p100_ms": 2002.71
+  },
+  "rrf_minilm_k5": {
+    "name": "D. RRF + MiniLM K=5",
+    "recall_1": 0.4333,
+    "recall_5": 0.5333,
+    "recall_10": 0.5333,
+    "mrr_10": 0.4594,
+    "skip_rate_pct": 0.0,
+    "p50_ms": 162.41,
+    "p95_ms": 230.18,
+    "p100_ms": 252.55
+  },
+  "adaptive": {
+    "name": "E. Adaptive (Production)",
+    "recall_1": 0.3667,
+    "recall_5": 0.5333,
+    "recall_10": 0.5333,
+    "mrr_10": 0.4189,
+    "skip_rate_pct": 53.3,
+    "p50_ms": 165.09,
+    "p95_ms": 229.48,
+    "p100_ms": 256.61
+  }
+}

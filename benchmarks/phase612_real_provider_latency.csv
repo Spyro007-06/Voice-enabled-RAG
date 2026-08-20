@@ -1,0 +1,12 @@
+test_name,language,label,audio_format,status_code,status,grounded,confidence,citations_count,e2e_latency_ms,stt_latency_ms,retrieval_latency_ms,llm_latency_ms,tts_latency_ms
+voice_rag_en,en,English Factual,wav,200,partial_success,False,0.0,0,918.24,0.07,0.0,0.0,1.09
+voice_rag_hi,hi,Hindi Factual,wav,200,success,True,1.0,2,35488.52,0.06,0.0,0.0,1.71
+voice_rag_ta,ta,Tamil Factual,wav,200,partial_success,False,0.0,0,177.4,0.08,0.0,0.0,0.57
+voice_rag_te,te,Telugu Factual,wav,200,partial_success,False,0.0,0,548.07,0.06,0.0,0.0,0.5
+voice_rag_ml,ml,Malayalam Factual,wav,200,partial_success,False,0.0,0,2129.74,0.09,0.0,0.0,0.58
+audio_format_wav,en,Format WAV,wav,200,partial_success,False,0.0,0,1816.39,0.08,0.0,0.0,1.9
+audio_format_mp3,en,Format MP3,mp3,200,partial_success,False,0.0,0,179.98,0.14,0.0,0.0,0.81
+audio_format_ogg,en,Format OGG,ogg,200,partial_success,False,0.0,0,170.18,0.05,0.0,0.0,0.63
+audio_format_webm,en,Format WEBM,webm,200,partial_success,False,0.0,0,180.31,0.06,0.0,0.0,0.58
+audio_format_flac,en,Format FLAC,flac,200,partial_success,False,0.0,0,167.53,0.05,0.0,0.0,0.59
+audio_format_m4a,en,Format M4A,m4a,200,partial_success,False,0.0,0,170.04,0.05,0.0,0.0,0.56

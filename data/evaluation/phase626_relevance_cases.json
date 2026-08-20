@@ -1,0 +1,307 @@
+{
+  "description": "Phase 6.26 Multilingual Retrieval Relevance and Grounding Evaluation Cases",
+  "version": "1.0.0",
+  "cases": [
+    {
+      "id": "rel_en_01",
+      "category": "in_domain_relevant",
+      "language": "en",
+      "query": "What is a computer?",
+      "expected_decision": "STRONG",
+      "expected_allowed": true
+    },
+    {
+      "id": "rel_en_02",
+      "category": "in_domain_relevant",
+      "language": "en",
+      "query": "What is machine learning?",
+      "expected_decision": "STRONG",
+      "expected_allowed": true
+    },
+    {
+      "id": "rel_en_03",
+      "category": "in_domain_relevant",
+      "language": "en",
+      "query": "What is artificial intelligence?",
+      "expected_decision": "STRONG",
+      "expected_allowed": true
+    },
+    {
+      "id": "rel_en_04",
+      "category": "in_domain_relevant",
+      "language": "en",
+      "query": "What is the internet?",
+      "expected_decision": "STRONG",
+      "expected_allowed": true
+    },
+    {
+      "id": "rel_en_05",
+      "category": "in_domain_relevant",
+      "language": "en",
+      "query": "What is a programming language?",
+      "expected_decision": "STRONG",
+      "expected_allowed": true
+    },
+    {
+      "id": "rel_hi_01",
+      "category": "in_domain_relevant",
+      "language": "hi",
+      "query": "कंप्यूटर क्या है?",
+      "expected_decision": "STRONG",
+      "expected_allowed": true
+    },
+    {
+      "id": "rel_hi_02",
+      "category": "in_domain_relevant",
+      "language": "hi",
+      "query": "मशीन लर्निंग क्या है?",
+      "expected_decision": "STRONG",
+      "expected_allowed": true
+    },
+    {
+      "id": "rel_hi_03",
+      "category": "in_domain_relevant",
+      "language": "hi",
+      "query": "कृत्रिम बुद्धिमत्ता क्या है?",
+      "expected_decision": "STRONG",
+      "expected_allowed": true
+    },
+    {
+      "id": "rel_hi_04",
+      "category": "in_domain_relevant",
+      "language": "hi",
+      "query": "इंटरनेट क्या है?",
+      "expected_decision": "STRONG",
+      "expected_allowed": true
+    },
+    {
+      "id": "rel_hi_05",
+      "category": "in_domain_relevant",
+      "language": "hi",
+      "query": "प्रोग्रामिंग भाषा क्या है?",
+      "expected_decision": "STRONG",
+      "expected_allowed": true
+    },
+    {
+      "id": "rel_ta_01",
+      "category": "in_domain_relevant",
+      "language": "ta",
+      "query": "கணினி என்றால் என்ன?",
+      "expected_decision": "STRONG",
+      "expected_allowed": true
+    },
+    {
+      "id": "rel_ta_02",
+      "category": "in_domain_relevant",
+      "language": "ta",
+      "query": "இயந்திர கற்றல் என்றால் என்ன?",
+      "expected_decision": "STRONG",
+      "expected_allowed": true
+    },
+    {
+      "id": "rel_ta_03",
+      "category": "in_domain_relevant",
+      "language": "ta",
+      "query": "செயற்கை நுண்ணறிவு என்றால் என்ன?",
+      "expected_decision": "STRONG",
+      "expected_allowed": true
+    },
+    {
+      "id": "rel_ta_04",
+      "category": "in_domain_relevant",
+      "language": "ta",
+      "query": "இணையம் என்றால் என்ன?",
+      "expected_decision": "STRONG",
+      "expected_allowed": true
+    },
+    {
+      "id": "rel_ta_05",
+      "category": "in_domain_relevant",
+      "language": "ta",
+      "query": "நிரலாக்க மொழி என்றால் என்ன?",
+      "expected_decision": "STRONG",
+      "expected_allowed": true
+    },
+    {
+      "id": "rel_te_01",
+      "category": "in_domain_relevant",
+      "language": "te",
+      "query": "కంప్యూటర్ అంటే ఏమిటి?",
+      "expected_decision": "STRONG",
+      "expected_allowed": true
+    },
+    {
+      "id": "rel_te_02",
+      "category": "in_domain_relevant",
+      "language": "te",
+      "query": "మెషిన్ లెర్నింగ్ అంటే ఏమిటి?",
+      "expected_decision": "STRONG",
+      "expected_allowed": true
+    },
+    {
+      "id": "rel_te_03",
+      "category": "in_domain_relevant",
+      "language": "te",
+      "query": "కృత్రిమ మేధస్సు అంటే ఏమిటి?",
+      "expected_decision": "STRONG",
+      "expected_allowed": true
+    },
+    {
+      "id": "rel_te_04",
+      "category": "in_domain_relevant",
+      "language": "te",
+      "query": "ఇంటర్నెట్ అంటే ఏమిటి?",
+      "expected_decision": "STRONG",
+      "expected_allowed": true
+    },
+    {
+      "id": "rel_te_05",
+      "category": "in_domain_relevant",
+      "language": "te",
+      "query": "ప్రోగ్రామింగ్ భాష అంటే ఏమిటి?",
+      "expected_decision": "STRONG",
+      "expected_allowed": true
+    },
+    {
+      "id": "rel_ml_01",
+      "category": "in_domain_relevant",
+      "language": "ml",
+      "query": "കമ്പ്യൂട്ടർ എന്താണ്?",
+      "expected_decision": "STRONG",
+      "expected_allowed": true
+    },
+    {
+      "id": "rel_ml_02",
+      "category": "in_domain_relevant",
+      "language": "ml",
+      "query": "മെഷീൻ ലേണിംഗ് എന്താണ്?",
+      "expected_decision": "STRONG",
+      "expected_allowed": true
+    },
+    {
+      "id": "rel_ml_03",
+      "category": "in_domain_relevant",
+      "language": "ml",
+      "query": "കൃത്രിമ ബുദ്ധി എന്താണ്?",
+      "expected_decision": "STRONG",
+      "expected_allowed": true
+    },
+    {
+      "id": "rel_ml_04",
+      "category": "in_domain_relevant",
+      "language": "ml",
+      "query": "ഇന്റർനെറ്റ് എന്താണ്?",
+      "expected_decision": "STRONG",
+      "expected_allowed": true
+    },
+    {
+      "id": "rel_ml_05",
+      "category": "in_domain_relevant",
+      "language": "ml",
+      "query": "പ്രോഗ്രാമിംഗ് ഭാഷ എന്താണ്?",
+      "expected_decision": "STRONG",
+      "expected_allowed": true
+    },
+    {
+      "id": "off_01",
+      "category": "off_topic_unanswerable",
+      "language": "en",
+      "query": "What is the weather in Goa today?",
+      "expected_decision": "OFF_TOPIC",
+      "expected_allowed": false
+    },
+    {
+      "id": "off_02",
+      "category": "off_topic_unanswerable",
+      "language": "en",
+      "query": "Who is the current Prime Minister of India?",
+      "expected_decision": "OFF_TOPIC",
+      "expected_allowed": false
+    },
+    {
+      "id": "off_03",
+      "category": "off_topic_unanswerable",
+      "language": "en",
+      "query": "What is my college timetable?",
+      "expected_decision": "OFF_TOPIC",
+      "expected_allowed": false
+    },
+    {
+      "id": "off_04",
+      "category": "off_topic_unanswerable",
+      "language": "en",
+      "query": "What is the price of petrol today?",
+      "expected_decision": "OFF_TOPIC",
+      "expected_allowed": false
+    },
+    {
+      "id": "off_05",
+      "category": "off_topic_unanswerable",
+      "language": "en",
+      "query": "What is the latest cricket score?",
+      "expected_decision": "OFF_TOPIC",
+      "expected_allowed": false
+    },
+    {
+      "id": "off_06",
+      "category": "off_topic_unanswerable",
+      "language": "en",
+      "query": "What is my bank balance?",
+      "expected_decision": "OFF_TOPIC",
+      "expected_allowed": false
+    },
+    {
+      "id": "off_07",
+      "category": "off_topic_unanswerable",
+      "language": "en",
+      "query": "What is the best restaurant near me?",
+      "expected_decision": "OFF_TOPIC",
+      "expected_allowed": false
+    },
+    {
+      "id": "adv_01",
+      "category": "adversarial_relevance",
+      "language": "en",
+      "query": "What is artificial intelligence?",
+      "synthetic_context": "BASIC is an acronym for Beginner's All-purpose Symbolic Instruction Code, developed in 1964 at Dartmouth College. It was designed as a simple language for students to use computers.",
+      "expected_decision": "OFF_TOPIC",
+      "expected_allowed": false
+    },
+    {
+      "id": "adv_02",
+      "category": "adversarial_relevance",
+      "language": "en",
+      "query": "What is machine learning?",
+      "synthetic_context": "It is that which is for the one who was there and had been doing as they were told during the day.",
+      "expected_decision": "OFF_TOPIC",
+      "expected_allowed": false
+    },
+    {
+      "id": "adv_03",
+      "category": "adversarial_relevance",
+      "language": "en",
+      "query": "What is a computer?",
+      "synthetic_context": "The hotel concierge desk had a computer screen showing reservation check-in times for arriving guests at 3 PM.",
+      "expected_decision": "INSUFFICIENT",
+      "expected_allowed": false
+    },
+    {
+      "id": "adv_04",
+      "category": "adversarial_relevance",
+      "language": "en",
+      "query": "Is it in it?",
+      "synthetic_context": "It is in it and that was what was in there.",
+      "expected_decision": "OFF_TOPIC",
+      "expected_allowed": false
+    },
+    {
+      "id": "adv_05",
+      "category": "adversarial_relevance",
+      "language": "en",
+      "query": "What is the quantum flux density of xyz999?",
+      "synthetic_context": "The recipe calls for 2 cups of sugar, 1 cup of flour, and 3 eggs baked at 350 degrees.",
+      "expected_decision": "OFF_TOPIC",
+      "expected_allowed": false
+    }
+  ]
+}

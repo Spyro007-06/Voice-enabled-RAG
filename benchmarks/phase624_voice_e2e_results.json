@@ -1,0 +1,532 @@
+{
+  "timestamp": "2026-08-20T11:55:33.016502",
+  "phase": "6.24",
+  "system": "HH Goa 2026 Multilingual Voice RAG",
+  "models": {
+    "stt": "saarika:v2.5",
+    "tts": "bulbul:v2",
+    "speaker": "anushka",
+    "llm": "sarvam-105b",
+    "embeddings": "intfloat/multilingual-e5-small",
+    "reranker": "cross-encoder/mmarco-mMiniLMv2-L12-H384-v1"
+  },
+  "summary": {
+    "matrix_queries_total": 25,
+    "matrix_queries_pass": 25,
+    "matrix_pass_rate_pct": 100.0,
+    "stt_pass_count": 5,
+    "tts_pass_count": 5,
+    "llm_pass_count": 0,
+    "retrieval_latencies": {
+      "p50": 596.97,
+      "p70": 1310.93,
+      "p90": 2097.7,
+      "p95": 2165.1,
+      "p99": 2250.02,
+      "avg": 989.14
+    },
+    "end_to_end_latencies": {
+      "p50": 9889.43,
+      "p70": 10892.81,
+      "p90": 61319.66,
+      "p95": 62218.85,
+      "p99": 63711.09,
+      "avg": 17892.31
+    },
+    "stt_latencies": {
+      "p50": 547.0,
+      "p70": 693.13,
+      "p90": 832.53,
+      "p95": 866.82,
+      "p99": 894.25,
+      "avg": 599.47
+    },
+    "tts_latencies": {
+      "p50": 667.99,
+      "p70": 716.27,
+      "p90": 863.78,
+      "p95": 908.92,
+      "p99": 945.04,
+      "avg": 702.4
+    },
+    "llm_latencies": {
+      "p50": 0.0,
+      "p70": 0.0,
+      "p90": 0.0,
+      "p95": 0.0,
+      "p99": 0.0,
+      "avg": 0.0
+    }
+  },
+  "retrieval_matrix_details": [
+    {
+      "language": "en",
+      "language_name": "English",
+      "query_index": 1,
+      "query": "What is a computer?",
+      "answer": "I don't have enough information in the retrieved context to answer that.",
+      "grounded": false,
+      "confidence": 0.3,
+      "citations_count": 0,
+      "retrieved_chunks_count": 3,
+      "retrieval_latency_ms": 537.87,
+      "total_latency_ms": 64144.84,
+      "status": "PASS"
+    },
+    {
+      "language": "en",
+      "language_name": "English",
+      "query_index": 2,
+      "query": "What is machine learning?",
+      "answer": "The provided context does not contain information about what machine learning is.",
+      "grounded": false,
+      "confidence": 1.0,
+      "citations_count": 0,
+      "retrieved_chunks_count": 3,
+      "retrieval_latency_ms": 2044.53,
+      "total_latency_ms": 8228.93,
+      "status": "PASS"
+    },
+    {
+      "language": "en",
+      "language_name": "English",
+      "query_index": 3,
+      "query": "What is artificial intelligence?",
+      "answer": "The information is not available in the provided context.",
+      "grounded": true,
+      "confidence": 1.0,
+      "citations_count": 0,
+      "retrieved_chunks_count": 3,
+      "retrieval_latency_ms": 2173.09,
+      "total_latency_ms": 10189.38,
+      "status": "PASS"
+    },
+    {
+      "language": "en",
+      "language_name": "English",
+      "query_index": 4,
+      "query": "What is the internet?",
+      "answer": "The provided context does not contain a definition for the internet.",
+      "grounded": false,
+      "confidence": 1.0,
+      "citations_count": 0,
+      "retrieved_chunks_count": 3,
+      "retrieval_latency_ms": 1608.0,
+      "total_latency_ms": 10445.33,
+      "status": "PASS"
+    },
+    {
+      "language": "en",
+      "language_name": "English",
+      "query_index": 5,
+      "query": "What is a programming language?",
+      "answer": "I don't have enough information in the retrieved context to answer that.",
+      "grounded": false,
+      "confidence": 0.0,
+      "citations_count": 0,
+      "retrieved_chunks_count": 3,
+      "retrieval_latency_ms": 2133.14,
+      "total_latency_ms": 62337.53,
+      "status": "PASS"
+    },
+    {
+      "language": "hi",
+      "language_name": "Hindi",
+      "query_index": 1,
+      "query": "कंप्यूटर क्या है?",
+      "answer": "प्रदान किए गए संदर्भ में कंप्यूटर की परिभाषा नहीं दी गई है।",
+      "grounded": true,
+      "confidence": 1.0,
+      "citations_count": 3,
+      "retrieved_chunks_count": 3,
+      "retrieval_latency_ms": 1522.74,
+      "total_latency_ms": 7507.7,
+      "status": "PASS"
+    },
+    {
+      "language": "hi",
+      "language_name": "Hindi",
+      "query_index": 2,
+      "query": "मशीन लर्निंग क्या है?",
+      "answer": "I don't have enough information in the retrieved context to answer that.",
+      "grounded": false,
+      "confidence": 0.0,
+      "citations_count": 0,
+      "retrieved_chunks_count": 3,
+      "retrieval_latency_ms": 1478.61,
+      "total_latency_ms": 61744.14,
+      "status": "PASS"
+    },
+    {
+      "language": "hi",
+      "language_name": "Hindi",
+      "query_index": 3,
+      "query": "कृत्रिम बुद्धिमत्ता क्या है?",
+      "answer": "I don't have enough information in the retrieved context to answer that.",
+      "grounded": false,
+      "confidence": 0.3,
+      "citations_count": 0,
+      "retrieved_chunks_count": 3,
+      "retrieval_latency_ms": 593.64,
+      "total_latency_ms": 9889.43,
+      "status": "PASS"
+    },
+    {
+      "language": "hi",
+      "language_name": "Hindi",
+      "query_index": 4,
+      "query": "इंटरनेट क्या है?",
+      "answer": "I don't have enough information in the retrieved context to answer that.",
+      "grounded": false,
+      "confidence": 0.3,
+      "citations_count": 0,
+      "retrieved_chunks_count": 3,
+      "retrieval_latency_ms": 451.38,
+      "total_latency_ms": 10948.71,
+      "status": "PASS"
+    },
+    {
+      "language": "hi",
+      "language_name": "Hindi",
+      "query_index": 5,
+      "query": "प्रोग्रामिंग भाषा क्या है?",
+      "answer": "प्रदान किए गए संदर्भ में इस बात की परिभाषा नहीं दी गई है कि प्रोग्रामिंग भाषा क्या है। इसमें केवल बेसिक (BASIC) नामक एक विशिष्ट प्रोग्रामिंग भाषा के ब...",
+      "grounded": true,
+      "confidence": 1.0,
+      "citations_count": 2,
+      "retrieved_chunks_count": 2,
+      "retrieval_latency_ms": 542.64,
+      "total_latency_ms": 5105.96,
+      "status": "PASS"
+    },
+    {
+      "language": "ta",
+      "language_name": "Tamil",
+      "query_index": 1,
+      "query": "கணினி என்றால் என்ன?",
+      "answer": "வழங்கப்பட்டுள்ள தரவுகளின் அடிப்படையில், இந்தத் தகவல்கள் கிடைக்கப் பெறவில்லை.",
+      "grounded": true,
+      "confidence": 1.0,
+      "citations_count": 3,
+      "retrieved_chunks_count": 3,
+      "retrieval_latency_ms": 536.51,
+      "total_latency_ms": 11526.62,
+      "status": "PASS"
+    },
+    {
+      "language": "ta",
+      "language_name": "Tamil",
+      "query_index": 2,
+      "query": "இயந்திர கற்றல் என்றால் என்ன?",
+      "answer": "வழங்கப்பட்ட சூழலில் இயந்திர கற்றல் பற்றிய தகவல்கள் இல்லை.",
+      "grounded": true,
+      "confidence": 1.0,
+      "citations_count": 3,
+      "retrieved_chunks_count": 3,
+      "retrieval_latency_ms": 596.97,
+      "total_latency_ms": 6347.21,
+      "status": "PASS"
+    },
+    {
+      "language": "ta",
+      "language_name": "Tamil",
+      "query_index": 3,
+      "query": "செயற்கை நுண்ணறிவு என்றால் என்ன?",
+      "answer": "வழங்கப்பட்ட சூழலில் செயற்கை நுண்ணறிவு பற்றிய தகவல்கள் கிடைக்கவில்லை.",
+      "grounded": true,
+      "confidence": 1.0,
+      "citations_count": 3,
+      "retrieved_chunks_count": 3,
+      "retrieval_latency_ms": 640.23,
+      "total_latency_ms": 9235.55,
+      "status": "PASS"
+    },
+    {
+      "language": "ta",
+      "language_name": "Tamil",
+      "query_index": 4,
+      "query": "இணையம் என்றால் என்ன?",
+      "answer": "இணையம் (Internet) என்றால் என்ன என்பதற்கான வரையறையை வழங்கப்பட்ட சூழலில் இடம்பெறவில்லை.",
+      "grounded": true,
+      "confidence": 1.0,
+      "citations_count": 3,
+      "retrieved_chunks_count": 3,
+      "retrieval_latency_ms": 495.95,
+      "total_latency_ms": 9250.7,
+      "status": "PASS"
+    },
+    {
+      "language": "ta",
+      "language_name": "Tamil",
+      "query_index": 5,
+      "query": "நிரலாக்க மொழி என்றால் என்ன?",
+      "answer": "வழங்கப்பட்ட சூழலில் இந்தத் தகவல் கிடைக்கவில்லை.",
+      "grounded": true,
+      "confidence": 1.0,
+      "citations_count": 3,
+      "retrieved_chunks_count": 3,
+      "retrieval_latency_ms": 556.6,
+      "total_latency_ms": 10669.2,
+      "status": "PASS"
+    },
+    {
+      "language": "te",
+      "language_name": "Telugu",
+      "query_index": 1,
+      "query": "కంప్యూటర్ అంటే ఏమిటి?",
+      "answer": "అందించిన సందర్భంలో కంప్యూటర్ నిర్వచనం లేదు.",
+      "grounded": true,
+      "confidence": 1.0,
+      "citations_count": 3,
+      "retrieved_chunks_count": 3,
+      "retrieval_latency_ms": 499.21,
+      "total_latency_ms": 9080.98,
+      "status": "PASS"
+    },
+    {
+      "language": "te",
+      "language_name": "Telugu",
+      "query_index": 2,
+      "query": "మెషిన్ లెర్నింగ్ అంటే ఏమిటి?",
+      "answer": "అందించిన సందర్భంలో మెషిన్ లెర్నింగ్ గురించి సమాచారం లేదు.",
+      "grounded": true,
+      "confidence": 1.0,
+      "citations_count": 3,
+      "retrieved_chunks_count": 3,
+      "retrieval_latency_ms": 606.45,
+      "total_latency_ms": 10523.42,
+      "status": "PASS"
+    },
+    {
+      "language": "te",
+      "language_name": "Telugu",
+      "query_index": 3,
+      "query": "కృత్రిమ మేధస్సు అంటే ఏమిటి?",
+      "answer": "I don't have enough information in the retrieved context to answer that.",
+      "grounded": false,
+      "confidence": 0.3,
+      "citations_count": 0,
+      "retrieved_chunks_count": 3,
+      "retrieval_latency_ms": 2274.32,
+      "total_latency_ms": 13256.65,
+      "status": "PASS"
+    },
+    {
+      "language": "te",
+      "language_name": "Telugu",
+      "query_index": 4,
+      "query": "ఇంటర్నెట్ అంటే ఏమిటి?",
+      "answer": "ఇచ్చిన సందర్భంలో ఇంటర్నెట్ గురించి సమాచారం లేదు.",
+      "grounded": true,
+      "confidence": 1.0,
+      "citations_count": 3,
+      "retrieved_chunks_count": 3,
+      "retrieval_latency_ms": 2000.69,
+      "total_latency_ms": 9340.43,
+      "status": "PASS"
+    },
+    {
+      "language": "te",
+      "language_name": "Telugu",
+      "query_index": 5,
+      "query": "ప్రోగ్రామింగ్ భాష అంటే ఏమిటి?",
+      "answer": "అందించిన సందర్భంలో ప్రోగ్రామింగ్ భాష అంటే ఏమిటి అనే దానికి నిర్వచనం లేదు. ఇది కేవలం బేసిక్ (BASIC) అనే ఒక నిర్దిష్ట ప్రోగ్రామింగ్ లాంగ్వేజ్ గురించి మా...",
+      "grounded": true,
+      "confidence": 1.0,
+      "citations_count": 3,
+      "retrieved_chunks_count": 3,
+      "retrieval_latency_ms": 610.45,
+      "total_latency_ms": 9055.8,
+      "status": "PASS"
+    },
+    {
+      "language": "ml",
+      "language_name": "Malayalam",
+      "query_index": 1,
+      "query": "കമ്പ്യൂട്ടർ എന്താണ്?",
+      "answer": "നൽകിയിട്ടുള്ള സന്ദർഭത്തെ അടിസ്ഥാനമാക്കി, \"കമ്പ്യൂട്ടർ എന്നാൽ എന്ത്?\" എന്ന ചോദ്യത്തിന് ഉത്തരം നൽകാനുള്ള വിവരങ്ങൾ ലഭ്യമല്ല. ഡെസ്ക്ടോപ്പിൽ ഒരു \"കമ്പ്യൂട്...",
+      "grounded": true,
+      "confidence": 1.0,
+      "citations_count": 3,
+      "retrieved_chunks_count": 3,
+      "retrieval_latency_ms": 521.01,
+      "total_latency_ms": 17829.54,
+      "status": "PASS"
+    },
+    {
+      "language": "ml",
+      "language_name": "Malayalam",
+      "query_index": 2,
+      "query": "മെഷീൻ ലേണിംഗ് എന്താണ്?",
+      "answer": "നൽകിയിട്ടുള്ള സന്ദർഭത്തിൽ മെഷീൻ ലേണിംഗിനെക്കുറിച്ചുള്ള വിവരങ്ങൾ ലഭ്യമല്ല.",
+      "grounded": true,
+      "confidence": 1.0,
+      "citations_count": 3,
+      "retrieved_chunks_count": 3,
+      "retrieval_latency_ms": 598.05,
+      "total_latency_ms": 5133.92,
+      "status": "PASS"
+    },
+    {
+      "language": "ml",
+      "language_name": "Malayalam",
+      "query_index": 3,
+      "query": "കൃത്രിമ ബുദ്ധി എന്താണ്?",
+      "answer": "നൽകിയിട്ടുള്ള സന്ദർഭത്തിൽ ഈ വിവരങ്ങൾ ലഭ്യമല്ല.",
+      "grounded": true,
+      "confidence": 1.0,
+      "citations_count": 3,
+      "retrieved_chunks_count": 3,
+      "retrieval_latency_ms": 582.33,
+      "total_latency_ms": 5473.83,
+      "status": "PASS"
+    },
+    {
+      "language": "ml",
+      "language_name": "Malayalam",
+      "query_index": 4,
+      "query": "ഇന്റർനെറ്റ് എന്താണ്?",
+      "answer": "I don't have enough information in the retrieved context to answer that.",
+      "grounded": false,
+      "confidence": 0.3,
+      "citations_count": 0,
+      "retrieved_chunks_count": 3,
+      "retrieval_latency_ms": 531.83,
+      "total_latency_ms": 9359.05,
+      "status": "PASS"
+    },
+    {
+      "language": "ml",
+      "language_name": "Malayalam",
+      "query_index": 5,
+      "query": "പ്രോഗ്രാമിംഗ് ഭാഷ എന്താണ്?",
+      "answer": "I don't have enough information in the retrieved context to answer that.",
+      "grounded": false,
+      "confidence": 0.0,
+      "citations_count": 0,
+      "retrieved_chunks_count": 3,
+      "retrieval_latency_ms": 592.28,
+      "total_latency_ms": 60682.94,
+      "status": "PASS"
+    }
+  ],
+  "provider_tests": {
+    "stt": {
+      "en": {
+        "original_phrase": "What is a computer?",
+        "transcript": "That is a computer.",
+        "detected_lang": "en-IN",
+        "confidence": 0.95,
+        "latency_ms": 547.0,
+        "status": "PASS"
+      },
+      "hi": {
+        "original_phrase": "कंप्यूटर क्या है?",
+        "transcript": "कंप्यूटर क्या है?",
+        "detected_lang": "hi-IN",
+        "confidence": 0.95,
+        "latency_ms": 404.14,
+        "status": "PASS"
+      },
+      "ta": {
+        "original_phrase": "கணினி என்றால் என்ன?",
+        "transcript": "கணினி என்றால் என்ன?",
+        "detected_lang": "ta-IN",
+        "confidence": 0.95,
+        "latency_ms": 415.46,
+        "status": "PASS"
+      },
+      "te": {
+        "original_phrase": "కంప్యూటర్ అంటే ఏమిటి?",
+        "transcript": "కంప్యూటర్ అంటే ఏమిటి?",
+        "detected_lang": "te-IN",
+        "confidence": 0.95,
+        "latency_ms": 901.11,
+        "status": "PASS"
+      },
+      "ml": {
+        "original_phrase": "കമ്പ്യൂട്ടർ എന്താണ്?",
+        "transcript": "കമ്പ്യൂട്ടർ എന്താണ്?",
+        "detected_lang": "ml-IN",
+        "confidence": 0.95,
+        "latency_ms": 729.66,
+        "status": "PASS"
+      }
+    },
+    "tts": {
+      "en": {
+        "phrase": "What is a computer?",
+        "audio_bytes_len": 61484,
+        "audio_b64_len": 81980,
+        "latency_ms": 954.07,
+        "status": "PASS"
+      },
+      "hi": {
+        "phrase": "कंप्यूटर क्या है?",
+        "audio_bytes_len": 47660,
+        "audio_b64_len": 63548,
+        "latency_ms": 667.99,
+        "status": "PASS"
+      },
+      "ta": {
+        "phrase": "கணினி என்றால் என்ன?",
+        "audio_bytes_len": 55340,
+        "audio_b64_len": 73788,
+        "latency_ms": 667.44,
+        "status": "PASS"
+      },
+      "te": {
+        "phrase": "కంప్యూటర్ అంటే ఏమిటి?",
+        "audio_bytes_len": 63020,
+        "audio_b64_len": 84028,
+        "latency_ms": 494.18,
+        "status": "PASS"
+      },
+      "ml": {
+        "phrase": "കമ്പ്യൂട്ടർ എന്താണ്?",
+        "audio_bytes_len": 52268,
+        "audio_b64_len": 69692,
+        "latency_ms": 728.34,
+        "status": "PASS"
+      }
+    },
+    "llm": {
+      "en": {
+        "status": "FAIL",
+        "error": "[SARVAM] Request timed out after 60.0s while contacting upstream service."
+      },
+      "hi": {
+        "status": "FAIL",
+        "error": "[SARVAM] Request timed out after 60.0s while contacting upstream service."
+      },
+      "ta": {
+        "status": "FAIL",
+        "error": "[SARVAM] Request timed out after 60.0s while contacting upstream service."
+      }
+    },
+    "stt_latencies": {
+      "p50": 547.0,
+      "p70": 693.13,
+      "p90": 832.53,
+      "p95": 866.82,
+      "p99": 894.25,
+      "avg": 599.47
+    },
+    "tts_latencies": {
+      "p50": 667.99,
+      "p70": 716.27,
+      "p90": 863.78,
+      "p95": 908.92,
+      "p99": 945.04,
+      "avg": 702.4
+    },
+    "llm_latencies": {
+      "p50": 0.0,
+      "p70": 0.0,
+      "p90": 0.0,
+      "p95": 0.0,
+      "p99": 0.0,
+      "avg": 0.0
+    }
+  }
+}
