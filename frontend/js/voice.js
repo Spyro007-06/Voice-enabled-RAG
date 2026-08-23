@@ -1,12 +1,11 @@
 /**
  * HH Goa 2026 Multilingual Voice RAG — Voice Recording & Web Audio Management
- * Phase 6.21: Max-duration enforcement, min-duration guard, page-visibility abort
  */
 
-import { state } from './state.js';
+import { state, APP_STATE } from './state.js';
 
 const MAX_RECORDING_DURATION_MS = 60000; // 60 seconds hard limit
-const MIN_RECORDING_DURATION_MS = 500;   // 500ms minimum to avoid accidental taps
+const MIN_RECORDING_DURATION_MS = 400;   // Minimum threshold to prevent accidental click
 
 export class VoiceManager {
   constructor() {
@@ -19,17 +18,18 @@ export class VoiceManager {
     this.maxDurationTimer = null;
     this.recordingStartTime = 0;
     this.animationFrameId = null;
-    this.onWaveformData = null;
-    this._cleaning = false; // double-cleanup guard
-    this._onVisibilityChange = null; // page-visibility abort handler
-
-    // Bind auto-stop callbacks once at construction time
-    this._onMaxDurationReached = null;
+    this.waveformCanvas = null;
+    this.canvasContext = null;
+    this._isCleaning = false;
   }
 
-  /**
-   * Determine best browser-supported audio mime type
-   */
+  initCanvas(canvasElement) {
+    this.waveformCanvas = canvasElement;
+    if (canvasElement) {
+      this.canvasContext = canvasElement.getContext('2d');
+    }
+  }
+
   getSupportedMimeType() {
     const types = [
       'audio/webm;codecs=opus',
@@ -46,22 +46,42 @@ export class VoiceManager {
     return '';
   }
 
-  /**
-   * Start microphone recording.
-   * @param {function} onWaveformCallback - receives Uint8Array frequency data per frame
-   * @param {function} onMaxDuration - called when 60s limit is reached (auto-stop trigger)
-   * @param {function} onRemainingTime - called every second with remaining seconds
-   */
-  async startRecording(onWaveformCallback = null, onMaxDuration = null, onRemainingTime = null) {
+  async checkMicrophoneAvailable() {
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+      return { available: false, reason: 'UNSUPPORTED' };
+    }
+
+    try {
+      if (navigator.mediaDevices.enumerateDevices) {
+        const devices = await navigator.mediaDevices.enumerateDevices();
+        const audioInputs = devices.filter((d) => d.kind === 'audioinput');
+        if (devices.length > 0 && audioInputs.length === 0) {
+          return { available: false, reason: 'NO_MIC_DETECTED' };
+        }
+      }
+    } catch (_) {
+      // Some browsers block enumeration prior to permission grant; proceed to getUserMedia
+    }
+
+    return { available: true };
+  }
+
+  async startRecording({ onTimerTick, onAutoStop, onError }) {
     if (this.mediaRecorder && this.mediaRecorder.state === 'recording') {
       return;
     }
 
-    this.onWaveformData = onWaveformCallback;
-    this._onMaxDurationReached = onMaxDuration;
+    state.setState(APP_STATE.REQUESTING_MIC_PERMISSION);
 
-    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-      throw new Error('Microphone recording is not supported in this browser.');
+    // Initial device availability check
+    const check = await this.checkMicrophoneAvailable();
+    if (!check.available && check.reason === 'NO_MIC_DETECTED') {
+      const err = new Error('No microphone device was detected on this system.');
+      err.code = 'NO_MIC_DETECTED';
+      this.cleanup();
+      state.setState(APP_STATE.ERROR);
+      if (onError) onError(err);
+      return;
     }
 
     try {
@@ -72,204 +92,207 @@ export class VoiceManager {
           autoGainControl: true,
         },
       });
-    } catch (err) {
-      if (err.name === 'NotAllowedError' || err.name === 'PermissionDeniedError') {
-        throw new Error('Microphone permission was denied. Please allow microphone access.');
-      }
-      throw new Error(`Microphone access failed: ${err.message}`);
-    }
 
-    // Set up Web Audio API Analyser for live visualizer
-    try {
-      const AudioCtx = window.AudioContext || window.webkitAudioContext;
-      if (AudioCtx) {
-        this.audioContext = new AudioCtx();
-        const source = this.audioContext.createMediaStreamSource(this.audioStream);
-        this.analyser = this.audioContext.createAnalyser();
-        this.analyser.fftSize = 64;
-        source.connect(this.analyser);
-        this._startVisualizerLoop();
-      }
-    } catch (visErr) {
-      console.warn('Visualizer AudioContext init skipped:', visErr);
-    }
-
-    const mimeType = this.getSupportedMimeType();
-    const options = mimeType ? { mimeType } : {};
-
-    this.audioChunks = [];
-    this._cleaning = false;
-    this.mediaRecorder = new MediaRecorder(this.audioStream, options);
-
-    this.mediaRecorder.ondataavailable = (event) => {
-      if (event.data && event.data.size > 0) {
-        this.audioChunks.push(event.data);
-      }
-    };
-
-    this.recordingStartTime = Date.now();
-    this.mediaRecorder.start(100); // collect in 100ms chunks
-
-    // Start timer interval — updates state + optional remaining-time callback
-    this.timerInterval = setInterval(() => {
-      const elapsed = Date.now() - this.recordingStartTime;
-      const durationSec = Math.floor(elapsed / 1000);
-      state.setRecording(true, durationSec);
-
-      if (onRemainingTime) {
-        const remainingSec = Math.max(0, Math.ceil((MAX_RECORDING_DURATION_MS - elapsed) / 1000));
-        onRemainingTime(remainingSec);
-      }
-    }, 500);
-
-    state.setRecording(true, 0);
-
-    // Max-duration hard stop at 60 seconds
-    this.maxDurationTimer = setTimeout(() => {
-      if (this.mediaRecorder && this.mediaRecorder.state === 'recording') {
-        if (this._onMaxDurationReached) {
-          this._onMaxDurationReached();
-        }
-      }
-    }, MAX_RECORDING_DURATION_MS);
-
-    // Page visibility abort — cancel recording on tab switch / navigation
-    this._onVisibilityChange = () => {
-      if (document.hidden && this.mediaRecorder && this.mediaRecorder.state === 'recording') {
-        this.cancelRecording();
-      }
-    };
-    document.addEventListener('visibilitychange', this._onVisibilityChange);
-  }
-
-  _startVisualizerLoop() {
-    if (!this.analyser) return;
-    const dataArray = new Uint8Array(this.analyser.frequencyBinCount);
-
-    const update = () => {
-      if (!this.analyser || state.getState().isRecording === false) return;
-      this.analyser.getByteFrequencyData(dataArray);
-
-      if (this.onWaveformData) {
-        this.onWaveformData(dataArray);
-      }
-      this.animationFrameId = requestAnimationFrame(update);
-    };
-    update();
-  }
-
-  /**
-   * Stop recording and resolve the audio blob.
-   * Rejects if duration is below MIN_RECORDING_DURATION_MS.
-   */
-  async stopRecording() {
-    return new Promise((resolve, reject) => {
-      if (!this.mediaRecorder || this.mediaRecorder.state === 'inactive') {
-        this._cleanup();
-        reject(new Error('No active recording.'));
-        return;
+      // Verify that at least one audio track exists and is active
+      const audioTracks = this.audioStream.getAudioTracks();
+      if (!audioTracks || audioTracks.length === 0) {
+        throw Object.assign(new Error('No active audio track found in device stream.'), { code: 'NO_MIC_DETECTED' });
       }
 
-      // Enforce minimum duration guard
-      const elapsed = Date.now() - this.recordingStartTime;
-      if (elapsed < MIN_RECORDING_DURATION_MS) {
-        this._cleanup();
-        reject(new Error('Recording too short. Please hold the button for at least half a second.'));
-        return;
-      }
+      const mimeType = this.getSupportedMimeType();
+      const options = mimeType ? { mimeType } : undefined;
+      this.mediaRecorder = new MediaRecorder(this.audioStream, options);
+      this.audioChunks = [];
 
-      this.mediaRecorder.onstop = () => {
-        const mimeType = this.mediaRecorder.mimeType || 'audio/webm';
-        const audioBlob = new Blob(this.audioChunks, { type: mimeType });
-        const chunksCount = this.audioChunks.length;
-        this._cleanup();
-
-        // Dev-only structured logging (no raw audio logged)
-        if (typeof console !== 'undefined' && console.log) {
-          console.log(`VOICE RECORDING mime=${mimeType} chunks=${chunksCount} bytes=${audioBlob.size} duration=${elapsed}ms`);
-        }
-
-        if (audioBlob.size === 0) {
-          reject(new Error('Recording produced an empty audio payload.'));
-        } else {
-          let extension = 'webm';
-          if (mimeType.includes('ogg')) extension = 'ogg';
-          else if (mimeType.includes('wav')) extension = 'wav';
-          else if (mimeType.includes('mp4') || mimeType.includes('m4a')) extension = 'mp4';
-
-          resolve({
-            blob: audioBlob,
-            mimeType,
-            filename: `query.${extension}`,
-            durationMs: elapsed,
-          });
+      this.mediaRecorder.ondataavailable = (event) => {
+        if (event.data && event.data.size > 0) {
+          this.audioChunks.push(event.data);
         }
       };
 
-
-      try {
-        this.mediaRecorder.stop();
-      } catch (err) {
-        this._cleanup();
-        reject(err);
+      // Initialize Web Audio Context and Analyser
+      const AudioCtx = window.AudioContext || window.webkitAudioContext;
+      if (AudioCtx) {
+        this.audioContext = new AudioCtx();
+        if (this.audioContext.state === 'suspended') {
+          await this.audioContext.resume();
+        }
+        const source = this.audioContext.createMediaStreamSource(this.audioStream);
+        this.analyser = this.audioContext.createAnalyser();
+        this.analyser.fftSize = 256;
+        this.analyser.smoothingTimeConstant = 0.8;
+        source.connect(this.analyser);
       }
-    });
+
+      this.mediaRecorder.start(100);
+      this.recordingStartTime = Date.now();
+      state.setState(APP_STATE.RECORDING);
+
+      // Start Waveform Rendering
+      this.startWaveformLoop();
+
+      // Start Elapsed Timer
+      if (this.timerInterval) clearInterval(this.timerInterval);
+      this.timerInterval = setInterval(() => {
+        const elapsedSeconds = Math.floor((Date.now() - this.recordingStartTime) / 1000);
+        if (onTimerTick) onTimerTick(elapsedSeconds);
+      }, 250);
+
+      // Enforce 60s max duration auto-stop
+      if (this.maxDurationTimer) clearTimeout(this.maxDurationTimer);
+      this.maxDurationTimer = setTimeout(() => {
+        if (this.isRecording()) {
+          if (onAutoStop) onAutoStop();
+        }
+      }, MAX_RECORDING_DURATION_MS);
+
+    } catch (err) {
+      this.cleanup();
+      state.setState(APP_STATE.ERROR);
+
+      // Normalize error code
+      if (
+        err.name === 'NotFoundError' ||
+        err.name === 'DevicesNotFoundError' ||
+        err.code === 'NO_MIC_DETECTED' ||
+        err.message?.toLowerCase().includes('device not found') ||
+        err.message?.toLowerCase().includes('requested device not found')
+      ) {
+        err.code = 'NO_MIC_DETECTED';
+      } else if (err.name === 'NotAllowedError' || err.name === 'PermissionDeniedError') {
+        err.code = 'PERMISSION_DENIED';
+      } else if (err.name === 'NotReadableError' || err.name === 'TrackStartError') {
+        err.code = 'MIC_IN_USE';
+      }
+
+      if (onError) onError(err);
+    }
   }
 
-  /**
-   * Cancel and discard recording
-   */
+  isRecording() {
+    return this.mediaRecorder && this.mediaRecorder.state === 'recording';
+  }
+
+  startWaveformLoop() {
+    if (!this.analyser || !this.waveformCanvas || !this.canvasContext) return;
+
+    const bufferLength = this.analyser.frequencyBinCount;
+    const dataArray = new Uint8Array(bufferLength);
+    const canvas = this.waveformCanvas;
+    const ctx = this.canvasContext;
+
+    const draw = () => {
+      if (!this.isRecording()) return;
+
+      this.animationFrameId = requestAnimationFrame(draw);
+      this.analyser.getByteFrequencyData(dataArray);
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      const barWidth = (canvas.width / bufferLength) * 2.2;
+      let x = 0;
+
+      // Create luminous linear gradient for audio bars
+      const gradient = ctx.createLinearGradient(0, 0, canvas.width, 0);
+      gradient.addColorStop(0, '#10b981');
+      gradient.addColorStop(0.5, '#06b6d4');
+      gradient.addColorStop(1, '#6366f1');
+
+      for (let i = 0; i < bufferLength; i++) {
+        const barHeight = (dataArray[i] / 255) * (canvas.height * 0.85);
+
+        ctx.fillStyle = gradient;
+        const y = (canvas.height - barHeight) / 2;
+        
+        // Draw smooth rounded bar
+        const bw = Math.max(barWidth - 2, 2);
+        const bh = Math.max(barHeight, 3);
+        ctx.beginPath();
+        ctx.roundRect ? ctx.roundRect(x, y, bw, bh, 3) : ctx.rect(x, y, bw, bh);
+        ctx.fill();
+
+        x += barWidth + 2;
+        if (x > canvas.width) break;
+      }
+    };
+
+    draw();
+  }
+
+  async stopRecording() {
+    if (!this.mediaRecorder || this.mediaRecorder.state !== 'recording') {
+      return null;
+    }
+
+    state.setState(APP_STATE.STOPPING);
+
+    if (this.timerInterval) clearInterval(this.timerInterval);
+    if (this.maxDurationTimer) clearTimeout(this.maxDurationTimer);
+    if (this.animationFrameId) cancelAnimationFrame(this.animationFrameId);
+
+    const elapsedMs = Date.now() - this.recordingStartTime;
+
+    const audioBlob = await new Promise((resolve) => {
+      this.mediaRecorder.onstop = () => {
+        const mimeType = this.mediaRecorder.mimeType || 'audio/webm';
+        const blob = new Blob(this.audioChunks, { type: mimeType });
+        resolve(blob);
+      };
+      this.mediaRecorder.stop();
+    });
+
+    this.cleanup();
+
+    if (elapsedMs < MIN_RECORDING_DURATION_MS || audioBlob.size < 300) {
+      state.setState(APP_STATE.STT_ERROR);
+      throw new Error('Recording was too short or silent. Please try speaking again.');
+    }
+
+    state.lastRecordedBlob = audioBlob;
+    return audioBlob;
+  }
+
   cancelRecording() {
-    if (this.mediaRecorder && this.mediaRecorder.state !== 'inactive') {
+    if (this.timerInterval) clearInterval(this.timerInterval);
+    if (this.maxDurationTimer) clearTimeout(this.maxDurationTimer);
+    if (this.animationFrameId) cancelAnimationFrame(this.animationFrameId);
+
+    if (this.mediaRecorder && this.mediaRecorder.state === 'recording') {
       try {
         this.mediaRecorder.stop();
       } catch (_) {}
     }
-    this._cleanup();
-    state.setRecording(false, 0);
+
+    this.cleanup();
+    state.setState(APP_STATE.IDLE);
   }
 
-  _cleanup() {
-    // Double-cleanup guard: prevent race between stop + cancel
-    if (this._cleaning) return;
-    this._cleaning = true;
+  cleanup() {
+    if (this._isCleaning) return;
+    this._isCleaning = true;
 
-    if (this.maxDurationTimer) {
-      clearTimeout(this.maxDurationTimer);
-      this.maxDurationTimer = null;
-    }
-    if (this.timerInterval) {
-      clearInterval(this.timerInterval);
-      this.timerInterval = null;
-    }
-    if (this.animationFrameId) {
-      cancelAnimationFrame(this.animationFrameId);
-      this.animationFrameId = null;
-    }
-    if (this.audioStream) {
-      this.audioStream.getTracks().forEach((track) => track.stop());
-      this.audioStream = null;
-    }
-    if (this.audioContext && this.audioContext.state !== 'closed') {
-      try {
-        this.audioContext.close();
-      } catch (_) {}
-      this.audioContext = null;
-    }
-    if (this._onVisibilityChange) {
-      document.removeEventListener('visibilitychange', this._onVisibilityChange);
-      this._onVisibilityChange = null;
-    }
-    this.analyser = null;
-    state.setRecording(false, 0);
-    this._cleaning = false;
-  }
+    try {
+      if (this.audioStream) {
+        this.audioStream.getTracks().forEach((track) => {
+          try {
+            track.stop();
+          } catch (_) {}
+        });
+        this.audioStream = null;
+      }
 
-  /** Expose max duration for UI countdown display */
-  get maxDurationSeconds() {
-    return MAX_RECORDING_DURATION_MS / 1000;
+      if (this.audioContext && this.audioContext.state !== 'closed') {
+        this.audioContext.close().catch(() => {});
+        this.audioContext = null;
+      }
+
+      if (this.waveformCanvas && this.canvasContext) {
+        this.canvasContext.clearRect(0, 0, this.waveformCanvas.width, this.waveformCanvas.height);
+      }
+    } finally {
+      this._isCleaning = false;
+    }
   }
 }
 
 export const voiceManager = new VoiceManager();
-

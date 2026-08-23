@@ -127,6 +127,21 @@ def test_sarvam_llm_initialization_validation(monkeypatch):
     assert provider.api_key == "mock_valid_sarvam_key"
 
 
+def test_gemini_llm_initialization_validation(monkeypatch):
+    """Verify GeminiLLMProvider validates GEMINI_API_KEY upon instantiation."""
+    from app.providers.llm import GeminiLLMProvider
+    monkeypatch.setenv("GEMINI_API_KEY", "")
+    monkeypatch.setenv("LLM_API_KEY", "")
+    get_settings.cache_clear()
+
+    with pytest.raises(MissingAPIKeyError, match="GEMINI_API_KEY"):
+        GeminiLLMProvider(api_key=None)
+
+    provider = GeminiLLMProvider(api_key="mock_valid_gemini_key")
+    assert provider.provider_name == "gemini"
+    assert provider.api_key == "mock_valid_gemini_key"
+
+
 def test_openai_llm_initialization_validation(monkeypatch):
     """Verify OpenAILLMProvider validates OPENAI_API_KEY / LLM_API_KEY upon instantiation."""
     monkeypatch.setenv("OPENAI_API_KEY", "")

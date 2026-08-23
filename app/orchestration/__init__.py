@@ -14,12 +14,6 @@ from app.orchestration.models import (
     VoiceAskResponse,
     VoiceLatencyBreakdown,
 )
-from app.orchestration.voice_rag import (
-    VoiceRAGOrchestrator,
-    get_voice_rag_orchestrator,
-    normalize_language_code,
-    normalize_query_text,
-)
 
 __all__ = [
     "VoiceOrchestrationError",
@@ -32,8 +26,4 @@ __all__ = [
     "VoiceLatencyBreakdown",
     "AudioOutputMetadata",
     "VoiceAskResponse",
-    "VoiceRAGOrchestrator",
-    "get_voice_rag_orchestrator",
-    "normalize_language_code",
-    "normalize_query_text",
 ]

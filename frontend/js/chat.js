@@ -1,476 +1,168 @@
 /**
- * HH Goa 2026 Multilingual Voice RAG — Chat Controller & Query Flow (Phase 6.25 Dataset-Centric)
+ * HH Goa 2026 Multilingual Voice RAG — Conversation & Orchestration Manager
  */
 
-import { api, ApiError } from './api.js';
-import { state } from './state.js';
-import { renderMessage, showToast } from './ui.js';
+import { state, APP_STATE, MULTILINGUAL_CONFIG } from './state.js';
+import { ApiService } from './api.js';
+import { UIManager } from './ui.js';
 
-export class ChatController {
-  constructor(messagesContainerId = 'chatMessages', heroContainerId = 'welcomeState') {
-    this.container = document.getElementById(messagesContainerId);
-    this.hero = document.getElementById(heroContainerId) || document.getElementById('welcomeHero');
-    this.activeStageElement = null;
-  }
+export class ChatManager {
+  /**
+   * Handle Voice Audio Submission (E2E Pipeline)
+   */
+  static async handleVoiceSubmission(audioBlob) {
+    const lang = state.language;
+    UIManager.announce('Audio recording stopped. Transcribing speech with Saarika v2.5…');
 
-  _hideHero() {
-    if (this.hero && this.hero.style.display !== 'none') {
-      this.hero.style.display = 'none';
+    // Display initial pipeline progress
+    let progressBox = UIManager.renderProgress(0);
+    state.setState(APP_STATE.TRANSCRIBING);
+
+    try {
+      // Progress to transcribing
+      progressBox = UIManager.updateProgress(progressBox, 1);
+
+      const response = await ApiService.submitVoiceAsk(audioBlob, lang, 5);
+
+      // Verify transcript
+      if (!response.transcript || !response.transcript.trim()) {
+        if (progressBox) progressBox.remove();
+        state.setState(APP_STATE.STT_ERROR);
+        UIManager.renderErrorCard(
+          "We couldn't understand the recording. Please try speaking again.",
+          () => {
+            const centralMic = document.getElementById('centralVoiceBtn') || document.getElementById('micBtn');
+            if (centralMic) centralMic.click();
+          }
+        );
+        return;
+      }
+
+      // 1. Display Transcript FIRST
+      state.setState(APP_STATE.TRANSCRIPT_READY);
+      UIManager.renderUserTurn({
+        text: response.transcript,
+        isVoice: true,
+        languageCode: response.detected_language || response.language || lang,
+      });
+
+      // 2. Display retrieval & generation progress
+      state.setState(APP_STATE.RETRIEVING);
+      progressBox = UIManager.updateProgress(progressBox, 2);
+
+      // Small tick to show progress transitioning
+      await new Promise((r) => setTimeout(r, 120));
+      progressBox = UIManager.updateProgress(progressBox, 3);
+
+      await new Promise((r) => setTimeout(r, 100));
+      progressBox = UIManager.updateProgress(progressBox, 4, response.citations?.length || 0);
+
+      await new Promise((r) => setTimeout(r, 80));
+      progressBox = UIManager.updateProgress(progressBox, 5);
+
+      // 3. Remove progress and render final answer
+      if (progressBox) progressBox.remove();
+
+      state.setState(APP_STATE.ANSWER_READY);
+      UIManager.renderAnswer({
+        answer: response.answer,
+        grounded: response.grounded,
+        citations: response.citations,
+        citation_provenance: response.citation_provenance,
+        audio: response.audio,
+        isVoice: true,
+        model: 'Google Gemini (gemini-2.5-flash)',
+        onRetryVoice: () => {
+          if (state.lastRecordedBlob) {
+            ChatManager.handleVoiceSubmission(state.lastRecordedBlob);
+          }
+        },
+      });
+
+      UIManager.announce('Answer ready. Voice response loaded.');
+
+    } catch (error) {
+      if (progressBox) progressBox.remove();
+      state.setState(APP_STATE.ERROR);
+
+      const msg = error.message || 'Voice RAG execution failed.';
+      UIManager.renderErrorCard(
+        `Error: ${msg}`,
+        () => {
+          if (state.lastRecordedBlob) {
+            ChatManager.handleVoiceSubmission(state.lastRecordedBlob);
+          }
+        }
+      );
+      UIManager.showToast(msg, true);
     }
-  }
-
-  _showHero() {
-    if (this.hero) {
-      this.hero.style.display = '';
-    }
-  }
-
-  _scrollToBottom() {
-    if (this.container) {
-      this.container.scrollTop = this.container.scrollHeight;
-    }
-  }
-
-  _showLoadingIndicator(stageText = 'Thinking...') {
-    this._hideHero();
-    this._removeLoadingIndicator();
-
-    const row = document.createElement('div');
-    row.className = 'message-row assistant animate-fade-in';
-    row.id = 'loadingStageIndicator';
-
-    const avatar = document.createElement('div');
-    avatar.className = 'message-avatar assistant';
-    avatar.textContent = 'AI';
-
-    const bubble = document.createElement('div');
-    bubble.className = 'message-bubble assistant';
-
-    const stageWrap = document.createElement('div');
-    stageWrap.className = 'loading-stage-indicator';
-
-    const textSpan = document.createElement('span');
-    textSpan.id = 'loadingStageText';
-    textSpan.textContent = stageText;
-
-    const dots = document.createElement('div');
-    dots.className = 'loading-dots';
-    dots.innerHTML = `
-      <div class="loading-dot"></div>
-      <div class="loading-dot"></div>
-      <div class="loading-dot"></div>
-    `;
-
-    stageWrap.appendChild(textSpan);
-    stageWrap.appendChild(dots);
-    bubble.appendChild(stageWrap);
-    row.appendChild(avatar);
-    row.appendChild(bubble);
-
-    this.container.appendChild(row);
-    this.activeStageElement = row;
-    this._scrollToBottom();
-  }
-
-  _updateLoadingText(stageText) {
-    const textSpan = document.getElementById('loadingStageText');
-    if (textSpan) {
-      textSpan.textContent = stageText;
-    }
-  }
-
-  _removeLoadingIndicator() {
-    if (this.activeStageElement) {
-      this.activeStageElement.remove();
-      this.activeStageElement = null;
-    }
-    const elem = document.getElementById('loadingStageIndicator');
-    if (elem) elem.remove();
   }
 
   /**
-   * Reset the chat UI and state back to empty welcome screen
+   * Handle Text Query Submission (Streamed)
    */
-  clear() {
-    this._removeLoadingIndicator();
-    if (this.container) {
-      const rows = this.container.querySelectorAll('.message-row');
-      rows.forEach((r) => r.remove());
-    }
-    this._showHero();
-    state.setCurrentAudio(null, null);
-    state.setState({ messages: [] });
-  }
+  static async handleTextSubmission(queryText) {
+    if (!queryText || !queryText.trim()) return;
 
-  /**
-   * Handle text question submission — uses SSE streaming (/api/ask-stream) with
-   * real pipeline-stage events and token streaming. Falls back to buffered /api/ask.
-   */
-  async submitTextQuery(query) {
-    if (!query || !query.trim()) return;
+    const lang = state.language;
+    const cleanQuery = queryText.trim();
 
-    this._hideHero();
-
-    const currentLang = state.getState().language;
-
-    // 1. Add User Message
-    const userMsg = state.addMessage({
-      sender: 'user',
-      text: query.trim(),
-      language: currentLang,
+    // 1. Render User Turn
+    UIManager.renderUserTurn({
+      text: cleanQuery,
+      isVoice: false,
+      languageCode: lang,
     });
-    this.container.appendChild(renderMessage(userMsg));
-    this._scrollToBottom();
 
-    // 2. Check if SSE / ReadableStream is supported
-    const supportsStream = typeof ReadableStream !== 'undefined' && typeof fetch !== 'undefined';
+    // 2. Initial Progress Tracker
+    let progressBox = UIManager.renderProgress(2);
+    state.setState(APP_STATE.RETRIEVING);
 
-    if (!supportsStream) {
-      return this._submitTextQueryBuffered(query, currentLang);
-    }
-
-    // 3. SSE streaming path
-    this._showLoadingIndicator('Retrieving sources...');
-    state.setLoadingStage('retrieving');
-
-    let streamController = null;
-    let streamTokenBubble = null;
-    let streamTokenContent = null;
     let accumulatedTokens = '';
 
-    const _ensureTokenBubble = () => {
-      if (streamTokenBubble) return;
-      this._removeLoadingIndicator();
-
-      const row = document.createElement('div');
-      row.className = 'message-row assistant animate-fade-in';
-      row.id = 'streamingResponseRow';
-
-      const avatar = document.createElement('div');
-      avatar.className = 'message-avatar assistant';
-      avatar.textContent = 'AI';
-
-      const bubble = document.createElement('div');
-      bubble.className = 'message-bubble assistant';
-
-      const contentDiv = document.createElement('div');
-      contentDiv.className = 'message-content stream-typing';
-      if (currentLang) contentDiv.setAttribute('lang', currentLang);
-      contentDiv.textContent = '';
-
-      bubble.appendChild(contentDiv);
-      row.appendChild(avatar);
-      row.appendChild(bubble);
-      this.container.appendChild(row);
-
-      streamTokenBubble = row;
-      streamTokenContent = contentDiv;
-      this._scrollToBottom();
-    };
-
-    return new Promise((resolve) => {
-      streamController = api.askQuestionStream(
-        query,
-        currentLang,
-        5,
-        {
-          onStage: (stage, message) => {
-            state.setLoadingStage(stage);
-            this._updateLoadingText(message || stage);
-          },
-
-          onToken: (token) => {
-            _ensureTokenBubble();
-            accumulatedTokens += token;
-            if (streamTokenContent) {
-              streamTokenContent.textContent = accumulatedTokens;
-              this._scrollToBottom();
-            }
-          },
-
-          onDone: (payload) => {
-            const streamRow = document.getElementById('streamingResponseRow');
-            if (streamRow) streamRow.remove();
-            this._removeLoadingIndicator();
-
-            const isRefusal = !payload.grounded || (payload.citations && payload.citations.length === 0);
-
-            const assistantMsg = state.addMessage({
-              sender: 'assistant',
-              text: payload.answer || accumulatedTokens || "I don't have enough information in the retrieved context to answer that.",
-              grounded: Boolean(payload.grounded),
-              confidence: payload.confidence || 0,
-              citations: payload.citations || [],
-              citationProvenance: payload.citation_provenance || [],
-              language: currentLang,
-              latencyMs: typeof payload.latency_ms === 'number'
-                ? { total: payload.latency_ms }
-                : payload.latency_ms,
-              error: null,
-              showCrossLanguageRetry: isRefusal,
-              originalQuery: query.trim(),
-            });
-
-            this.container.appendChild(
-              renderMessage(assistantMsg, (q) => this.submitCrossLanguageQuery(q))
-            );
-            this._scrollToBottom();
-            state.setLoadingStage(null);
-            resolve();
-          },
-
-          onError: (message, code) => {
-            const streamRow = document.getElementById('streamingResponseRow');
-            if (streamRow) streamRow.remove();
-            this._removeLoadingIndicator();
-
-            if (!accumulatedTokens) {
-              state.setLoadingStage(null);
-              this._submitTextQueryBuffered(query, currentLang).then(resolve);
-              return;
-            }
-
-            showToast(message, 'error');
-            state.setLoadingStage(null);
-            resolve();
-          },
+    await ApiService.streamAsk({
+      query: cleanQuery,
+      language: lang,
+      topK: 5,
+      onStage: (stagePayload) => {
+        const stageName = stagePayload.stage;
+        if (stageName === 'retrieving') {
+          state.setState(APP_STATE.RETRIEVING);
+          progressBox = UIManager.updateProgress(progressBox, 2);
+        } else if (stageName === 'ranking') {
+          state.setState(APP_STATE.RERANKING);
+          progressBox = UIManager.updateProgress(progressBox, 3);
+        } else if (stageName === 'generating') {
+          state.setState(APP_STATE.GENERATING);
+          progressBox = UIManager.updateProgress(progressBox, 4);
         }
-      );
-    });
-  }
+      },
+      onToken: (tokenDelta) => {
+        accumulatedTokens += tokenDelta;
+      },
+      onDone: (donePayload) => {
+        if (progressBox) progressBox.remove();
+        state.setState(APP_STATE.ANSWER_READY);
 
-  /**
-   * Buffered (non-streaming) text query — fallback
-   */
-  async _submitTextQueryBuffered(query, currentLang) {
-    this._showLoadingIndicator('Retrieving sources...');
-    state.setLoadingStage('retrieving');
-
-    try {
-      const responsePromise = api.askQuestion(query, currentLang);
-
-      setTimeout(() => {
-        if (state.getState().loadingStage) {
-          this._updateLoadingText('Ranking context...');
-          state.setLoadingStage('ranking');
-        }
-      }, 350);
-
-      setTimeout(() => {
-        if (state.getState().loadingStage) {
-          this._updateLoadingText('Generating grounded answer...');
-          state.setLoadingStage('generating');
-        }
-      }, 700);
-
-      const response = await responsePromise;
-      this._removeLoadingIndicator();
-
-      const isRefusal = !response.grounded || (response.citations && response.citations.length === 0);
-
-      const assistantMsg = state.addMessage({
-        sender: 'assistant',
-        text: response.answer || "I don't have enough information in the retrieved context to answer that.",
-        grounded: Boolean(response.grounded),
-        confidence: response.confidence,
-        citations: response.citations || [],
-        citationProvenance: response.citation_provenance || [],
-        language: currentLang,
-        latencyMs: response.latency_ms,
-        error: response.error,
-        showCrossLanguageRetry: isRefusal,
-        originalQuery: query.trim(),
-      });
-
-      this.container.appendChild(
-        renderMessage(assistantMsg, (q) => this.submitCrossLanguageQuery(q))
-      );
-      this._scrollToBottom();
-    } catch (err) {
-      this._removeLoadingIndicator();
-      const errMsg = err instanceof ApiError ? err.message : 'Something went wrong. Please try again.';
-      showToast(errMsg, 'error');
-
-      const assistantErr = state.addMessage({
-        sender: 'assistant',
-        text: `⚠️ ${errMsg}`,
-        grounded: false,
-        citations: [],
-        language: currentLang,
-        error: errMsg,
-      });
-      this.container.appendChild(renderMessage(assistantErr));
-      this._scrollToBottom();
-    } finally {
-      state.setLoadingStage(null);
-    }
-  }
-
-  /**
-   * Handle Cross-Language Retrieval Fallback (queries with language=None across full multilingual corpus)
-   */
-  async submitCrossLanguageQuery(originalQuery) {
-    if (!originalQuery || !originalQuery.trim()) return;
-
-    this._showLoadingIndicator('Searching across all 5 languages...');
-    state.setLoadingStage('retrieving');
-
-    try {
-      const responsePromise = api.askQuestion(originalQuery, null);
-
-      setTimeout(() => {
-        if (state.getState().loadingStage) {
-          this._updateLoadingText('Ranking cross-lingual candidates...');
-          state.setLoadingStage('ranking');
-        }
-      }, 350);
-
-      setTimeout(() => {
-        if (state.getState().loadingStage) {
-          this._updateLoadingText('Synthesizing cross-lingual answer...');
-          state.setLoadingStage('generating');
-        }
-      }, 700);
-
-      const response = await responsePromise;
-      this._removeLoadingIndicator();
-
-      const assistantMsg = state.addMessage({
-        sender: 'assistant',
-        text: response.answer || "I don't have enough information in the retrieved context to answer that.",
-        grounded: Boolean(response.grounded),
-        confidence: response.confidence,
-        citations: response.citations || [],
-        citationProvenance: response.citation_provenance || [],
-        language: response.language || null,
-        latencyMs: response.latency_ms,
-        error: response.error,
-        isCrossLanguage: true,
-      });
-
-      this.container.appendChild(renderMessage(assistantMsg));
-      this._scrollToBottom();
-    } catch (err) {
-      this._removeLoadingIndicator();
-      const errMsg = err instanceof ApiError ? err.message : 'Cross-language search failed.';
-      showToast(errMsg, 'error');
-    } finally {
-      state.setLoadingStage(null);
-    }
-  }
-
-  /**
-   * Handle recorded audio blob submission
-   */
-  async submitVoiceQuery(audioBlob, filename = 'recording.webm', onRetryVoice = null) {
-    if (!audioBlob) return;
-
-    this._hideHero();
-
-    const currentLang = state.getState().language;
-
-    // 1. Show Uploading / Transcribing
-    this._showLoadingIndicator('Transcribing voice (Saarika v2.5)...');
-    state.setLoadingStage('transcribing');
-
-    try {
-      setTimeout(() => {
-        if (state.getState().loadingStage) {
-          this._updateLoadingText('Retrieving passage sources...');
-          state.setLoadingStage('retrieving');
-        }
-      }, 500);
-
-      setTimeout(() => {
-        if (state.getState().loadingStage) {
-          this._updateLoadingText('Ranking cross-encoder candidates...');
-          state.setLoadingStage('ranking');
-        }
-      }, 1000);
-
-      setTimeout(() => {
-        if (state.getState().loadingStage) {
-          this._updateLoadingText('Generating grounded answer (Sarvam 105B)...');
-          state.setLoadingStage('generating');
-        }
-      }, 1500);
-
-      setTimeout(() => {
-        if (state.getState().loadingStage) {
-          this._updateLoadingText('Synthesizing voice response (Bulbul v2)...');
-          state.setLoadingStage('synthesizing');
-        }
-      }, 2000);
-
-      const response = await api.askVoice(audioBlob, currentLang, 5, filename);
-
-      this._removeLoadingIndicator();
-
-      // 2. Render user's transcribed query explicitly
-      if (response.transcript) {
-        const userMsg = state.addMessage({
-          sender: 'user',
-          text: response.transcript,
-          language: response.language || currentLang,
-          isVoice: true,
+        UIManager.renderAnswer({
+          answer: donePayload.answer || accumulatedTokens,
+          grounded: donePayload.grounded !== false,
+          citations: donePayload.citations || [],
+          citation_provenance: donePayload.citation_provenance || [],
+          audio: null,
+          isVoice: false,
+          model: 'Google Gemini (gemini-2.5-flash)',
         });
-        this.container.appendChild(renderMessage(userMsg));
-        this._scrollToBottom();
-      }
 
-      // 3. Handle Audio Payload & TTS Status
-      let status = response.status || 'success';
-      const audioB64 = (response.audio && response.audio.audio_base64) || response.audio_base64 || null;
-      const hasAudio = Boolean(audioB64 && ((response.audio && response.audio.available !== false) || !response.audio));
-      const audioFormat = (response.audio && response.audio.format) || 'wav';
-      const ttsFailed = !hasAudio && (status === 'partial_success' || (response.audio && response.audio.available === false));
-
-      if (ttsFailed && response.answer) {
-        showToast('Text answer ready — voice synthesis is temporarily unavailable.', 'warning', 5000);
-      }
-
-      // 4. Render Assistant Response
-      const assistantMsg = state.addMessage({
-        sender: 'assistant',
-        text: response.answer || "I don't have enough information in the retrieved context to answer that.",
-        grounded: Boolean(response.grounded),
-        confidence: response.confidence || 0,
-        citations: response.citations || [],
-        citationProvenance: response.citation_provenance || [],
-        language: response.language || currentLang,
-        status: status,
-        ttsUnavailable: ttsFailed,
-        audioBase64: hasAudio ? audioB64 : null,
-        audioFormat: audioFormat,
-        latencyMs: response.latency_ms,
-        error: response.error,
-        originalQuery: response.transcript || '',
-      });
-
-      this.container.appendChild(
-        renderMessage(assistantMsg, (q) => this.submitCrossLanguageQuery(q), null, onRetryVoice)
-      );
-      this._scrollToBottom();
-    } catch (err) {
-      this._removeLoadingIndicator();
-      const errMsg = err instanceof ApiError ? err.message : 'Voice request failed. Please try again.';
-      showToast(errMsg, 'error');
-
-      const isSTTErr = errMsg.toLowerCase().includes('speech') || errMsg.toLowerCase().includes('transcrib') || errMsg.toLowerCase().includes('audio');
-
-      const assistantErr = state.addMessage({
-        sender: 'assistant',
-        text: `⚠️ ${errMsg}`,
-        grounded: false,
-        citations: [],
-        language: currentLang,
-        error: errMsg,
-        isSTTFailure: isSTTErr,
-      });
-      this.container.appendChild(renderMessage(assistantErr, null, null, onRetryVoice));
-      this._scrollToBottom();
-    } finally {
-      state.setLoadingStage(null);
-    }
+        UIManager.announce('Answer received.');
+      },
+      onError: (err) => {
+        if (progressBox) progressBox.remove();
+        state.setState(APP_STATE.ERROR);
+        const msg = err.message || 'Failed to generate answer.';
+        UIManager.renderErrorCard(msg);
+        UIManager.showToast(msg, true);
+      },
+    });
   }
 }

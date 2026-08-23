@@ -58,89 +58,101 @@ def warmup_models():
 @pytest.mark.asyncio
 async def test_ask_endpoint_english_query():
     """Verify end-to-end RAG execution for English query."""
-    async with AsyncClient(
-        transport=ASGITransport(app=app), base_url="http://test"
-    ) as client:
-        payload = {
-            "query": "What is the capital of Goa?",
-            "top_k": 3,
-        }
-        response = await client.post("/api/ask", json=payload)
-        assert response.status_code == 200
-        data = response.json()
+    mock_provider = MockGenerationProvider(simulated_latency_ms=10.0)
+    mock_service = GenerationService(provider=mock_provider)
 
-        assert data["query"] == "What is the capital of Goa?"
-        assert isinstance(data["grounded"], bool)
-        assert len(data["answer"]) > 0
-        assert isinstance(data["citations"], list)
-        if data["grounded"]:
-            assert len(data["citations"]) > 0
-        else:
-            assert len(data["citations"]) == 0
-        assert 0.0 <= data["retrieval_confidence"] <= 1.0
-        assert isinstance(data["reranking_used"], bool)
-        assert data["model"] is not None
-        assert data["error"] is None
+    with patch("app.api.routes.get_generation_service", return_value=mock_service):
+        async with AsyncClient(
+            transport=ASGITransport(app=app), base_url="http://test"
+        ) as client:
+            payload = {
+                "query": "What is the capital of Goa?",
+                "top_k": 3,
+            }
+            response = await client.post("/api/ask", json=payload)
+            assert response.status_code == 200
+            data = response.json()
 
-        # Context summary
-        summary = data["retrieved_context_summary"]
-        assert summary["chunks_count"] > 0
-        assert summary["total_characters"] > 0
-        assert len(summary["chunk_ids"]) > 0
+            assert data["query"] == "What is the capital of Goa?"
+            assert isinstance(data["grounded"], bool)
+            assert len(data["answer"]) > 0
+            assert isinstance(data["citations"], list)
+            if data["grounded"]:
+                assert len(data["citations"]) > 0
+            else:
+                assert len(data["citations"]) == 0
+            assert 0.0 <= data["retrieval_confidence"] <= 1.0
+            assert isinstance(data["reranking_used"], bool)
+            assert data["model"] is not None
+            assert data["error"] is None
 
-        # Latency breakdown telemetry
-        lat = data["latency_ms"]
-        assert "embedding" in lat
-        assert "retrieval" in lat
-        assert "reranking" in lat
-        assert "context_selection" in lat
-        assert "prompt_construction" in lat
-        assert "generation" in lat
-        assert "total" in lat
-        assert lat["total"] > 0
+            # Context summary
+            summary = data["retrieved_context_summary"]
+            assert summary["chunks_count"] > 0
+            assert summary["total_characters"] > 0
+            assert len(summary["chunk_ids"]) > 0
+
+            # Latency breakdown telemetry
+            lat = data["latency_ms"]
+            assert "embedding" in lat
+            assert "retrieval" in lat
+            assert "reranking" in lat
+            assert "context_selection" in lat
+            assert "prompt_construction" in lat
+            assert "generation" in lat
+            assert "total" in lat
+            assert lat["total"] > 0
 
 
 @pytest.mark.asyncio
 async def test_ask_endpoint_hindi_query():
     """Verify end-to-end RAG execution for Hindi query preserving Unicode script."""
-    async with AsyncClient(
-        transport=ASGITransport(app=app), base_url="http://test"
-    ) as client:
-        payload = {
-            "query": "भारत की राजधानी क्या है?",
-            "language": "hi",
-            "top_k": 3,
-        }
-        response = await client.post("/api/ask", json=payload)
-        assert response.status_code == 200
-        data = response.json()
+    mock_provider = MockGenerationProvider(simulated_latency_ms=10.0)
+    mock_service = GenerationService(provider=mock_provider)
 
-        assert data["query"] == "भारत की राजधानी क्या है?"
-        assert isinstance(data["grounded"], bool)
-        assert len(data["answer"]) > 0
-        assert data["error"] is None
-        assert data["latency_ms"]["total"] > 0
+    with patch("app.api.routes.get_generation_service", return_value=mock_service):
+        async with AsyncClient(
+            transport=ASGITransport(app=app), base_url="http://test"
+        ) as client:
+            payload = {
+                "query": "भारत की राजधानी क्या है?",
+                "language": "hi",
+                "top_k": 3,
+            }
+            response = await client.post("/api/ask", json=payload)
+            assert response.status_code == 200
+            data = response.json()
+
+            assert data["query"] == "भारत की राजधानी क्या है?"
+            assert isinstance(data["grounded"], bool)
+            assert len(data["answer"]) > 0
+            assert data["error"] is None
+            assert data["latency_ms"]["total"] > 0
 
 
 @pytest.mark.asyncio
 async def test_ask_endpoint_tamil_query():
     """Verify end-to-end RAG execution for Tamil query preserving Unicode script."""
-    async with AsyncClient(
-        transport=ASGITransport(app=app), base_url="http://test"
-    ) as client:
-        payload = {
-            "query": "கோவாவின் தலைநகரம் எது?",
-            "top_k": 2,
-        }
-        response = await client.post("/api/ask", json=payload)
-        assert response.status_code == 200
-        data = response.json()
+    mock_provider = MockGenerationProvider(simulated_latency_ms=10.0)
+    mock_service = GenerationService(provider=mock_provider)
 
-        assert data["query"] == "கோவாவின் தலைநகரம் எது?"
-        assert isinstance(data["grounded"], bool)
-        assert len(data["answer"]) > 0
-        assert data["error"] is None
-        assert data["latency_ms"]["total"] > 0
+    with patch("app.api.routes.get_generation_service", return_value=mock_service):
+        async with AsyncClient(
+            transport=ASGITransport(app=app), base_url="http://test"
+        ) as client:
+            payload = {
+                "query": "கோவாவின் தலைநகரம் எது?",
+                "top_k": 2,
+            }
+            response = await client.post("/api/ask", json=payload)
+            assert response.status_code == 200
+            data = response.json()
+
+            assert data["query"] == "கோவாவின் தலைநகரம் எது?"
+            assert isinstance(data["grounded"], bool)
+            assert len(data["answer"]) > 0
+            assert data["error"] is None
+            assert data["latency_ms"]["total"] > 0
 
 
 # --- 2. Query Validation ---
@@ -207,27 +219,31 @@ async def test_ask_endpoint_no_context_guard():
 @pytest.mark.asyncio
 async def test_ask_endpoint_citation_propagation():
     """Verify citations from retrieved chunks properly propagate to the response."""
-    async with AsyncClient(
-        transport=ASGITransport(app=app), base_url="http://test"
-    ) as client:
-        payload = {
-            "query": "What is the capital of Goa?",
-            "top_k": 2,
-        }
-        response = await client.post("/api/ask", json=payload)
-        assert response.status_code == 200
-        data = response.json()
+    mock_provider = MockGenerationProvider(simulated_latency_ms=10.0)
+    mock_service = GenerationService(provider=mock_provider)
 
-        assert isinstance(data["grounded"], bool)
-        # Chunk IDs must match citations
-        summary_ids = data["retrieved_context_summary"]["chunk_ids"]
-        assert len(summary_ids) > 0
-        if data["grounded"]:
-            assert len(data["citations"]) > 0
-            for cite in data["citations"]:
-                assert cite in summary_ids or cite.startswith("chunk_") or cite.startswith("doc_")
-        else:
-            assert data["citations"] == []
+    with patch("app.api.routes.get_generation_service", return_value=mock_service):
+        async with AsyncClient(
+            transport=ASGITransport(app=app), base_url="http://test"
+        ) as client:
+            payload = {
+                "query": "What is the capital of Goa?",
+                "top_k": 2,
+            }
+            response = await client.post("/api/ask", json=payload)
+            assert response.status_code == 200
+            data = response.json()
+
+            assert isinstance(data["grounded"], bool)
+            # Chunk IDs must match citations
+            summary_ids = data["retrieved_context_summary"]["chunk_ids"]
+            assert len(summary_ids) > 0
+            if data["grounded"]:
+                assert len(data["citations"]) > 0
+                for cite in data["citations"]:
+                    assert cite in summary_ids or cite.startswith("chunk_") or cite.startswith("doc_")
+            else:
+                assert data["citations"] == []
 
 
 # --- 5. Generation Failure and Timeout Handling ---

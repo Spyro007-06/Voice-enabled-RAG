@@ -26,7 +26,6 @@ from app.orchestration.models import (
     VoiceAskResponse,
     VoiceLatencyBreakdown,
 )
-from app.providers.factory import get_stt_provider, get_tts_provider
 from app.providers.stt.base import STTProvider
 from app.providers.tts.base import TTSProvider
 from app.speech.validation import sanitize_filename, validate_audio_security
@@ -128,15 +127,17 @@ class VoiceRAGOrchestrator:
 
     @property
     def stt_provider(self) -> STTProvider:
-        if self._stt_provider is None:
-            self._stt_provider = get_stt_provider()
-        return self._stt_provider
+        if self._stt_provider is not None:
+            return self._stt_provider
+        from app.providers.factory import get_stt_provider
+        return get_stt_provider()
 
     @property
     def tts_provider(self) -> TTSProvider:
-        if self._tts_provider is None:
-            self._tts_provider = get_tts_provider()
-        return self._tts_provider
+        if self._tts_provider is not None:
+            return self._tts_provider
+        from app.providers.factory import get_tts_provider
+        return get_tts_provider()
 
     @property
     def adaptive_service(self) -> AdaptiveRetrievalService:

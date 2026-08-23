@@ -1,150 +1,128 @@
-﻿/* ==========================================================================
-   HH Goa 2026 — Responsive Breakpoints (Phase 6.17)
+/* ==========================================================================
+   HH Goa 2026 Multilingual Voice RAG — Responsive Layout Breakpoints
    ========================================================================== */
 
-/* --------------------------------------------------------------------------
-   Desktop (>= 1200px)
-   -------------------------------------------------------------------------- */
-@media (min-width: 1200px) {
-  .app-main {
-    max-width: 1100px;
-  }
-}
-
-/* --------------------------------------------------------------------------
-   Tablet (768px to 1199px)
-   -------------------------------------------------------------------------- */
-@media (max-width: 1199px) and (min-width: 768px) {
-  .app-main {
-    width: 90%;
-    padding: 0 12px;
-  }
-  
-  .message-bubble {
-    max-width: 85%;
-  }
-}
-
-/* --------------------------------------------------------------------------
-   Mobile (< 768px)
-   -------------------------------------------------------------------------- */
-@media (max-width: 767px) {
-  .app-main {
-    width: 100%;
-    padding: 0 10px;
+/* Tablet & Smaller (<= 768px) */
+@media (max-width: 768px) {
+  .topbar {
+    height: 64px;
+    padding: 0 16px;
   }
 
-  .header-inner {
-    padding: 0 10px;
-    gap: 8px;
+  .brand-title {
+    font-size: 0.95rem;
   }
 
-  .header-center {
-    display: none;
+  .brand-subtitle {
+    font-size: 0.65rem;
   }
 
-  .brand-sub {
-    display: none;
+  .welcome-section {
+    padding-top: 20px;
   }
 
-  .brand-name {
-    font-size: 0.85rem;
-  }
-
-  .lang-select {
-    padding: 4px 22px 4px 8px;
-    font-size: 0.75rem;
-  }
-
-  .status-pill {
-    padding: 4px 8px;
-    font-size: 0.72rem;
-  }
-
-  .chat-feed {
-    padding: 16px 0 10px;
-  }
-
-  .message-row {
-    gap: 8px;
-    margin-bottom: 16px;
-  }
-
-  .message-avatar {
-    width: 28px;
-    height: 28px;
-    font-size: 0.7rem;
-  }
-
-  .message-bubble {
-    max-width: 90%;
-    padding: 10px 14px;
-    font-size: 0.9rem;
-  }
-
-  .welcome-state {
-    min-height: 50vh;
-    padding: 24px 8px;
-  }
-
-  .welcome-title {
-    font-size: 1.3rem;
+  .welcome-heading {
+    font-size: 2rem;
   }
 
   .welcome-sub {
-    font-size: 0.8rem;
+    font-size: 0.92rem;
+    margin-bottom: 24px;
   }
 
-  .welcome-hint {
-    font-size: 0.85rem;
+  .hero-mic-btn {
+    width: 88px;
+    height: 88px;
   }
 
-  .welcome-mic-btn {
-    padding: 10px 20px;
-    font-size: 0.88rem;
+  .hero-mic-btn svg {
+    width: 36px;
+    height: 36px;
   }
 
-  .suggestion-chip {
-    font-size: 0.8rem;
-    padding: 6px 12px;
+  .recording-banner {
+    grid-template-columns: 1fr;
+    gap: 14px;
+    padding: 16px;
   }
 
-  .composer-wrap {
-    padding: 8px 0 10px;
+  .rec-canvas-container {
+    height: 48px;
   }
 
-  .composer {
-    padding: 6px 8px 6px 12px;
-    border-radius: var(--radius-md);
+  .rec-controls {
+    justify-content: flex-end;
   }
 
-  .composer-input {
-    font-size: 0.9rem;
+  .turn-answer {
+    padding: 20px;
   }
 
-  /* Ensure minimum 48px touch targets for mobile */
-  .composer-btn {
-    min-width: 44px;
-    min-height: 44px;
+  .answer-body {
+    font-size: 1.02rem;
   }
 
-  .composer-hint {
-    display: none;
+  .audio-controls-row {
+    grid-template-columns: auto 1fr;
+    gap: 10px;
   }
 
-  .recording-bar-inner {
-    gap: 6px;
-  }
-
-  .recording-label {
+  .audio-volume-wrapper {
     display: none;
   }
 
   .drawer {
-    width: 85vw;
-  }
-
-  .audio-player-card {
-    max-width: 100%;
+    width: 100vw;
+    border-right: none;
   }
 }
+
+/* Small Mobile (<= 480px) */
+@media (max-width: 480px) {
+  .main-container {
+    padding: 12px 14px 130px;
+  }
+
+  .welcome-heading {
+    font-size: 1.7rem;
+  }
+
+  .lang-chip {
+    font-size: 0.78rem;
+    padding: 5px 12px;
+  }
+
+  .turn-user, .turn-answer, .pipeline-progress-box, .suggestions-card {
+    padding: 16px;
+  }
+
+  .transcript-quote {
+    font-size: 1.05rem;
+  }
+
+  .char-counter {
+    display: none;
+  }
+
+  .composer-bar {
+    padding: 8px 12px;
+  }
+
+  .modal-card {
+    padding: 24px 18px;
+    gap: 16px;
+  }
+
+  .modal-title {
+    font-size: 1.15rem;
+  }
+
+  .modal-actions {
+    flex-direction: column;
+  }
+
+  .modal-action-btn {
+    width: 100%;
+  }
+}
+

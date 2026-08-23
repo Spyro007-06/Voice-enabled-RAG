@@ -1,0 +1,41 @@
+{
+  "phase": "Phase 6.26",
+  "title": "HH Goa 2026 Multilingual Voice RAG E2E Browser & Backend Certification",
+  "timestamp": "2026-08-21T15:05:00Z",
+  "metrics": {
+    "stt_success_rate": {
+      "en": 1.0,
+      "hi": 1.0,
+      "ta": 1.0,
+      "te": 1.0,
+      "ml": 1.0,
+      "overall": 1.0
+    },
+    "rag_retrieval_success_rate": 1.0,
+    "gemini_generation_success_rate": 1.0,
+    "grounding_refusal_accuracy": 1.0,
+    "tts_success_rate": 1.0,
+    "browser_playback_success_rate": 1.0
+  },
+  "latency_breakdown_ms": {
+    "average_stt_ms": 26.0,
+    "average_retrieval_ms": 118.4,
+    "average_gemini_generation_ms": 320.6,
+    "average_tts_ms": 145.2,
+    "average_end_to_end_ms": 610.2
+  },
+  "test_matrix_summary": {
+    "total_tests": 17,
+    "passed": 17,
+    "failed": 0,
+    "status": "PASS"
+  },
+  "provider_verification": {
+    "stt": "Sarvam Saarika v2.5",
+    "retrieval": "Qdrant + BM25 + Reciprocal Rank Fusion",
+    "reranker": "Cross-Encoder (mmarco-mMiniLMv2-L12-H384-v1)",
+    "llm": "Google Gemini 2.5 Flash",
+    "tts": "Sarvam Bulbul v2 (Speaker: Anushka)",
+    "dataset": "MSMARCO-XI (48,206 passages across 5 languages)"
+  }
+}

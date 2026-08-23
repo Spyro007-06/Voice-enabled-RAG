@@ -7,6 +7,7 @@ from typing import Any, Dict, Optional
 from app.config import get_settings
 from app.generation.base import GenerationProvider
 from app.providers.exceptions import InvalidRequestError
+from app.providers.llm.gemini import GeminiLLMProvider
 from app.providers.llm.mock import MockLLMProvider
 from app.providers.llm.openai import OpenAILLMProvider
 from app.providers.llm.sarvam import SarvamLLMProvider
@@ -97,7 +98,7 @@ def get_llm_provider(provider_name: Optional[str] = None, **kwargs: Any) -> Gene
     """Resolve and lazily instantiate an LLM generation provider.
 
     Args:
-        provider_name: 'mock', 'sarvam', 'openai', or None (uses Settings.LLM_PROVIDER).
+        provider_name: 'gemini', 'mock', 'sarvam', 'openai', or None (uses Settings.LLM_PROVIDER).
         **kwargs: Additional parameters passed to provider constructor.
 
     Returns:
@@ -113,6 +114,8 @@ def get_llm_provider(provider_name: Optional[str] = None, **kwargs: Any) -> Gene
 
         if target_name == "mock":
             inst = MockLLMProvider(**kwargs)
+        elif target_name in ("gemini", "google"):
+            inst = GeminiLLMProvider(**kwargs)
         elif target_name == "sarvam":
             inst = SarvamLLMProvider(**kwargs)
         elif target_name in ("openai", "gpt"):
@@ -120,7 +123,7 @@ def get_llm_provider(provider_name: Optional[str] = None, **kwargs: Any) -> Gene
         else:
             raise InvalidRequestError(
                 provider_name=target_name,
-                message=f"Unsupported LLM provider '{target_name}'. Supported: 'mock', 'sarvam', 'openai'.",
+                message=f"Unsupported LLM provider '{target_name}'. Supported: 'gemini', 'mock', 'sarvam', 'openai'.",
             )
 
         _LLM_INSTANCES[cache_key] = inst
@@ -161,10 +164,10 @@ def get_active_providers_info() -> Dict[str, str]:
     """Return active provider names for health telemetry and UI status display."""
     settings = get_settings()
     return {
-        "stt": settings.STT_PROVIDER,
-        "llm": settings.LLM_PROVIDER,
-        "tts": settings.TTS_PROVIDER,
+        "stt": f"{settings.STT_PROVIDER} ({settings.SARVAM_STT_MODEL})",
+        "llm": f"{settings.LLM_PROVIDER} ({settings.GEMINI_MODEL if settings.LLM_PROVIDER == 'gemini' else settings.LLM_MODEL_NAME})",
+        "tts": f"{settings.TTS_PROVIDER} ({settings.SARVAM_TTS_MODEL})",
         "vector_db": "qdrant" if "qdrant" in settings.VECTOR_PROVIDER else settings.VECTOR_PROVIDER,
+        "embedding": settings.EMBEDDING_MODEL,
+        "reranker": settings.RERANKER_MODEL,
     }
-
-

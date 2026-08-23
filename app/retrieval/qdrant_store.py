@@ -43,7 +43,7 @@ def get_shared_qdrant_client(location: Optional[str] = None, in_memory: bool = F
         return _CLIENT_CACHE[cloud_url]
 
     path = location or settings.QDRANT_PATH
-    norm_path = os.path.abspath(path)
+    norm_path = os.path.normcase(os.path.abspath(path))
 
     if norm_path not in _CLIENT_CACHE:
         os.makedirs(norm_path, exist_ok=True)

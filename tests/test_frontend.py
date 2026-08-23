@@ -65,7 +65,7 @@ async def test_frontend_index_serving():
         # Pipeline steps in UI
         assert "Language Resolution" in text
         assert "Saarika v2.5" in text
-        assert "Sarvam-105B LLM" in text
+        assert "Google Gemini" in text
         assert "Bulbul v2 TTS" in text
 
 

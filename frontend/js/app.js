@@ -1,410 +1,409 @@
 /**
- * HH Goa 2026 Multilingual Voice RAG — Main Application Entry Point (Phase 6.25 Dataset-Centric)
+ * HH Goa 2026 Multilingual Voice RAG — Main Application Entry Point
  */
 
-import { state } from './state.js';
+import { state, APP_STATE, MULTILINGUAL_CONFIG } from './state.js';
 import { voiceManager } from './voice.js';
-import { ChatController } from './chat.js';
-import { healthMonitor } from './health.js';
-import { showToast } from './ui.js';
+import { ChatManager } from './chat.js';
+import { UIManager } from './ui.js';
+import { HealthInspector } from './health.js';
 
-document.addEventListener('DOMContentLoaded', () => {
-  const chat = new ChatController('chatMessages', 'welcomeState');
+// DOM Elements
+const elements = {
+  menuBtn: document.getElementById('menuBtn'),
+  closeMenuBtn: document.getElementById('closeMenuBtn'),
+  menuDrawer: document.getElementById('menuDrawer'),
+  drawerBackdrop: document.getElementById('drawerBackdrop'),
+  langSelect: document.getElementById('langSelect'),
+  languageTabs: document.getElementById('languageTabs'),
+  suggestionsContainer: document.getElementById('suggestionsContainer'),
+  welcomeState: document.getElementById('welcomeState'),
+  centralVoiceBtn: document.getElementById('centralVoiceBtn'),
+  welcomeMicBtn: document.getElementById('welcomeMicBtn'),
+  micBtn: document.getElementById('micBtn'),
+  micLabel: document.getElementById('micLabel'),
+  queryInput: document.getElementById('queryInput'),
+  sendBtn: document.getElementById('sendBtn'),
+  charCounter: document.getElementById('charCounter'),
+  recordingBar: document.getElementById('recordingBar'),
+  waveform: document.getElementById('waveform'),
+  recordingTimer: document.getElementById('recordingTimer'),
+  recordingLangBadge: document.getElementById('recordingLangBadge'),
+  stopRecordingBtn: document.getElementById('stopRecordingBtn'),
+  cancelRecordingBtn: document.getElementById('cancelRecordingBtn'),
+  chatMessages: document.getElementById('chatMessages'),
+  newChatBtn: document.getElementById('newChatBtn'),
+  clearChatBtn: document.getElementById('clearChatBtn'),
+  openDatasetBtn: document.getElementById('openDatasetFromMenu'),
+  openPipelineBtn: document.getElementById('openPipelineFromMenu'),
+  openStatusBtn: document.getElementById('openStatusFromMenu'),
+  openAboutBtn: document.getElementById('openAboutBtn'),
+  datasetDrawer: document.getElementById('datasetDrawer'),
+  pipelineDrawer: document.getElementById('pipelineDrawer'),
+  statusDrawer: document.getElementById('statusDrawer'),
+  aboutDrawer: document.getElementById('aboutDrawer'),
+};
 
-  // DOM Elements — Inputs & Actions
-  const queryInput = document.getElementById('queryInput');
-  const sendBtn = document.getElementById('sendBtn');
-  const micBtn = document.getElementById('micBtn');
-  const welcomeMicBtn = document.getElementById('welcomeMicBtn');
-  const charCounter = document.getElementById('charCounter');
-  const langSelect = document.getElementById('langSelect');
-  const suggestionChips = document.querySelectorAll('.suggestion-chip');
-  const langTabs = document.querySelectorAll('.lang-tab');
+/**
+ * Open or close specified drawer
+ */
+function setDrawerOpen(drawerElement, isOpen) {
+  if (!drawerElement) return;
 
-  // DOM Elements — Recording Bar
-  const recordingBar = document.getElementById('recordingBar');
-  const recordingStatusLabel = document.getElementById('recordingStatusLabel');
-  const recordingTimer = document.getElementById('recordingTimer');
-  const recordingRemaining = document.getElementById('recordingRemaining');
-  const stopRecordingBtn = document.getElementById('stopRecordingBtn');
-  const cancelRecordingBtn = document.getElementById('cancelRecordingBtn');
-  const waveformBars = document.querySelectorAll('.waveform-bar');
-
-  // DOM Elements — Drawers & Backdrops
-  const drawerBackdrop = document.getElementById('drawerBackdrop');
-
-  // Menu Drawer
-  const menuBtn = document.getElementById('menuBtn');
-  const menuDrawer = document.getElementById('menuDrawer');
-  const closeMenuBtn = document.getElementById('closeMenuBtn');
-
-  // Dataset Drawer
-  const headerDatasetBtn = document.getElementById('headerDatasetBtn');
-  const footerDatasetBtn = document.getElementById('footerDatasetBtn');
-  const openDatasetFromMenu = document.getElementById('openDatasetFromMenu');
-  const datasetDrawer = document.getElementById('datasetDrawer');
-  const closeDatasetBtn = document.getElementById('closeDatasetBtn');
-
-  // Pipeline Drawer
-  const headerPipelineBtn = document.getElementById('headerPipelineBtn');
-  const footerPipelineBtn = document.getElementById('footerPipelineBtn');
-  const openPipelineFromMenu = document.getElementById('openPipelineFromMenu');
-  const pipelineDrawer = document.getElementById('pipelineDrawer');
-  const closePipelineBtn = document.getElementById('closePipelineBtn');
-
-  // Status Drawer
-  const statusBtn = document.getElementById('statusBtn');
-  const footerStatusBtn = document.getElementById('footerStatusBtn');
-  const openStatusFromMenu = document.getElementById('openStatusFromMenu');
-  const statusDrawer = document.getElementById('statusDrawer');
-  const closeStatusBtn = document.getElementById('closeStatusBtn');
-  const refreshHealthBtn = document.getElementById('refreshHealthBtn');
-
-  // About Drawer
-  const openAboutBtn = document.getElementById('openAboutBtn');
-  const aboutDrawer = document.getElementById('aboutDrawer');
-  const closeAboutBtn = document.getElementById('closeAboutBtn');
-
-  // Chat Actions
-  const newChatBtn = document.getElementById('newChatBtn');
-  const clearChatBtn = document.getElementById('clearChatBtn');
-
-  // Start background health polling
-  healthMonitor.start();
-
-  // --------------------------------------------------------------------------
-  // 1. Language Selector with Session Synchronization
-  // --------------------------------------------------------------------------
-  if (langSelect) {
-    langSelect.addEventListener('change', (e) => {
-      const selectedLang = e.target.value;
-      state.setLanguage(selectedLang);
-      syncLangTab(selectedLang);
-      const text = e.target.options[e.target.selectedIndex].text;
-      showToast(`Language set to ${text}`, 'info', 2000);
-    });
-  }
-
-  // --------------------------------------------------------------------------
-  // 2. Suggestion Language Tabs
-  // --------------------------------------------------------------------------
-  function syncLangTab(langCode) {
-    langTabs.forEach((tab) => {
-      const isMatch = tab.getAttribute('data-lang') === langCode;
-      tab.classList.toggle('active', isMatch);
-      tab.setAttribute('aria-selected', isMatch ? 'true' : 'false');
-    });
-
-    const grids = document.querySelectorAll('.suggestion-grid');
-    grids.forEach((grid) => {
-      const isMatch = grid.getAttribute('data-lang-group') === langCode;
-      grid.classList.toggle('active', isMatch);
-      grid.hidden = !isMatch;
-    });
-  }
-
-  langTabs.forEach((tab) => {
-    tab.addEventListener('click', () => {
-      const lang = tab.getAttribute('data-lang');
-      if (lang) {
-        state.setLanguage(lang);
-        if (langSelect) langSelect.value = lang;
-        syncLangTab(lang);
-      }
-    });
+  // Close all other info drawers first
+  [
+    elements.menuDrawer,
+    elements.datasetDrawer,
+    elements.pipelineDrawer,
+    elements.statusDrawer,
+    elements.aboutDrawer,
+  ].forEach((d) => {
+    if (d && d !== drawerElement) d.hidden = true;
   });
 
-  // --------------------------------------------------------------------------
-  // 3. Textarea Auto-Resize & Character Counter
-  // --------------------------------------------------------------------------
-  if (queryInput) {
-    queryInput.addEventListener('input', () => {
-      queryInput.style.height = 'auto';
-      const newHeight = Math.max(48, Math.min(queryInput.scrollHeight, 160));
-      queryInput.style.height = `${newHeight}px`;
+  drawerElement.hidden = !isOpen;
+  if (elements.drawerBackdrop) elements.drawerBackdrop.hidden = !isOpen;
 
-      const len = queryInput.value.length;
-      if (charCounter) {
-        charCounter.textContent = `${len} / 2000`;
-        if (len > 2000) {
-          charCounter.className = 'char-counter over';
-        } else if (len > 1850) {
-          charCounter.className = 'char-counter warn';
-        } else {
-          charCounter.className = 'char-counter';
-        }
+  if (elements.menuBtn) {
+    elements.menuBtn.setAttribute('aria-expanded', String(isOpen && drawerElement === elements.menuDrawer));
+  }
+
+  if (isOpen && drawerElement === elements.statusDrawer) {
+    HealthInspector.updateSystemStatus();
+  }
+}
+
+function closeAllDrawers() {
+  [
+    elements.menuDrawer,
+    elements.datasetDrawer,
+    elements.pipelineDrawer,
+    elements.statusDrawer,
+    elements.aboutDrawer,
+  ].forEach((d) => {
+    if (d) d.hidden = true;
+  });
+  if (elements.drawerBackdrop) elements.drawerBackdrop.hidden = true;
+  if (elements.menuBtn) elements.menuBtn.setAttribute('aria-expanded', 'false');
+}
+
+/**
+ * Render Quick Language Chips & Select Box
+ */
+function updateLanguageUI(langCode) {
+  const config = MULTILINGUAL_CONFIG[langCode] || MULTILINGUAL_CONFIG.en;
+
+  // Update Select Element
+  if (elements.langSelect) elements.langSelect.value = langCode;
+
+  // Update Recording Lang Badge
+  if (elements.recordingLangBadge) {
+    elements.recordingLangBadge.textContent = `${config.nativeName} · Saarika v2.5`;
+  }
+
+  // Update Language Chips
+  if (elements.languageTabs) {
+    elements.languageTabs.replaceChildren(
+      ...Object.entries(MULTILINGUAL_CONFIG).map(([code, item]) => {
+        const btn = document.createElement('button');
+        btn.className = 'lang-chip';
+        btn.textContent = item.nativeName;
+        btn.setAttribute('aria-pressed', String(code === langCode));
+        btn.onclick = () => {
+          state.setLanguage(code);
+        };
+        return btn;
+      })
+    );
+  }
+
+  // Update Suggested Corpus Questions
+  if (elements.suggestionsContainer) {
+    elements.suggestionsContainer.replaceChildren(
+      ...config.questions.map((question) => {
+        const btn = document.createElement('button');
+        btn.className = 'suggestion-btn';
+        btn.textContent = `“${question}”`;
+        btn.onclick = () => {
+          if (elements.queryInput) elements.queryInput.value = '';
+          ChatManager.handleTextSubmission(question);
+        };
+        return btn;
+      })
+    );
+  }
+
+  UIManager.announce(`Language set to ${config.fullName}`);
+}
+
+/**
+ * Reactively apply app state to the DOM: mic button class/label, welcome screen
+ */
+function applyAppState(appState) {
+  const micBtns = [
+    elements.centralVoiceBtn,
+    elements.micBtn,
+    elements.welcomeMicBtn,
+  ].filter(Boolean);
+
+  const isRecording = appState === APP_STATE.RECORDING;
+  const isBusy = [
+    APP_STATE.REQUESTING_MIC_PERMISSION,
+    APP_STATE.STOPPING,
+    APP_STATE.TRANSCRIBING,
+    APP_STATE.RETRIEVING,
+    APP_STATE.RERANKING,
+    APP_STATE.GENERATING,
+    APP_STATE.SYNTHESIZING,
+  ].includes(appState);
+
+  // Toggle .recording class on hero mic button
+  micBtns.forEach((btn) => {
+    btn.classList.toggle('recording', isRecording);
+    btn.classList.toggle('processing', isBusy);
+    btn.disabled = isBusy;
+  });
+
+  // Update the mic rings wrapper
+  const rings = document.querySelector('.mic-rings');
+  if (rings) {
+    rings.classList.toggle('is-recording', isRecording);
+    rings.classList.toggle('is-processing', isBusy);
+  }
+
+  // Update hero label
+  if (elements.micLabel) {
+    if (isRecording) {
+      elements.micLabel.textContent = 'Listening… tap to stop';
+    } else if (isBusy) {
+      elements.micLabel.textContent = 'Processing…';
+    } else {
+      elements.micLabel.textContent = 'Tap to speak';
+    }
+  }
+
+  // Hide welcome screen as soon as user starts interacting
+  if (isRecording || isBusy) {
+    if (elements.welcomeState) elements.welcomeState.hidden = true;
+  }
+}
+
+/**
+ * Voice Recording Controls
+ */
+async function startVoiceRecording() {
+  const config = MULTILINGUAL_CONFIG[state.language] || MULTILINGUAL_CONFIG.en;
+  if (elements.recordingLangBadge) {
+    elements.recordingLangBadge.textContent = `${config.nativeName} · Saarika v2.5`;
+  }
+
+  if (elements.recordingTimer) elements.recordingTimer.textContent = '00:00';
+  if (elements.recordingBar) elements.recordingBar.hidden = false;
+
+  [elements.centralVoiceBtn, elements.micBtn, elements.welcomeMicBtn].forEach((btn) => {
+    if (btn) btn.setAttribute('aria-label', 'Stop voice recording');
+  });
+
+  UIManager.announce(`Listening. Recording in ${config.name} started.`);
+
+  await voiceManager.startRecording({
+    onTimerTick: (seconds) => {
+      const mins = Math.floor(seconds / 60);
+      const secs = String(seconds % 60).padStart(2, '0');
+      if (elements.recordingTimer) {
+        elements.recordingTimer.textContent = `0${mins}:${secs}`;
       }
+    },
+    onAutoStop: async () => {
+      UIManager.showToast('Reached 60-second limit. Processing voice input…');
+      await stopVoiceRecording();
+    },
+    onError: (err) => {
+      if (elements.recordingBar) elements.recordingBar.hidden = true;
+      [elements.centralVoiceBtn, elements.micBtn, elements.welcomeMicBtn].forEach((btn) => {
+        if (btn) btn.setAttribute('aria-label', 'Start voice recording');
+      });
 
-      if (sendBtn) {
-        sendBtn.disabled = len === 0 || len > 2000 || state.getState().loadingStage !== null;
+      if (err.code === 'NO_MIC_DETECTED') {
+        UIManager.showNoMicModal({
+          onRetry: () => startVoiceRecording(),
+          onTypeInstead: () => {
+            if (elements.queryInput) {
+              elements.queryInput.focus();
+              elements.queryInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+          },
+        });
+      } else if (err.code === 'PERMISSION_DENIED') {
+        UIManager.showMicPermissionModal({
+          onRetry: () => startVoiceRecording(),
+        });
+      } else {
+        const msg = `Microphone error: ${err.message || 'Unable to access audio device'}`;
+        UIManager.showToast(msg, true);
+        UIManager.announce('Microphone access denied or unavailable.');
       }
-    });
+    },
+  });
+}
 
-    queryInput.addEventListener('keydown', (e) => {
+async function stopVoiceRecording() {
+  if (elements.recordingBar) elements.recordingBar.hidden = true;
+
+  [elements.centralVoiceBtn, elements.micBtn, elements.welcomeMicBtn].forEach((btn) => {
+    if (btn) btn.setAttribute('aria-label', 'Start voice recording');
+  });
+
+  try {
+    const audioBlob = await voiceManager.stopRecording();
+    if (audioBlob) {
+      await ChatManager.handleVoiceSubmission(audioBlob);
+    }
+  } catch (err) {
+    UIManager.showToast(err.message || 'Failed to capture audio', true);
+  }
+}
+
+function cancelVoiceRecording() {
+  voiceManager.cancelRecording();
+  if (elements.recordingBar) elements.recordingBar.hidden = true;
+
+  [elements.centralVoiceBtn, elements.micBtn, elements.welcomeMicBtn].forEach((btn) => {
+    if (btn) btn.setAttribute('aria-label', 'Start voice recording');
+  });
+
+  UIManager.announce('Recording cancelled.');
+}
+
+/**
+ * Handle Send Text Button / Enter Key
+ */
+function submitComposerText() {
+  if (!elements.queryInput) return;
+  const text = elements.queryInput.value.trim();
+  if (!text) return;
+
+  elements.queryInput.value = '';
+  if (elements.charCounter) elements.charCounter.textContent = '0 / 2000';
+  if (elements.sendBtn) elements.sendBtn.disabled = true;
+
+  ChatManager.handleTextSubmission(text);
+}
+
+/**
+ * Initialize Application
+ */
+document.addEventListener('DOMContentLoaded', () => {
+  // 1. Initialize Waveform Canvas
+  voiceManager.initCanvas(elements.waveform);
+
+  // 2. State Subscriber — drives mic button + label + welcome visibility reactively
+  state.subscribe((type, data) => {
+    if (type === 'language') {
+      updateLanguageUI(data);
+    }
+
+    if (type === 'state') {
+      applyAppState(data);
+    }
+  });
+  state.setLanguage('en');
+
+  // 3. Language Selector Dropdown
+  if (elements.langSelect) {
+    elements.langSelect.onchange = (e) => {
+      state.setLanguage(e.target.value);
+    };
+  }
+
+  // 4. Voice Mic Trigger Buttons
+  const toggleRecording = () => {
+    if (voiceManager.isRecording()) {
+      stopVoiceRecording();
+    } else {
+      startVoiceRecording();
+    }
+  };
+
+  if (elements.centralVoiceBtn) elements.centralVoiceBtn.onclick = toggleRecording;
+  if (elements.welcomeMicBtn) elements.welcomeMicBtn.onclick = toggleRecording;
+  if (elements.micBtn) elements.micBtn.onclick = toggleRecording;
+
+  if (elements.stopRecordingBtn) elements.stopRecordingBtn.onclick = stopVoiceRecording;
+  if (elements.cancelRecordingBtn) elements.cancelRecordingBtn.onclick = cancelVoiceRecording;
+
+  // 5. Composer Textarea & Send Button
+  if (elements.queryInput) {
+    elements.queryInput.oninput = (e) => {
+      const len = e.target.value.length;
+      if (elements.charCounter) elements.charCounter.textContent = `${len} / 2000`;
+      if (elements.sendBtn) elements.sendBtn.disabled = !e.target.value.trim();
+
+      // Auto-grow
+      e.target.style.height = 'auto';
+      e.target.style.height = `${Math.min(e.target.scrollHeight, 140)}px`;
+    };
+
+    elements.queryInput.onkeydown = (e) => {
       if (e.key === 'Enter' && !e.shiftKey) {
         e.preventDefault();
-        const text = queryInput.value.trim();
-        if (text && (!sendBtn || !sendBtn.disabled)) {
-          handleTextSubmit();
-        }
+        submitComposerText();
       }
-    });
+    };
   }
 
-  // --------------------------------------------------------------------------
-  // 4. Text Submit Handler
-  // --------------------------------------------------------------------------
-  if (sendBtn) {
-    sendBtn.addEventListener('click', handleTextSubmit);
+  if (elements.sendBtn) {
+    elements.sendBtn.onclick = submitComposerText;
   }
 
-  function handleTextSubmit() {
-    if (!queryInput) return;
-    const text = queryInput.value.trim();
-    if (!text) return;
+  // 6. Drawer Navigation Controls
+  if (elements.menuBtn) elements.menuBtn.onclick = () => setDrawerOpen(elements.menuDrawer, true);
+  if (elements.closeMenuBtn) elements.closeMenuBtn.onclick = () => setDrawerOpen(elements.menuDrawer, false);
+  if (elements.drawerBackdrop) elements.drawerBackdrop.onclick = closeAllDrawers;
 
-    queryInput.value = '';
-    queryInput.style.height = '48px';
-    if (charCounter) {
-      charCounter.textContent = '0 / 2000';
-      charCounter.className = 'char-counter';
-    }
-    if (sendBtn) sendBtn.disabled = true;
+  // Info Drawers
+  if (elements.openDatasetBtn) elements.openDatasetBtn.onclick = () => setDrawerOpen(elements.datasetDrawer, true);
+  if (elements.openPipelineBtn) elements.openPipelineBtn.onclick = () => setDrawerOpen(elements.pipelineDrawer, true);
+  if (elements.openStatusBtn) elements.openStatusBtn.onclick = () => setDrawerOpen(elements.statusDrawer, true);
+  if (elements.openAboutBtn) elements.openAboutBtn.onclick = () => setDrawerOpen(elements.aboutDrawer, true);
 
-    chat.submitTextQuery(text);
-  }
-
-  // --------------------------------------------------------------------------
-  // 5. Suggested Questions Click
-  // --------------------------------------------------------------------------
-  suggestionChips.forEach((chip) => {
-    chip.addEventListener('click', () => {
-      const q = chip.getAttribute('data-query') || chip.textContent.trim();
-      if (queryInput) {
-        queryInput.value = q;
-        queryInput.dispatchEvent(new Event('input'));
-        handleTextSubmit();
-      }
-    });
+  // Close buttons on all info drawers
+  document.querySelectorAll('.close-info-drawer').forEach((btn) => {
+    btn.onclick = closeAllDrawers;
   });
 
-  // --------------------------------------------------------------------------
-  // 6. Voice Interaction Flow (Inline Recording Bar with Waveform)
-  // --------------------------------------------------------------------------
-  if (micBtn) {
-    micBtn.addEventListener('click', () => {
-      if (state.getState().isRecording) {
-        handleStopRecording();
-      } else {
-        handleStartRecording();
-      }
-    });
-  }
-
-  if (welcomeMicBtn) {
-    welcomeMicBtn.addEventListener('click', () => {
-      handleStartRecording();
-    });
-  }
-
-  if (stopRecordingBtn) {
-    stopRecordingBtn.addEventListener('click', handleStopRecording);
-  }
-
-  if (cancelRecordingBtn) {
-    cancelRecordingBtn.addEventListener('click', handleCancelRecording);
-  }
-
-  async function handleStartRecording() {
-    try {
-      if (micBtn) {
-        micBtn.classList.add('recording');
-        micBtn.setAttribute('aria-label', 'Stop voice recording');
-      }
-      if (recordingBar) {
-        recordingBar.hidden = false;
-      }
-      if (recordingStatusLabel) {
-        recordingStatusLabel.textContent = 'Listening...';
-      }
-
-      await voiceManager.startRecording(
-        // onWaveform callback
-        (frequencyData) => {
-          if (waveformBars && waveformBars.length > 0) {
-            for (let i = 0; i < waveformBars.length; i++) {
-              const val = frequencyData[i * 2] || 0;
-              const barHeight = Math.max(4, Math.min(24, (val / 255) * 28));
-              waveformBars[i].style.height = `${barHeight}px`;
-            }
-          }
-        },
-        // onMaxDuration callback — auto-stop at 60s
-        () => {
-          showToast('Maximum recording length (60s) reached — submitting automatically.', 'info', 3000);
-          handleStopRecording();
-        },
-        // onRemainingTime callback
-        (remainingSec) => {
-          if (recordingRemaining) {
-            if (remainingSec <= 10) {
-              recordingRemaining.textContent = `${remainingSec}s left`;
-              recordingRemaining.hidden = false;
-            } else {
-              recordingRemaining.hidden = true;
-            }
-          }
-        }
-      );
-    } catch (err) {
-      resetRecordingUI();
-      showToast(err.message, 'error');
-    }
-  }
-
-  async function handleStopRecording() {
-    if (recordingStatusLabel) {
-      recordingStatusLabel.textContent = 'Processing voice...';
-    }
-    try {
-      const { blob, filename } = await voiceManager.stopRecording();
-      resetRecordingUI();
-      chat.submitVoiceQuery(blob, filename, () => handleStartRecording());
-    } catch (err) {
-      resetRecordingUI();
-      if (err.message && err.message !== 'No active recording.') {
-        showToast(err.message, 'warning');
-      }
-    }
-  }
-
-  function handleCancelRecording() {
-    voiceManager.cancelRecording();
-    resetRecordingUI();
-    showToast('Recording cancelled', 'info', 1500);
-  }
-
-  function resetRecordingUI() {
-    if (micBtn) {
-      micBtn.classList.remove('recording');
-      micBtn.setAttribute('aria-label', 'Start voice recording');
-    }
-    if (recordingBar) {
-      recordingBar.hidden = true;
-    }
-    if (recordingRemaining) {
-      recordingRemaining.hidden = true;
-    }
-    if (waveformBars) {
-      waveformBars.forEach((bar) => {
-        bar.style.height = '6px';
-      });
-    }
-  }
-
-  // --------------------------------------------------------------------------
-  // 7. Drawers Management
-  // --------------------------------------------------------------------------
-  function openDrawer(drawerElem, triggerBtn) {
-    closeAllDrawers();
-    if (!drawerElem) return;
-    drawerElem.hidden = false;
-    if (drawerBackdrop) drawerBackdrop.hidden = false;
-    if (triggerBtn) triggerBtn.setAttribute('aria-expanded', 'true');
-    const isLeft = drawerElem.classList.contains('drawer-left');
-    drawerElem.classList.add(isLeft ? 'animating-in-left' : 'animating-in-right');
-  }
-
-  function closeAllDrawers() {
-    [menuDrawer, datasetDrawer, pipelineDrawer, statusDrawer, aboutDrawer].forEach((d) => {
-      if (d) {
-        d.hidden = true;
-        d.classList.remove('animating-in-left', 'animating-in-right');
-      }
-    });
-    if (drawerBackdrop) drawerBackdrop.hidden = true;
-    if (menuBtn) menuBtn.setAttribute('aria-expanded', 'false');
-    if (statusBtn) statusBtn.setAttribute('aria-expanded', 'false');
-  }
-
-  // Menu Drawer
-  if (menuBtn) menuBtn.addEventListener('click', () => openDrawer(menuDrawer, menuBtn));
-  if (closeMenuBtn) closeMenuBtn.addEventListener('click', closeAllDrawers);
-
-  // Dataset Drawer
-  if (headerDatasetBtn) headerDatasetBtn.addEventListener('click', () => openDrawer(datasetDrawer, headerDatasetBtn));
-  if (footerDatasetBtn) footerDatasetBtn.addEventListener('click', () => openDrawer(datasetDrawer, footerDatasetBtn));
-  if (openDatasetFromMenu) openDatasetFromMenu.addEventListener('click', () => openDrawer(datasetDrawer, null));
-  if (closeDatasetBtn) closeDatasetBtn.addEventListener('click', closeAllDrawers);
-
-  // Pipeline Drawer
-  if (headerPipelineBtn) headerPipelineBtn.addEventListener('click', () => openDrawer(pipelineDrawer, headerPipelineBtn));
-  if (footerPipelineBtn) footerPipelineBtn.addEventListener('click', () => openDrawer(pipelineDrawer, footerPipelineBtn));
-  if (openPipelineFromMenu) openPipelineFromMenu.addEventListener('click', () => openDrawer(pipelineDrawer, null));
-  if (closePipelineBtn) closePipelineBtn.addEventListener('click', closeAllDrawers);
-
-  // Status Drawer
-  if (statusBtn) statusBtn.addEventListener('click', () => openDrawer(statusDrawer, statusBtn));
-  if (footerStatusBtn) footerStatusBtn.addEventListener('click', () => openDrawer(statusDrawer, footerStatusBtn));
-  if (openStatusFromMenu) openStatusFromMenu.addEventListener('click', () => openDrawer(statusDrawer, statusBtn));
-  if (closeStatusBtn) closeStatusBtn.addEventListener('click', closeAllDrawers);
-
-  // About Drawer
-  if (openAboutBtn) openAboutBtn.addEventListener('click', () => openDrawer(aboutDrawer, null));
-  if (closeAboutBtn) closeAboutBtn.addEventListener('click', closeAllDrawers);
-
-  // Backdrop click & Escape key
-  if (drawerBackdrop) drawerBackdrop.addEventListener('click', closeAllDrawers);
-
+  // 7. Global Keyboard Shortcuts (Escape to close drawers/recording/modals)
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
+      if (voiceManager.isRecording()) {
+        cancelVoiceRecording();
+      }
       closeAllDrawers();
-      if (queryInput) queryInput.blur();
+      UIManager.closeModal('noMicModal');
+      UIManager.closeModal('micPermModal');
     }
   });
 
-  // --------------------------------------------------------------------------
-  // 8. New Session / Reset Chat
-  // --------------------------------------------------------------------------
-  function handleResetChat() {
-    chat.clear();
+  const modalBackdrop = document.getElementById('modalBackdrop');
+  if (modalBackdrop) {
+    modalBackdrop.onclick = () => {
+      UIManager.closeModal('noMicModal');
+      UIManager.closeModal('micPermModal');
+    };
+  }
+
+  // 8. New / Clear Chat
+  const resetConversation = () => {
+    if (elements.chatMessages) elements.chatMessages.replaceChildren();
+    if (elements.welcomeState) elements.welcomeState.hidden = false;
+    state.setState(APP_STATE.IDLE);
     closeAllDrawers();
-    if (queryInput) {
-      queryInput.value = '';
-      queryInput.style.height = '48px';
-    }
-    showToast('New query session started', 'info', 2000);
-  }
+    UIManager.announce('New conversation started.');
+  };
 
-  if (newChatBtn) newChatBtn.addEventListener('click', handleResetChat);
-  if (clearChatBtn) clearChatBtn.addEventListener('click', handleResetChat);
+  if (elements.newChatBtn) elements.newChatBtn.onclick = resetConversation;
+  if (elements.clearChatBtn) elements.clearChatBtn.onclick = resetConversation;
 
-  // --------------------------------------------------------------------------
-  // 9. Manual Health Refresh
-  // --------------------------------------------------------------------------
-  if (refreshHealthBtn) {
-    refreshHealthBtn.addEventListener('click', async () => {
-      showToast('Refreshing system status...', 'info', 1500);
-      await healthMonitor.check();
-    });
-  }
-
-  // --------------------------------------------------------------------------
-  // 10. Reactive State Subscriptions
-  // --------------------------------------------------------------------------
-  state.subscribe((s) => {
-    if (recordingTimer && s.isRecording) {
-      const m = Math.floor(s.recordingDuration / 60);
-      const sec = s.recordingDuration % 60;
-      recordingTimer.textContent = `${m < 10 ? '0' : ''}${m}:${sec < 10 ? '0' : ''}${sec}`;
-    }
-
-    const isBusy = s.loadingStage !== null;
-    if (sendBtn && !s.isRecording) {
-      sendBtn.disabled = isBusy || (queryInput ? queryInput.value.trim().length === 0 : true);
-    }
-    if (micBtn) {
-      micBtn.disabled = isBusy && !s.isRecording;
-    }
-  });
+  // 9. Initial Health Check
+  HealthInspector.updateSystemStatus();
 });

@@ -1,7 +1,7 @@
 """Application configuration using Pydantic Settings."""
 
 from functools import lru_cache
-from typing import List, Union
+from typing import List, Optional, Union
 from pydantic import field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
@@ -73,7 +73,6 @@ class Settings(BaseSettings):
     RERANK_BATCH_SIZE: int = 16  # Backward compatibility alias
     RERANKER_HIGH_CONFIDENCE_SKIP: bool = True
     RERANKER_WARMUP_ENABLED: bool = False
-    CPU_NUM_THREADS: int = 4
 
     CONTEXT_DIVERSITY_ENABLED: bool = True
     MAX_CHUNKS_PER_DOCUMENT: int = 2
@@ -110,20 +109,30 @@ class Settings(BaseSettings):
     PARALLEL_RETRIEVAL_ENABLED: bool = False
     PARALLEL_RETRIEVAL_WORKERS: int = 4
 
-    # Phase 6.1 — LLM Generation Architecture Configuration
-    LLM_PROVIDER: str = "sarvam"  # 'mock', 'sarvam', 'openai', etc.
-    LLM_MODEL_NAME: str = "sarvam-105b"
+    # Phase 6.1 & Gemini Migration — LLM Generation Architecture Configuration
+    LLM_PROVIDER: str = "gemini"  # 'gemini', 'mock', 'sarvam', 'openai'
+    LLM_MODEL_NAME: str = "gemini-2.5-flash"
 
     LLM_TEMPERATURE: float = 0.7
     LLM_MAX_TOKENS: int = 2048
     LLM_TOP_P: float = 0.9
-    LLM_TIMEOUT: float = 60.0  # Generation timeout in seconds (supports 105B reasoning)
+    LLM_TIMEOUT: float = 60.0  # Generation timeout in seconds
     LLM_STREAMING: bool = False
     LLM_SYSTEM_PROMPT: str = (
-        "You are a helpful, accurate, and multilingual AI assistant. "
-        "Answer the query truthfully based solely on the provided context. "
-        "If the answer cannot be found in the context, clearly state that the information is not available. "
-        "Preserve the language and script of the user query unless requested otherwise."
+        "You are a multilingual retrieval-grounded question answering system.\n"
+        "Your task is to answer the user's question using ONLY the retrieved passages supplied in the context.\n"
+        "The retrieved passages come from the MSMARCO-XI multilingual corpus.\n"
+        "Rules:\n"
+        "1. Do not use outside knowledge.\n"
+        "2. Do not invent facts.\n"
+        "3. Do not infer unsupported information.\n"
+        "4. Do not fabricate citations.\n"
+        "5. If the retrieved context does not contain enough information to answer the question, clearly state "
+        "that the information is not available in the retrieved context.\n"
+        "6. Answer in the requested language whenever the retrieved context supports answering in that language.\n"
+        "7. Keep the answer concise and directly related to the question.\n"
+        "8. Preserve factual meaning from the retrieved passages.\n"
+        "9. Never claim that information exists in the corpus unless it is present in the supplied context."
     )
 
     # Phase 6.5 — RAG Generation Guardrails Configuration
@@ -137,9 +146,7 @@ class Settings(BaseSettings):
     # Phase 6.1 & 6.6 — Production Provider & Voice Pipeline Configuration
     STT_PROVIDER: str = "sarvam"  # 'mock', 'sarvam'
     TTS_PROVIDER: str = "sarvam"  # 'mock', 'sarvam'
-    LLM_PROVIDER: str = "sarvam"  # 'mock', 'sarvam', 'openai'
     VECTOR_PROVIDER: str = "qdrant_local"  # 'qdrant_local', 'qdrant_cloud', 'memory'
-
 
     # Phase 6.6 — Voice RAG Orchestration & Audio Security Configuration
     STT_TIMEOUT_MS: float = 5000.0
@@ -160,18 +167,24 @@ class Settings(BaseSettings):
         "audio/flac",
     ]
 
+    # Google Gemini Credentials & Configuration
+    GEMINI_API_KEY: Optional[str] = None
+    GEMINI_MODEL: str = "gemini-2.5-flash"
+    GEMINI_BASE_URL: str = "https://generativelanguage.googleapis.com/v1beta"
+
     # Production External Credentials & Endpoints (Never hardcoded, never logged)
-    SARVAM_API_KEY: Union[str, None] = None
+    SARVAM_API_KEY: Optional[str] = None
     SARVAM_BASE_URL: str = "https://api.sarvam.ai"
     SARVAM_STT_MODEL: str = "saarika:v2.5"
     SARVAM_TTS_MODEL: str = "bulbul:v2"
+    SARVAM_TTS_SPEAKER: str = "anushka"
     SARVAM_LLM_MODEL: str = "sarvam-105b"
 
-    VECTOR_DB_URL: Union[str, None] = None
-    VECTOR_DB_API_KEY: Union[str, None] = None
+    VECTOR_DB_URL: Optional[str] = None
+    VECTOR_DB_API_KEY: Optional[str] = None
 
-    LLM_API_KEY: Union[str, None] = None
-    OPENAI_API_KEY: Union[str, None] = None
+    LLM_API_KEY: Optional[str] = None
+    OPENAI_API_KEY: Optional[str] = None
     OPENAI_BASE_URL: str = "https://api.openai.com/v1"
     OPENAI_LLM_MODEL: str = "gpt-4o-mini"
 
@@ -228,6 +241,8 @@ def validate_production_config(settings: Settings) -> List[str]:
             issues.append("SARVAM_API_KEY is required when STT_PROVIDER is 'sarvam'.")
         if settings.TTS_PROVIDER == "sarvam" and not settings.SARVAM_API_KEY:
             issues.append("SARVAM_API_KEY is required when TTS_PROVIDER is 'sarvam'.")
+        if settings.LLM_PROVIDER == "gemini" and not settings.GEMINI_API_KEY:
+            issues.append("GEMINI_API_KEY is required when LLM_PROVIDER is 'gemini'.")
         if settings.LLM_PROVIDER == "sarvam" and not settings.SARVAM_API_KEY:
             issues.append("SARVAM_API_KEY is required when LLM_PROVIDER is 'sarvam'.")
         if settings.LLM_PROVIDER == "openai" and not settings.OPENAI_API_KEY:

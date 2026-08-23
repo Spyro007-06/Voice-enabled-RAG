@@ -38,6 +38,11 @@ class GenerationService:
     def _prepare_config(self, config_override: Optional[GenerationConfig] = None) -> GenerationConfig:
         """Merge configuration overrides with application settings defaults."""
         settings = get_settings()
+        default_model = (
+            settings.GEMINI_MODEL
+            if settings.LLM_PROVIDER == "gemini"
+            else settings.LLM_MODEL_NAME
+        )
         if config_override is None:
             return GenerationConfig(
                 temperature=settings.LLM_TEMPERATURE,
@@ -45,11 +50,12 @@ class GenerationService:
                 top_p=settings.LLM_TOP_P,
                 timeout=settings.LLM_TIMEOUT,
                 streaming=settings.LLM_STREAMING,
-                model_name=settings.LLM_MODEL_NAME,
+                model_name=default_model,
                 system_prompt=settings.LLM_SYSTEM_PROMPT,
             )
 
-        # Merge defaults for fields not explicitly set if needed
+        if not config_override.model_name:
+            config_override.model_name = default_model
         return config_override
 
     def _validate_and_extract_context(
