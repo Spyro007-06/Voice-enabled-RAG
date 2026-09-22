@@ -1073,3 +1073,24 @@ a:focus-visible {
     transform: scale(1) translateY(0);
   }
 }
+
+/* Accessibility: Skip to Content */
+.skip-to-content {
+  position: absolute;
+  top: -60px;
+  left: 0;
+  background: var(--accent);
+  color: var(--bg-dark);
+  padding: 12px 24px;
+  z-index: 9999;
+  font-weight: 700;
+  border-radius: 0 0 8px 0;
+  transition: top var(--transition-fast);
+  text-decoration: none;
+  box-shadow: var(--shadow-md);
+}
+
+.skip-to-content:focus {
+  top: 0;
+  outline: none;
+}
