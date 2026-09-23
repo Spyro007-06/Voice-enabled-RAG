@@ -449,7 +449,7 @@ export class UIManager {
 
     const tag = document.createElement('span');
     tag.className = 'voice-tag';
-    tag.innerHTML = '<span>🔊</span><span>Voice Response</span>';
+    tag.innerHTML = '<span aria-hidden="true">🔊</span><span>Voice Response</span>';
 
     const speaker = document.createElement('span');
     speaker.className = 'voice-speaker-badge';
@@ -509,6 +509,7 @@ export class UIManager {
 
     const volumeIcon = document.createElement('span');
     volumeIcon.textContent = '🔈';
+    volumeIcon.setAttribute('aria-hidden', 'true');
 
     const volumeSlider = document.createElement('input');
     volumeSlider.type = 'range';
