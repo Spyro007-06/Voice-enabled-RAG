@@ -28,7 +28,7 @@ export const MULTILINGUAL_CONFIG = Object.freeze({
     nativeName: 'English',
     fullName: 'English',
     userPromptLabel: 'YOU SAID',
-    sttModelLabel: 'English · Saarika v2.5 · ✓ Speech recognized',
+    sttModelLabel: 'English · Saarika v2.5 · <span aria-hidden="true">✓</span> Speech recognized',
     questions: [
       'What is a computer?',
       'How does machine learning work?',
@@ -43,7 +43,7 @@ export const MULTILINGUAL_CONFIG = Object.freeze({
     nativeName: 'हिन्दी',
     fullName: 'हिन्दी — Hindi',
     userPromptLabel: 'आपने पूछा',
-    sttModelLabel: 'हिन्दी · Saarika v2.5 · ✓ आवाज़ पहचानी गई',
+    sttModelLabel: 'हिन्दी · Saarika v2.5 · <span aria-hidden="true">✓</span> आवाज़ पहचानी गई',
     questions: [
       'कंप्यूटर क्या है?',
       'मशीन लर्निंग क्या है?',
@@ -58,7 +58,7 @@ export const MULTILINGUAL_CONFIG = Object.freeze({
     nativeName: 'தமிழ்',
     fullName: 'தமிழ் — Tamil',
     userPromptLabel: 'நீங்கள் கேட்டது',
-    sttModelLabel: 'தமிழ் · Saarika v2.5 · ✓ Speech recognized',
+    sttModelLabel: 'தமிழ் · Saarika v2.5 · <span aria-hidden="true">✓</span> Speech recognized',
     questions: [
       'கணினி என்றால் என்ன?',
       'இயந்திர கற்றல் என்றால் என்ன?',
@@ -73,7 +73,7 @@ export const MULTILINGUAL_CONFIG = Object.freeze({
     nativeName: 'తెలుగు',
     fullName: 'తెలుగు — Telugu',
     userPromptLabel: 'మీరు అడిగారు',
-    sttModelLabel: 'తెలుగు · Saarika v2.5 · ✓ Speech recognized',
+    sttModelLabel: 'తెలుగు · Saarika v2.5 · <span aria-hidden="true">✓</span> Speech recognized',
     questions: [
       'కంప్యూటర్ అంటే ఏమిటి?',
       'మెషిన్ లెర్నింగ్ అంటే ఏమిటి?',
@@ -88,7 +88,7 @@ export const MULTILINGUAL_CONFIG = Object.freeze({
     nativeName: 'മലയാളം',
     fullName: 'മലയാളം — Malayalam',
     userPromptLabel: 'നിങ്ങൾ ചോദിച്ചത്',
-    sttModelLabel: 'മലയാളം · Saarika v2.5 · ✓ Speech recognized',
+    sttModelLabel: 'മലയാളം · Saarika v2.5 · <span aria-hidden="true">✓</span> Speech recognized',
     questions: [
       'കമ്പ്യൂട്ടർ എന്താണ്?',
       'മെഷീൻ ലേണിംഗ് എന്താണ്?',

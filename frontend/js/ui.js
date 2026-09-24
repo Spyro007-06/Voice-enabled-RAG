@@ -199,7 +199,7 @@ export class UIManager {
 
     const meta = document.createElement('span');
     meta.className = `turn-meta-badge${isVoice ? ' voice' : ''}`;
-    meta.textContent = isVoice ? config.sttModelLabel : `${config.nativeName} · Text Query`;
+    meta.innerHTML = isVoice ? config.sttModelLabel : `${config.nativeName} · Text Query`;
 
     header.append(tag, meta);
 
@@ -255,6 +255,7 @@ export class UIManager {
 
       const icon = document.createElement('span');
       icon.className = 'stage-icon';
+      icon.setAttribute('aria-hidden', 'true');
       icon.textContent = isDone ? '✓' : isActive ? '●' : '○';
 
       const label = document.createElement('span');
@@ -303,7 +304,9 @@ export class UIManager {
 
     const statusTag = document.createElement('span');
     statusTag.className = `grounding-status-tag ${grounded ? 'grounded' : 'refusal'}`;
-    statusTag.textContent = grounded ? '✓ GROUNDED' : '! INSUFFICIENT EVIDENCE';
+    statusTag.innerHTML = grounded
+      ? '<span aria-hidden="true">✓</span> GROUNDED'
+      : '<span aria-hidden="true">!</span> INSUFFICIENT EVIDENCE';
 
     const modelMeta = document.createElement('span');
     modelMeta.className = 'answer-model-meta';
@@ -354,7 +357,7 @@ export class UIManager {
 
       const searchAllBtn = document.createElement('button');
       searchAllBtn.className = 'btn btn-ghost';
-      searchAllBtn.textContent = '🌐 Search all languages';
+      searchAllBtn.innerHTML = '<span aria-hidden="true">🌐</span> Search all languages';
       searchAllBtn.onclick = () => {
         state.setLanguage('en');
         const input = document.getElementById('queryInput');
