@@ -5,3 +5,7 @@
 ## 2026-09-23 - Hide Decorative Text Icons from Screen Readers
 **Learning:** Purely decorative emojis and text-based icons (like ✦, 🗑, 🔊) placed next to text labels can cause redundant or confusing announcements for screen reader users (e.g., announcing "Wastebasket, Clear Conversation").
 **Action:** Always add `aria-hidden="true"` to spans or elements containing these decorative text icons to ensure a clean, focused auditory experience.
+
+## 2024-05-24 - Screen Reader Icon Redundancy
+**Learning:** Screen readers announce both the aria-label and the visible text character (like '×') of an icon-only button, causing redundant or confusing announcements.
+**Action:** Applied aria-hidden="true" to decorative text-based icons inside buttons that already possess an aria-label.
