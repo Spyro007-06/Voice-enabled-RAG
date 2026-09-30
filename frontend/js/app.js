@@ -44,11 +44,17 @@ const elements = {
   aboutDrawer: document.getElementById('aboutDrawer'),
 };
 
+let drawerTriggerElement = null;
+
 /**
  * Open or close specified drawer
  */
 function setDrawerOpen(drawerElement, isOpen) {
   if (!drawerElement) return;
+
+  if (isOpen && document.activeElement && !document.activeElement.closest('.drawer')) {
+      drawerTriggerElement = document.activeElement;
+  }
 
   // Close all other info drawers first
   [
@@ -68,9 +74,33 @@ function setDrawerOpen(drawerElement, isOpen) {
     elements.menuBtn.setAttribute('aria-expanded', String(isOpen && drawerElement === elements.menuDrawer));
   }
 
+  if (isOpen) {
+    const closeBtn = drawerElement.querySelector('.close-info-drawer, #closeMenuBtn, button');
+    if (closeBtn) {
+      setTimeout(() => closeBtn.focus(), 50);
+    }
+  } else {
+    restoreDrawerFocus();
+  }
+
   if (isOpen && drawerElement === elements.statusDrawer) {
     HealthInspector.updateSystemStatus();
   }
+}
+
+function restoreDrawerFocus() {
+  if (drawerTriggerElement && typeof drawerTriggerElement.focus === 'function') {
+      const parentDrawer = drawerTriggerElement.closest('.drawer');
+      // If the trigger element is inside a drawer that is now hidden, fallback to menuBtn
+      if (parentDrawer && parentDrawer.hidden) {
+          if (elements.menuBtn) elements.menuBtn.focus();
+      } else {
+          drawerTriggerElement.focus();
+      }
+  } else if (elements.menuBtn) {
+      elements.menuBtn.focus();
+  }
+  drawerTriggerElement = null;
 }
 
 function closeAllDrawers() {
@@ -85,6 +115,7 @@ function closeAllDrawers() {
   });
   if (elements.drawerBackdrop) elements.drawerBackdrop.hidden = true;
   if (elements.menuBtn) elements.menuBtn.setAttribute('aria-expanded', 'false');
+  restoreDrawerFocus();
 }
 
 /**
