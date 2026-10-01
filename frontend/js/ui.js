@@ -62,7 +62,14 @@ export class UIManager {
     }
 
     this._trapFocusHandler = (e) => {
-      if (e.key !== 'Tab' || !this._activeModalId) return;
+      if (!this._activeModalId) return;
+
+      if (e.key === 'Escape') {
+        this.closeModal(this._activeModalId);
+        return;
+      }
+
+      if (e.key !== 'Tab') return;
 
       if (e.shiftKey) {
         if (document.activeElement === firstFocusable) {
