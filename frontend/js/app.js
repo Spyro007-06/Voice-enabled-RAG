@@ -284,8 +284,12 @@ function submitComposerText() {
   if (!text) return;
 
   elements.queryInput.value = '';
+  elements.queryInput.style.height = 'auto'; // Reset auto-grow height
   if (elements.charCounter) elements.charCounter.textContent = '0 / 2000';
-  if (elements.sendBtn) elements.sendBtn.disabled = true;
+  if (elements.sendBtn) {
+    elements.sendBtn.disabled = true;
+    elements.sendBtn.title = 'Type a question to send';
+  }
 
   ChatManager.handleTextSubmission(text);
 }
@@ -337,7 +341,11 @@ document.addEventListener('DOMContentLoaded', () => {
     elements.queryInput.oninput = (e) => {
       const len = e.target.value.length;
       if (elements.charCounter) elements.charCounter.textContent = `${len} / 2000`;
-      if (elements.sendBtn) elements.sendBtn.disabled = !e.target.value.trim();
+      if (elements.sendBtn) {
+        const isDisabled = !e.target.value.trim();
+        elements.sendBtn.disabled = isDisabled;
+        elements.sendBtn.title = isDisabled ? 'Type a question to send' : 'Send question (Enter)';
+      }
 
       // Auto-grow
       e.target.style.height = 'auto';
