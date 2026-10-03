@@ -125,7 +125,10 @@ function updateLanguageUI(langCode) {
         btn.className = 'suggestion-btn';
         btn.textContent = `“${question}”`;
         btn.onclick = () => {
-          if (elements.queryInput) elements.queryInput.value = '';
+          if (elements.queryInput) {
+            elements.queryInput.value = '';
+            elements.queryInput.style.height = 'auto'; // Reset auto-grow height
+          }
           ChatManager.handleTextSubmission(question);
         };
         return btn;
