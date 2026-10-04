@@ -161,6 +161,12 @@ function applyAppState(appState) {
   micBtns.forEach((btn) => {
     btn.classList.toggle('recording', isRecording);
     btn.classList.toggle('processing', isBusy);
+
+    // Prevent focus loss when dynamically disabling the active element
+    if (isBusy && document.activeElement === btn) {
+      if (elements.queryInput) elements.queryInput.focus();
+    }
+
     btn.disabled = isBusy;
   });
 
@@ -287,6 +293,11 @@ function submitComposerText() {
   elements.queryInput.style.height = 'auto'; // Reset auto-grow height
   if (elements.charCounter) elements.charCounter.textContent = '0 / 2000';
   if (elements.sendBtn) {
+    // Prevent focus loss when dynamically disabling the active element
+    if (document.activeElement === elements.sendBtn) {
+      elements.queryInput.focus();
+    }
+
     elements.sendBtn.disabled = true;
     elements.sendBtn.title = 'Type a question to send';
   }
