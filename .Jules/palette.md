@@ -12,3 +12,7 @@
 ## 2024-10-25 - Resetting Auto-Growing Textareas
 **Learning:** When using JavaScript to programmatically manage a `<textarea>`'s auto-growing height via the `oninput` event (e.g. `e.target.style.height = e.target.scrollHeight + 'px'`), programmatically clearing the value (e.g. `textarea.value = ''`) does not trigger the `oninput` event. This leaves the textarea "stuck" at its previously expanded height, which feels clunky and broken to users after submitting a long message.
 **Action:** Whenever programmatically clearing the value of an auto-growing textarea, you must also manually reset its inline height style (e.g. `textarea.style.height = 'auto'`) to restore it to its default, unexpanded state.
+
+## 2024-11-20 - Prevent Focus Loss on Disabled Buttons
+**Learning:** When a user activates a button using their keyboard (e.g., hitting Enter/Space on a Submit button), and that button is immediately disabled by the application (e.g., to prevent double submission), keyboard focus is lost. The browser typically drops focus back to the `<body>` element, forcing screen reader and keyboard users to navigate from the top of the page again.
+**Action:** Before disabling an interactive element that initiated an action, check if it currently has focus (`document.activeElement === btn`). If it does, programmatically shift focus to a logical adjacent element (like the text input they just used, or the response container) to maintain a continuous, accessible flow.

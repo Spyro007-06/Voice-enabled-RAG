@@ -283,12 +283,18 @@ function submitComposerText() {
   const text = elements.queryInput.value.trim();
   if (!text) return;
 
+  const wasSendBtnFocused = document.activeElement === elements.sendBtn;
+
   elements.queryInput.value = '';
   elements.queryInput.style.height = 'auto'; // Reset auto-grow height
   if (elements.charCounter) elements.charCounter.textContent = '0 / 2000';
   if (elements.sendBtn) {
     elements.sendBtn.disabled = true;
     elements.sendBtn.title = 'Type a question to send';
+  }
+
+  if (wasSendBtnFocused) {
+    elements.queryInput.focus();
   }
 
   ChatManager.handleTextSubmission(text);
