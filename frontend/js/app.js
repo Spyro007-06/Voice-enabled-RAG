@@ -47,8 +47,15 @@ const elements = {
 /**
  * Open or close specified drawer
  */
+let previousDrawerFocus = null;
+
 function setDrawerOpen(drawerElement, isOpen) {
   if (!drawerElement) return;
+
+  // Track focus before opening
+  if (isOpen && document.activeElement) {
+    previousDrawerFocus = document.activeElement;
+  }
 
   // Close all other info drawers first
   [
@@ -71,6 +78,18 @@ function setDrawerOpen(drawerElement, isOpen) {
   if (isOpen && drawerElement === elements.statusDrawer) {
     HealthInspector.updateSystemStatus();
   }
+
+  // Shift focus to the drawer on open
+  if (isOpen) {
+    const focusable = drawerElement.querySelector('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+    if (focusable) {
+      setTimeout(() => focusable.focus(), 50);
+    }
+  } else if (!isOpen && previousDrawerFocus) {
+    // Restore focus if this drawer is being closed individually
+    try { previousDrawerFocus.focus(); } catch (e) {}
+    previousDrawerFocus = null;
+  }
 }
 
 function closeAllDrawers() {
@@ -85,6 +104,11 @@ function closeAllDrawers() {
   });
   if (elements.drawerBackdrop) elements.drawerBackdrop.hidden = true;
   if (elements.menuBtn) elements.menuBtn.setAttribute('aria-expanded', 'false');
+
+  if (previousDrawerFocus) {
+    try { previousDrawerFocus.focus(); } catch (e) {}
+    previousDrawerFocus = null;
+  }
 }
 
 /**
