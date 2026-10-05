@@ -47,8 +47,14 @@ const elements = {
 /**
  * Open or close specified drawer
  */
+let _previousFocusBeforeDrawer = null;
+
 function setDrawerOpen(drawerElement, isOpen) {
   if (!drawerElement) return;
+
+  if (isOpen && drawerElement.hidden) {
+    _previousFocusBeforeDrawer = document.activeElement;
+  }
 
   // Close all other info drawers first
   [
@@ -68,6 +74,17 @@ function setDrawerOpen(drawerElement, isOpen) {
     elements.menuBtn.setAttribute('aria-expanded', String(isOpen && drawerElement === elements.menuDrawer));
   }
 
+  if (isOpen) {
+    const focusableSelectors = 'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
+    const focusable = drawerElement.querySelector(focusableSelectors);
+    if (focusable) focusable.focus();
+  } else if (!isOpen && _previousFocusBeforeDrawer) {
+    try {
+      _previousFocusBeforeDrawer.focus();
+    } catch (_) {}
+    _previousFocusBeforeDrawer = null;
+  }
+
   if (isOpen && drawerElement === elements.statusDrawer) {
     HealthInspector.updateSystemStatus();
   }
@@ -85,6 +102,13 @@ function closeAllDrawers() {
   });
   if (elements.drawerBackdrop) elements.drawerBackdrop.hidden = true;
   if (elements.menuBtn) elements.menuBtn.setAttribute('aria-expanded', 'false');
+
+  if (_previousFocusBeforeDrawer) {
+    try {
+      _previousFocusBeforeDrawer.focus();
+    } catch (_) {}
+    _previousFocusBeforeDrawer = null;
+  }
 }
 
 /**
