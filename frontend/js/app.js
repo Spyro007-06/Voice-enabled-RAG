@@ -47,8 +47,14 @@ const elements = {
 /**
  * Open or close specified drawer
  */
+let drawerPreviousFocus = null;
+
 function setDrawerOpen(drawerElement, isOpen) {
   if (!drawerElement) return;
+
+  if (isOpen && drawerElement.hidden) {
+    drawerPreviousFocus = document.activeElement;
+  }
 
   // Close all other info drawers first
   [
@@ -71,9 +77,25 @@ function setDrawerOpen(drawerElement, isOpen) {
   if (isOpen && drawerElement === elements.statusDrawer) {
     HealthInspector.updateSystemStatus();
   }
+
+  if (isOpen) {
+    const focusableSelectors = 'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
+    const focusables = Array.from(drawerElement.querySelectorAll(focusableSelectors)).filter(
+      (el) => !el.hasAttribute('disabled') && !el.getAttribute('aria-hidden')
+    );
+    if (focusables.length > 0) {
+      setTimeout(() => focusables[0].focus(), 50);
+    }
+  } else if (!isOpen && drawerPreviousFocus && typeof drawerPreviousFocus.focus === 'function') {
+    try {
+      drawerPreviousFocus.focus();
+    } catch (_) {}
+    drawerPreviousFocus = null;
+  }
 }
 
 function closeAllDrawers() {
+  let anyOpen = false;
   [
     elements.menuDrawer,
     elements.datasetDrawer,
@@ -81,10 +103,18 @@ function closeAllDrawers() {
     elements.statusDrawer,
     elements.aboutDrawer,
   ].forEach((d) => {
+    if (d && !d.hidden) anyOpen = true;
     if (d) d.hidden = true;
   });
   if (elements.drawerBackdrop) elements.drawerBackdrop.hidden = true;
   if (elements.menuBtn) elements.menuBtn.setAttribute('aria-expanded', 'false');
+
+  if (anyOpen && drawerPreviousFocus && typeof drawerPreviousFocus.focus === 'function') {
+    try {
+      drawerPreviousFocus.focus();
+    } catch (_) {}
+    drawerPreviousFocus = null;
+  }
 }
 
 /**
