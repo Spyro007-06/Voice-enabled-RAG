@@ -9,6 +9,8 @@ import { UIManager } from './ui.js';
 import { HealthInspector } from './health.js';
 
 // DOM Elements
+let previousDrawerFocus = null;
+
 const elements = {
   menuBtn: document.getElementById('menuBtn'),
   closeMenuBtn: document.getElementById('closeMenuBtn'),
@@ -50,6 +52,23 @@ const elements = {
 function setDrawerOpen(drawerElement, isOpen) {
   if (!drawerElement) return;
 
+  if (isOpen) {
+    // Only capture focus if a drawer isn't already open
+    const anyDrawerOpen = [
+      elements.menuDrawer, elements.datasetDrawer, elements.pipelineDrawer,
+      elements.statusDrawer, elements.aboutDrawer
+    ].some(d => d && !d.hidden);
+
+    if (!anyDrawerOpen) {
+      previousDrawerFocus = document.activeElement;
+    }
+  } else {
+    if (previousDrawerFocus && typeof previousDrawerFocus.focus === 'function') {
+      try { previousDrawerFocus.focus(); } catch(e) {}
+      previousDrawerFocus = null;
+    }
+  }
+
   // Close all other info drawers first
   [
     elements.menuDrawer,
@@ -71,6 +90,16 @@ function setDrawerOpen(drawerElement, isOpen) {
   if (isOpen && drawerElement === elements.statusDrawer) {
     HealthInspector.updateSystemStatus();
   }
+
+  if (isOpen) {
+    const focusableSelectors = 'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
+    const focusables = Array.from(drawerElement.querySelectorAll(focusableSelectors)).filter(
+      (el) => !el.hasAttribute('disabled') && !el.getAttribute('aria-hidden')
+    );
+    if (focusables.length > 0) {
+      setTimeout(() => focusables[0].focus(), 50);
+    }
+  }
 }
 
 function closeAllDrawers() {
@@ -85,6 +114,11 @@ function closeAllDrawers() {
   });
   if (elements.drawerBackdrop) elements.drawerBackdrop.hidden = true;
   if (elements.menuBtn) elements.menuBtn.setAttribute('aria-expanded', 'false');
+
+  if (previousDrawerFocus && typeof previousDrawerFocus.focus === 'function') {
+    try { previousDrawerFocus.focus(); } catch(e) {}
+    previousDrawerFocus = null;
+  }
 }
 
 /**

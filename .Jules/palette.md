@@ -16,3 +16,7 @@
 ## 2026-10-04 - Preventing Focus Loss on Dynamically Disabled Buttons
 **Learning:** To prevent accessibility focus loss, dynamically disabled interactive elements (like a submit button clicked via keyboard) must explicitly shift keyboard focus to a logical adjacent element (e.g., the related text input) before being disabled.
 **Action:** When a button's disabled state is managed dynamically, check if it's currently the `document.activeElement` and, if so, transfer focus to an appropriate target (like the main text input) prior to setting `disabled = true`.
+
+## 2026-10-05 - Maintaining Accessibility Focus in Drawers/Overlays
+**Learning:** When implementing or modifying side drawers or non-modal overlays, it is critical to maintain accessibility focus management. Otherwise, screen reader and keyboard users lose their place on the page when the overlay closes.
+**Action:** Always track `document.activeElement` before opening a drawer, programmatically shift focus to the drawer's first focusable element upon opening, and explicitly restore focus to the originally tracked element when the drawer closes.
