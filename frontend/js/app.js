@@ -291,7 +291,12 @@ async function startVoiceRecording() {
 }
 
 async function stopVoiceRecording() {
-  if (elements.recordingBar) elements.recordingBar.hidden = true;
+  if (elements.recordingBar) {
+    if (elements.recordingBar.contains(document.activeElement) && elements.queryInput) {
+      elements.queryInput.focus();
+    }
+    elements.recordingBar.hidden = true;
+  }
 
   [elements.centralVoiceBtn, elements.micBtn, elements.welcomeMicBtn].forEach((btn) => {
     if (btn) btn.setAttribute('aria-label', 'Start voice recording');
@@ -309,7 +314,12 @@ async function stopVoiceRecording() {
 
 function cancelVoiceRecording() {
   voiceManager.cancelRecording();
-  if (elements.recordingBar) elements.recordingBar.hidden = true;
+  if (elements.recordingBar) {
+    if (elements.recordingBar.contains(document.activeElement) && elements.queryInput) {
+      elements.queryInput.focus();
+    }
+    elements.recordingBar.hidden = true;
+  }
 
   [elements.centralVoiceBtn, elements.micBtn, elements.welcomeMicBtn].forEach((btn) => {
     if (btn) btn.setAttribute('aria-label', 'Start voice recording');
@@ -452,6 +462,19 @@ document.addEventListener('DOMContentLoaded', () => {
   const resetConversation = () => {
     if (elements.chatMessages) elements.chatMessages.replaceChildren();
     if (elements.welcomeState) elements.welcomeState.hidden = false;
+
+    if (elements.queryInput) {
+      elements.queryInput.value = '';
+      elements.queryInput.style.height = 'auto';
+    }
+    if (elements.charCounter) {
+      elements.charCounter.textContent = '0 / 2000';
+    }
+    if (elements.sendBtn) {
+      elements.sendBtn.disabled = true;
+      elements.sendBtn.title = 'Type a question to send';
+    }
+
     state.setState(APP_STATE.IDLE);
     closeAllDrawers();
     UIManager.announce('New conversation started.');
