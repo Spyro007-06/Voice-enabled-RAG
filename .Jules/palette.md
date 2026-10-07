@@ -20,3 +20,6 @@
 ## 2026-10-05 - Maintaining Accessibility Focus in Drawers/Overlays
 **Learning:** When implementing or modifying side drawers or non-modal overlays, it is critical to maintain accessibility focus management. Otherwise, screen reader and keyboard users lose their place on the page when the overlay closes.
 **Action:** Always track `document.activeElement` before opening a drawer, programmatically shift focus to the drawer's first focusable element upon opening, and explicitly restore focus to the originally tracked element when the drawer closes.
+## 2026-10-07 - Add Confirmation to Destructive Actions
+**Learning:** Actions that cause data loss, such as clearing conversation history, should prompt the user for confirmation first, but ideally *only* when there is actually data to lose. Prompting to clear an already-empty state is annoying.
+**Action:** Wrap destructive actions in `window.confirm` checks, optionally conditioned on checking if the state to clear is actually populated.
