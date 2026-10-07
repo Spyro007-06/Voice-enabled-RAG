@@ -20,3 +20,11 @@
 ## 2026-10-05 - Maintaining Accessibility Focus in Drawers/Overlays
 **Learning:** When implementing or modifying side drawers or non-modal overlays, it is critical to maintain accessibility focus management. Otherwise, screen reader and keyboard users lose their place on the page when the overlay closes.
 **Action:** Always track `document.activeElement` before opening a drawer, programmatically shift focus to the drawer's first focusable element upon opening, and explicitly restore focus to the originally tracked element when the drawer closes.
+
+## 2026-10-06 - Preventing Focus Loss on Hidden/Removed Elements
+**Learning:** To prevent accessibility focus loss, dynamically hiding or removing elements (like a recording bar or an error card) must explicitly shift keyboard focus to a logical adjacent element (e.g., the related text input) before hiding or removing it.
+**Action:** When hiding or removing a container or element, check if it contains the `document.activeElement` (using `.contains()`) and, if so, transfer focus to an appropriate target (like the main text input) prior to hiding or removing.
+
+## 2026-10-07 - Resetting Composer State when Clearing Conversation
+**Learning:** When clearing a conversation, the composer input must be fully reset to its default state. This includes clearing the text value, resetting any dynamically applied inline styles (like auto-grow height), updating the character counter, and disabling the send button.
+**Action:** In `resetConversation` or similar functions, ensure the query input value is cleared, its height style is set to 'auto', the character counter is reset (e.g. to '0 / 2000'), and the send button is disabled.

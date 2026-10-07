@@ -646,6 +646,10 @@ export class UIManager {
       btn.className = 'btn btn-ghost';
       btn.textContent = 'Try again';
       btn.onclick = () => {
+        if (document.activeElement === btn) {
+          const queryInput = document.getElementById('queryInput');
+          if (queryInput) queryInput.focus();
+        }
         card.remove();
         onRetry();
       };
