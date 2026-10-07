@@ -450,6 +450,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // 8. New / Clear Chat
   const resetConversation = () => {
+    // Only ask for confirmation if there are actual messages to clear
+    const hasMessages = elements.chatMessages && elements.chatMessages.children.length > 0;
+    if (hasMessages) {
+      if (!window.confirm('Are you sure you want to clear the conversation?')) {
+        return;
+      }
+    }
+
     if (elements.chatMessages) elements.chatMessages.replaceChildren();
     if (elements.welcomeState) elements.welcomeState.hidden = false;
     state.setState(APP_STATE.IDLE);
