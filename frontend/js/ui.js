@@ -187,7 +187,13 @@ export class UIManager {
    */
   static renderUserTurn({ text, isVoice = false, languageCode = 'en' }) {
     const welcome = document.getElementById('welcomeState');
-    if (welcome) welcome.hidden = true;
+    if (welcome) {
+      if (welcome.contains(document.activeElement)) {
+        const queryInput = document.getElementById('queryInput');
+        if (queryInput) queryInput.focus();
+      }
+      welcome.hidden = true;
+    }
 
     const stream = document.getElementById('chatMessages');
     if (!stream) return;
@@ -488,7 +494,7 @@ export class UIManager {
     const playBtn = document.createElement('button');
     playBtn.className = 'audio-play-btn';
     playBtn.setAttribute('aria-label', 'Play voice response');
-    playBtn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>';
+    playBtn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>';
 
     const scrubberWrap = document.createElement('div');
     scrubberWrap.className = 'audio-scrubber-wrapper';
@@ -538,10 +544,10 @@ export class UIManager {
     // Audio Event Wiring
     const updatePlayIcon = (isPlaying) => {
       if (isPlaying) {
-        playBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>';
+        playBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>';
         playBtn.setAttribute('aria-label', 'Pause voice response');
       } else {
-        playBtn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>';
+        playBtn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>';
         playBtn.setAttribute('aria-label', 'Play voice response');
       }
     };
@@ -646,7 +652,7 @@ export class UIManager {
       btn.className = 'btn btn-ghost';
       btn.textContent = 'Try again';
       btn.onclick = () => {
-        if (document.activeElement === btn) {
+        if (card.contains(document.activeElement)) {
           const queryInput = document.getElementById('queryInput');
           if (queryInput) queryInput.focus();
         }
