@@ -94,6 +94,11 @@ body.modal-open {
   overflow: hidden;
 }
 
+/* Global Hidden Attribute Override for Accessibility */
+[hidden] {
+  display: none !important;
+}
+
 /* Screen Reader Only Utility */
 .sr-only {
   position: absolute;
