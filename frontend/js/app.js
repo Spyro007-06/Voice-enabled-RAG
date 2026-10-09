@@ -227,7 +227,12 @@ function applyAppState(appState) {
 
   // Hide welcome screen as soon as user starts interacting
   if (isRecording || isBusy) {
-    if (elements.welcomeState) elements.welcomeState.hidden = true;
+    if (elements.welcomeState) {
+      if (elements.welcomeState.contains(document.activeElement) && elements.queryInput) {
+        elements.queryInput.focus();
+      }
+      elements.welcomeState.hidden = true;
+    }
   }
 }
 
