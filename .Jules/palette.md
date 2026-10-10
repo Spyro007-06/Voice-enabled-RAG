@@ -28,3 +28,7 @@
 ## 2026-10-07 - Resetting Composer State when Clearing Conversation
 **Learning:** When clearing a conversation, the composer input must be fully reset to its default state. This includes clearing the text value, resetting any dynamically applied inline styles (like auto-grow height), updating the character counter, and disabling the send button.
 **Action:** In `resetConversation` or similar functions, ensure the query input value is cleared, its height style is set to 'auto', the character counter is reset (e.g. to '0 / 2000'), and the send button is disabled.
+
+## 2026-10-08 - Reliable Focus Detection in Parent Elements
+**Learning:** When explicitly shifting keyboard focus away from a parent element that is about to be hidden or removed, use `parentElement.contains(document.activeElement)` rather than strict equality (`===`) to reliably detect if focus is anywhere inside the element (including child buttons or inputs).
+**Action:** Replace `document.activeElement === element` with `element.contains(document.activeElement)` when checking if focus is within an element block before removing or hiding it.
