@@ -646,7 +646,7 @@ export class UIManager {
       btn.className = 'btn btn-ghost';
       btn.textContent = 'Try again';
       btn.onclick = () => {
-        if (document.activeElement === btn) {
+        if (card.contains(document.activeElement)) {
           const queryInput = document.getElementById('queryInput');
           if (queryInput) queryInput.focus();
         }
