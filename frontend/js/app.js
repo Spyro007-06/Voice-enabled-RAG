@@ -137,18 +137,28 @@ function updateLanguageUI(langCode) {
 
   // Update Language Chips
   if (elements.languageTabs) {
-    elements.languageTabs.replaceChildren(
-      ...Object.entries(MULTILINGUAL_CONFIG).map(([code, item]) => {
-        const btn = document.createElement('button');
-        btn.className = 'lang-chip';
-        btn.textContent = item.nativeName;
-        btn.setAttribute('aria-pressed', String(code === langCode));
-        btn.onclick = () => {
-          state.setLanguage(code);
-        };
-        return btn;
-      })
-    );
+    const hadFocus = elements.languageTabs.contains(document.activeElement);
+    const chips = Object.entries(MULTILINGUAL_CONFIG).map(([code, item]) => {
+      const btn = document.createElement('button');
+      btn.className = 'lang-chip';
+      btn.textContent = item.nativeName;
+      btn.setAttribute('aria-pressed', String(code === langCode));
+      btn.onclick = () => {
+        state.setLanguage(code);
+      };
+      return btn;
+    });
+
+    elements.languageTabs.replaceChildren(...chips);
+
+    if (hadFocus) {
+      const activeBtn = Array.from(elements.languageTabs.children).find(
+        btn => btn.getAttribute('aria-pressed') === 'true'
+      );
+      if (activeBtn) {
+        activeBtn.focus();
+      }
+    }
   }
 
   // Update Suggested Corpus Questions
@@ -227,7 +237,12 @@ function applyAppState(appState) {
 
   // Hide welcome screen as soon as user starts interacting
   if (isRecording || isBusy) {
-    if (elements.welcomeState) elements.welcomeState.hidden = true;
+    if (elements.welcomeState && !elements.welcomeState.hidden) {
+      if (elements.welcomeState.contains(document.activeElement)) {
+        if (elements.queryInput) elements.queryInput.focus();
+      }
+      elements.welcomeState.hidden = true;
+    }
   }
 }
 
