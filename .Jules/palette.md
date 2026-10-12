@@ -28,3 +28,7 @@
 ## 2026-10-07 - Resetting Composer State when Clearing Conversation
 **Learning:** When clearing a conversation, the composer input must be fully reset to its default state. This includes clearing the text value, resetting any dynamically applied inline styles (like auto-grow height), updating the character counter, and disabling the send button.
 **Action:** In `resetConversation` or similar functions, ensure the query input value is cleared, its height style is set to 'auto', the character counter is reset (e.g. to '0 / 2000'), and the send button is disabled.
+
+## 2026-10-08 - Preventing Focus Loss when Welcome State is Hidden
+**Learning:** The welcome state view includes interactive elements, such as "Suggested Corpus Questions" buttons. When one of these is activated, the welcome state is programmatically hidden. Without focus management, keyboard and screen reader focus is lost and resets to the document body when this parent container is hidden.
+**Action:** Before hiding a container element like the welcome state, check if `welcomeState.contains(document.activeElement)`. If true, explicitly transfer focus to a logical next element (e.g., `queryInput`) to preserve continuous accessibility flow.
