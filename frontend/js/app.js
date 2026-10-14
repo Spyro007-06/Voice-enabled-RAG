@@ -137,6 +137,12 @@ function updateLanguageUI(langCode) {
 
   // Update Language Chips
   if (elements.languageTabs) {
+    let focusIndex = -1;
+    if (elements.languageTabs.contains(document.activeElement)) {
+      const children = Array.from(elements.languageTabs.children);
+      focusIndex = children.indexOf(document.activeElement);
+    }
+
     elements.languageTabs.replaceChildren(
       ...Object.entries(MULTILINGUAL_CONFIG).map(([code, item]) => {
         const btn = document.createElement('button');
@@ -149,10 +155,20 @@ function updateLanguageUI(langCode) {
         return btn;
       })
     );
+
+    if (focusIndex >= 0 && elements.languageTabs.children[focusIndex]) {
+      elements.languageTabs.children[focusIndex].focus();
+    }
   }
 
   // Update Suggested Corpus Questions
   if (elements.suggestionsContainer) {
+    let focusIndex = -1;
+    if (elements.suggestionsContainer.contains(document.activeElement)) {
+      const children = Array.from(elements.suggestionsContainer.children);
+      focusIndex = children.indexOf(document.activeElement);
+    }
+
     elements.suggestionsContainer.replaceChildren(
       ...config.questions.map((question) => {
         const btn = document.createElement('button');
@@ -168,6 +184,10 @@ function updateLanguageUI(langCode) {
         return btn;
       })
     );
+
+    if (focusIndex >= 0 && elements.suggestionsContainer.children[focusIndex]) {
+      elements.suggestionsContainer.children[focusIndex].focus();
+    }
   }
 
   UIManager.announce(`Language set to ${config.fullName}`);
@@ -460,7 +480,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // 8. New / Clear Chat
   const resetConversation = () => {
-    if (elements.chatMessages) elements.chatMessages.replaceChildren();
+    if (elements.chatMessages) {
+      if (elements.chatMessages.contains(document.activeElement) && elements.queryInput) {
+        elements.queryInput.focus();
+      }
+      elements.chatMessages.replaceChildren();
+    }
     if (elements.welcomeState) elements.welcomeState.hidden = false;
 
     if (elements.queryInput) {
