@@ -28,3 +28,7 @@
 ## 2026-10-07 - Resetting Composer State when Clearing Conversation
 **Learning:** When clearing a conversation, the composer input must be fully reset to its default state. This includes clearing the text value, resetting any dynamically applied inline styles (like auto-grow height), updating the character counter, and disabling the send button.
 **Action:** In `resetConversation` or similar functions, ensure the query input value is cleared, its height style is set to 'auto', the character counter is reset (e.g. to '0 / 2000'), and the send button is disabled.
+
+## 2024-10-14 - Preventing Focus Loss on Dynamically Replaced Containers
+**Learning:** When re-rendering containers with `replaceChildren` (like language tabs or suggested questions), keyboard users lose focus if the currently active element is one of the replaced children. This forces them to tab all the way back through the page.
+**Action:** Before replacing children, check if the container contains `document.activeElement`, capture its index among the children, and explicitly restore focus to the newly created element at that same index after replacement.
