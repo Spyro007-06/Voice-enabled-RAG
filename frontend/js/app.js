@@ -137,6 +137,11 @@ function updateLanguageUI(langCode) {
 
   // Update Language Chips
   if (elements.languageTabs) {
+    let focusIndex = -1;
+    if (elements.languageTabs.contains(document.activeElement)) {
+      focusIndex = Array.from(elements.languageTabs.children).indexOf(document.activeElement);
+    }
+
     elements.languageTabs.replaceChildren(
       ...Object.entries(MULTILINGUAL_CONFIG).map(([code, item]) => {
         const btn = document.createElement('button');
@@ -149,10 +154,19 @@ function updateLanguageUI(langCode) {
         return btn;
       })
     );
+
+    if (focusIndex !== -1 && elements.languageTabs.children.length > focusIndex) {
+      elements.languageTabs.children[focusIndex].focus();
+    }
   }
 
   // Update Suggested Corpus Questions
   if (elements.suggestionsContainer) {
+    let focusIndex = -1;
+    if (elements.suggestionsContainer.contains(document.activeElement)) {
+      focusIndex = Array.from(elements.suggestionsContainer.children).indexOf(document.activeElement);
+    }
+
     elements.suggestionsContainer.replaceChildren(
       ...config.questions.map((question) => {
         const btn = document.createElement('button');
@@ -168,6 +182,10 @@ function updateLanguageUI(langCode) {
         return btn;
       })
     );
+
+    if (focusIndex !== -1 && elements.suggestionsContainer.children.length > focusIndex) {
+      elements.suggestionsContainer.children[focusIndex].focus();
+    }
   }
 
   UIManager.announce(`Language set to ${config.fullName}`);
