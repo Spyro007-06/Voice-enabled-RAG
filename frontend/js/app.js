@@ -200,7 +200,7 @@ function applyAppState(appState) {
     btn.classList.toggle('processing', isBusy);
 
     // Prevent focus loss when dynamically disabling the active element
-    if (isBusy && document.activeElement === btn) {
+    if (isBusy && btn.contains(document.activeElement)) {
       if (elements.queryInput) elements.queryInput.focus();
     }
 
@@ -341,7 +341,7 @@ function submitComposerText() {
   if (elements.charCounter) elements.charCounter.textContent = '0 / 2000';
   if (elements.sendBtn) {
     // Prevent focus loss when dynamically disabling the active element
-    if (document.activeElement === elements.sendBtn) {
+    if (elements.sendBtn.contains(document.activeElement)) {
       elements.queryInput.focus();
     }
 
@@ -460,7 +460,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // 8. New / Clear Chat
   const resetConversation = () => {
-    if (elements.chatMessages) elements.chatMessages.replaceChildren();
+    if (elements.chatMessages) {
+      if (elements.chatMessages.contains(document.activeElement) && elements.queryInput) {
+        elements.queryInput.focus();
+      }
+      elements.chatMessages.replaceChildren();
+    }
     if (elements.welcomeState) elements.welcomeState.hidden = false;
 
     if (elements.queryInput) {
