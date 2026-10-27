@@ -245,7 +245,12 @@ function applyAppState(appState) {
 
   // Hide welcome screen as soon as user starts interacting
   if (isRecording || isBusy) {
-    if (elements.welcomeState) elements.welcomeState.hidden = true;
+    if (elements.welcomeState) {
+      if (elements.welcomeState.contains(document.activeElement) && elements.queryInput) {
+        elements.queryInput.focus();
+      }
+      elements.welcomeState.hidden = true;
+    }
   }
 }
 
@@ -280,7 +285,12 @@ async function startVoiceRecording() {
       await stopVoiceRecording();
     },
     onError: (err) => {
-      if (elements.recordingBar) elements.recordingBar.hidden = true;
+      if (elements.recordingBar) {
+        if (elements.recordingBar.contains(document.activeElement) && elements.queryInput) {
+          elements.queryInput.focus();
+        }
+        elements.recordingBar.hidden = true;
+      }
       [elements.centralVoiceBtn, elements.micBtn, elements.welcomeMicBtn].forEach((btn) => {
         if (btn) btn.setAttribute('aria-label', 'Start voice recording');
       });
