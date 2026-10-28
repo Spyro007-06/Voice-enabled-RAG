@@ -32,3 +32,6 @@
 ## 2026-10-08 - Preserving Focus during Dynamic Re-rendering
 **Learning:** To prevent accessibility focus loss when dynamically replacing child elements (e.g., re-rendering tabs or lists with `replaceChildren`), track the active element's index before replacement and explicitly restore focus to the new element at that index.
 **Action:** When calling `replaceChildren()`, check if the parent container contains `document.activeElement`, capture its index, perform the replacement, and then call `.focus()` on the corresponding newly created element.
+## 2026-10-28 - Hide Decorative Elements from Screen Readers
+**Learning:** Purely decorative elements like `.stop-sq` can cause screen readers to announce them unnecessarily if not explicitly hidden using `aria-hidden="true"`.
+**Action:** Ensure that all decorative elements have `aria-hidden="true"` applied to prevent redundant screen reader announcements.
