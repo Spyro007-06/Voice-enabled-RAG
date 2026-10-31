@@ -187,7 +187,13 @@ export class UIManager {
    */
   static renderUserTurn({ text, isVoice = false, languageCode = 'en' }) {
     const welcome = document.getElementById('welcomeState');
-    if (welcome) welcome.hidden = true;
+    if (welcome) {
+      if (welcome.contains(document.activeElement)) {
+        const queryInput = document.getElementById('queryInput');
+        if (queryInput) queryInput.focus();
+      }
+      welcome.hidden = true;
+    }
 
     const stream = document.getElementById('chatMessages');
     if (!stream) return;
@@ -646,7 +652,7 @@ export class UIManager {
       btn.className = 'btn btn-ghost';
       btn.textContent = 'Try again';
       btn.onclick = () => {
-        if (document.activeElement === btn) {
+        if (card.contains(document.activeElement)) {
           const queryInput = document.getElementById('queryInput');
           if (queryInput) queryInput.focus();
         }
