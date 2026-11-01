@@ -26,7 +26,13 @@ export class ChatManager {
 
       // Verify transcript
       if (!response.transcript || !response.transcript.trim()) {
-        if (progressBox) progressBox.remove();
+        if (progressBox) {
+          if (progressBox.contains(document.activeElement)) {
+            const queryInput = document.getElementById('queryInput');
+            if (queryInput) queryInput.focus();
+          }
+          progressBox.remove();
+        }
         state.setState(APP_STATE.STT_ERROR);
         UIManager.renderErrorCard(
           "We couldn't understand the recording. Please try speaking again.",
@@ -61,7 +67,13 @@ export class ChatManager {
       progressBox = UIManager.updateProgress(progressBox, 5);
 
       // 3. Remove progress and render final answer
-      if (progressBox) progressBox.remove();
+      if (progressBox) {
+        if (progressBox.contains(document.activeElement)) {
+          const queryInput = document.getElementById('queryInput');
+          if (queryInput) queryInput.focus();
+        }
+        progressBox.remove();
+      }
 
       state.setState(APP_STATE.ANSWER_READY);
       UIManager.renderAnswer({
@@ -82,7 +94,13 @@ export class ChatManager {
       UIManager.announce('Answer ready. Voice response loaded.');
 
     } catch (error) {
-      if (progressBox) progressBox.remove();
+      if (progressBox) {
+        if (progressBox.contains(document.activeElement)) {
+          const queryInput = document.getElementById('queryInput');
+          if (queryInput) queryInput.focus();
+        }
+        progressBox.remove();
+      }
       state.setState(APP_STATE.ERROR);
 
       const msg = error.message || 'Voice RAG execution failed.';
@@ -141,7 +159,13 @@ export class ChatManager {
         accumulatedTokens += tokenDelta;
       },
       onDone: (donePayload) => {
-        if (progressBox) progressBox.remove();
+        if (progressBox) {
+          if (progressBox.contains(document.activeElement)) {
+            const queryInput = document.getElementById('queryInput');
+            if (queryInput) queryInput.focus();
+          }
+          progressBox.remove();
+        }
         state.setState(APP_STATE.ANSWER_READY);
 
         UIManager.renderAnswer({
@@ -157,7 +181,13 @@ export class ChatManager {
         UIManager.announce('Answer received.');
       },
       onError: (err) => {
-        if (progressBox) progressBox.remove();
+        if (progressBox) {
+          if (progressBox.contains(document.activeElement)) {
+            const queryInput = document.getElementById('queryInput');
+            if (queryInput) queryInput.focus();
+          }
+          progressBox.remove();
+        }
         state.setState(APP_STATE.ERROR);
         const msg = err.message || 'Failed to generate answer.';
         UIManager.renderErrorCard(msg);

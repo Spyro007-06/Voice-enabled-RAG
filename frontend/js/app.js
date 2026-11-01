@@ -218,7 +218,7 @@ function applyAppState(appState) {
     btn.classList.toggle('processing', isBusy);
 
     // Prevent focus loss when dynamically disabling the active element
-    if (isBusy && document.activeElement === btn) {
+    if (isBusy && btn.contains(document.activeElement)) {
       if (elements.queryInput) elements.queryInput.focus();
     }
 
@@ -245,7 +245,12 @@ function applyAppState(appState) {
 
   // Hide welcome screen as soon as user starts interacting
   if (isRecording || isBusy) {
-    if (elements.welcomeState) elements.welcomeState.hidden = true;
+    if (elements.welcomeState) {
+      if (elements.welcomeState.contains(document.activeElement)) {
+        if (elements.queryInput) elements.queryInput.focus();
+      }
+      elements.welcomeState.hidden = true;
+    }
   }
 }
 
@@ -359,7 +364,7 @@ function submitComposerText() {
   if (elements.charCounter) elements.charCounter.textContent = '0 / 2000';
   if (elements.sendBtn) {
     // Prevent focus loss when dynamically disabling the active element
-    if (document.activeElement === elements.sendBtn) {
+    if (elements.sendBtn.contains(document.activeElement)) {
       elements.queryInput.focus();
     }
 
