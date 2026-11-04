@@ -32,3 +32,7 @@
 ## 2026-10-08 - Preserving Focus during Dynamic Re-rendering
 **Learning:** To prevent accessibility focus loss when dynamically replacing child elements (e.g., re-rendering tabs or lists with `replaceChildren`), track the active element's index before replacement and explicitly restore focus to the new element at that index.
 **Action:** When calling `replaceChildren()`, check if the parent container contains `document.activeElement`, capture its index, perform the replacement, and then call `.focus()` on the corresponding newly created element.
+
+## 2024-10-31 - Focus Loss on Replaced Chat Messages
+**Learning:** When clearing a conversation via the menu drawer, if the previous focus (before the menu opened) was inside `chatMessages`, it gets lost when `chatMessages.replaceChildren()` is called, resetting focus to the `<body>`.
+**Action:** When dynamically clearing content from a container, explicitly check if it contains the tracked `previousDrawerFocus` or `document.activeElement`. If so, dynamically update the focus tracker (e.g. to `elements.queryInput`) before replacing the children.

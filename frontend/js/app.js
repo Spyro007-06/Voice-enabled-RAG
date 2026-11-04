@@ -245,7 +245,12 @@ function applyAppState(appState) {
 
   // Hide welcome screen as soon as user starts interacting
   if (isRecording || isBusy) {
-    if (elements.welcomeState) elements.welcomeState.hidden = true;
+    if (elements.welcomeState && !elements.welcomeState.hidden) {
+      if (elements.welcomeState.contains(document.activeElement)) {
+        if (elements.queryInput) elements.queryInput.focus();
+      }
+      elements.welcomeState.hidden = true;
+    }
   }
 }
 
@@ -478,6 +483,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // 8. New / Clear Chat
   const resetConversation = () => {
+    if (previousDrawerFocus && elements.chatMessages && elements.chatMessages.contains(previousDrawerFocus)) {
+      previousDrawerFocus = elements.queryInput;
+    }
     if (elements.chatMessages) elements.chatMessages.replaceChildren();
     if (elements.welcomeState) elements.welcomeState.hidden = false;
 

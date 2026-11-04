@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<body>
+  <div id="chatMessages">
+    <button id="playBtn">Play</button>
+  </div>
+  <button id="menuBtn">Menu</button>
+  <button id="clearChatBtn">Clear</button>
+  <input type="text" id="queryInput" />
+  <script>
+    const chat = document.getElementById('chatMessages');
+    const play = document.getElementById('playBtn');
+    const menu = document.getElementById('menuBtn');
+    const clear = document.getElementById('clearChatBtn');
+
+    let prev = null;
+
+    // Simulate flow
+    play.focus(); // user focuses play button
+    console.log("Active (1):", document.activeElement.id);
+
+    // open menu
+    prev = document.activeElement;
+    menu.focus();
+    console.log("Active (2):", document.activeElement.id);
+
+    // clear chat
+    chat.replaceChildren(); // play button is detached
+    // close menu
+    if (prev && typeof prev.focus === 'function') {
+      try { prev.focus(); } catch(e) {}
+      prev = null;
+    }
+
+    console.log("Active (3):", document.activeElement.id);
+  </script>
+</body>
+</html>
