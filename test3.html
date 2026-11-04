@@ -1,0 +1,32 @@
+<html>
+<body>
+  <div id="chatMessages">
+    <button id="playBtn">Play</button>
+  </div>
+  <button id="menuBtn">Menu</button>
+  <button id="clearChatBtn">Clear</button>
+  <input type="text" id="queryInput" />
+  <script>
+    const chat = document.getElementById('chatMessages');
+    const play = document.getElementById('playBtn');
+    const menu = document.getElementById('menuBtn');
+    const clear = document.getElementById('clearChatBtn');
+
+    let prev = null;
+
+    play.focus();
+    console.log("Active (1):", document.activeElement.id || document.activeElement.tagName);
+
+    prev = document.activeElement;
+    menu.focus();
+
+    chat.innerHTML = '';
+
+    if (prev && typeof prev.focus === 'function') {
+      try { prev.focus(); } catch(e) {}
+      prev = null;
+    }
+    console.log("Active (3):", document.activeElement.id || document.activeElement.tagName);
+  </script>
+</body>
+</html>

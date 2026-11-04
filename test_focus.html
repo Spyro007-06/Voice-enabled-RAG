@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<body>
+  <div id="welcomeState">
+    <button id="suggestBtn">Click me</button>
+  </div>
+  <input type="text" id="queryInput" />
+  <script>
+    const btn = document.getElementById('suggestBtn');
+    const welcome = document.getElementById('welcomeState');
+    const input = document.getElementById('queryInput');
+
+    btn.focus();
+    console.log("Active element before:", document.activeElement.id);
+
+    if (welcome.contains(document.activeElement)) {
+      input.focus();
+    }
+    welcome.hidden = true;
+    console.log("Active element after:", document.activeElement.id);
+  </script>
+</body>
+</html>
