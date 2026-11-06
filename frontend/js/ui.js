@@ -488,6 +488,7 @@ export class UIManager {
     const playBtn = document.createElement('button');
     playBtn.className = 'audio-play-btn';
     playBtn.setAttribute('aria-label', 'Play voice response');
+    playBtn.title = 'Play voice response';
     playBtn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>';
 
     const scrubberWrap = document.createElement('div');
@@ -499,6 +500,7 @@ export class UIManager {
     scrubber.min = '0';
     scrubber.max = '100';
     scrubber.value = '0';
+    scrubber.title = 'Playback scrubber';
     scrubber.setAttribute('aria-label', 'Playback scrubber');
 
     const timeRow = document.createElement('div');
@@ -528,6 +530,7 @@ export class UIManager {
     volumeSlider.max = '1';
     volumeSlider.step = '0.05';
     volumeSlider.value = '1';
+    volumeSlider.title = 'Voice volume';
     volumeSlider.setAttribute('aria-label', 'Voice volume');
 
     volumeWrap.append(volumeIcon, volumeSlider);
@@ -540,9 +543,11 @@ export class UIManager {
       if (isPlaying) {
         playBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>';
         playBtn.setAttribute('aria-label', 'Pause voice response');
+        playBtn.title = 'Pause voice response';
       } else {
         playBtn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>';
         playBtn.setAttribute('aria-label', 'Play voice response');
+        playBtn.title = 'Play voice response';
       }
     };
 
