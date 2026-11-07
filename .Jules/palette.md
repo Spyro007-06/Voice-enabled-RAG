@@ -32,3 +32,7 @@
 ## 2026-10-08 - Preserving Focus during Dynamic Re-rendering
 **Learning:** To prevent accessibility focus loss when dynamically replacing child elements (e.g., re-rendering tabs or lists with `replaceChildren`), track the active element's index before replacement and explicitly restore focus to the new element at that index.
 **Action:** When calling `replaceChildren()`, check if the parent container contains `document.activeElement`, capture its index, perform the replacement, and then call `.focus()` on the corresponding newly created element.
+
+## 2026-10-09 - Improving Discoverability for Icon-Only Buttons
+**Learning:** While `aria-label` provides necessary context for screen reader users on icon-only buttons, sighted keyboard users (and mouse hover users) lack visibility into what the button does unless there is a visible tooltip. Relying solely on `aria-label` creates an unequal experience and makes it difficult for sighted users to discover keyboard shortcuts.
+**Action:** Always provide a `title` attribute on icon-only buttons matching its `aria-label` to aid discoverability for sighted users, and append any relevant keyboard shortcut hints (e.g., `(Esc)`) to the `title` text.
