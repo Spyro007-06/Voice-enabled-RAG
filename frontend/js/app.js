@@ -262,7 +262,10 @@ async function startVoiceRecording() {
   if (elements.recordingBar) elements.recordingBar.hidden = false;
 
   [elements.centralVoiceBtn, elements.micBtn, elements.welcomeMicBtn].forEach((btn) => {
-    if (btn) btn.setAttribute('aria-label', 'Stop voice recording');
+    if (btn) {
+      btn.setAttribute('aria-label', 'Stop voice recording');
+      btn.setAttribute('title', 'Stop voice recording');
+    }
   });
 
   UIManager.announce(`Listening. Recording in ${config.name} started.`);
@@ -282,7 +285,10 @@ async function startVoiceRecording() {
     onError: (err) => {
       if (elements.recordingBar) elements.recordingBar.hidden = true;
       [elements.centralVoiceBtn, elements.micBtn, elements.welcomeMicBtn].forEach((btn) => {
-        if (btn) btn.setAttribute('aria-label', 'Start voice recording');
+        if (btn) {
+          btn.setAttribute('aria-label', 'Start voice recording');
+          btn.setAttribute('title', 'Start voice recording');
+        }
       });
 
       if (err.code === 'NO_MIC_DETECTED') {
@@ -317,7 +323,10 @@ async function stopVoiceRecording() {
   }
 
   [elements.centralVoiceBtn, elements.micBtn, elements.welcomeMicBtn].forEach((btn) => {
-    if (btn) btn.setAttribute('aria-label', 'Start voice recording');
+    if (btn) {
+      btn.setAttribute('aria-label', 'Start voice recording');
+      btn.setAttribute('title', 'Start voice recording');
+    }
   });
 
   try {
@@ -340,7 +349,10 @@ function cancelVoiceRecording() {
   }
 
   [elements.centralVoiceBtn, elements.micBtn, elements.welcomeMicBtn].forEach((btn) => {
-    if (btn) btn.setAttribute('aria-label', 'Start voice recording');
+    if (btn) {
+      btn.setAttribute('aria-label', 'Start voice recording');
+      btn.setAttribute('title', 'Start voice recording');
+    }
   });
 
   UIManager.announce('Recording cancelled.');
